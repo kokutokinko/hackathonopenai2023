@@ -1,21 +1,37 @@
 # 必要なモジュールのインポート
 import streamlit as st
 import os
-import openai
+from openai import AzureOpenAI
 
 # APIの設定
 
 
 
 
-"""
-openai.api_key = "a39dc5505f15492aa3d8962b153bd149"
-openai.api_base = "https://sunhackathon45.openai.azure.com/"
-openai.api_type = 'azure'
-openai.api_version = '2023-05-15'
 
-deployment_name='GPT35TURBO16K'
-"""
+    
+client = AzureOpenAI(
+    api_key=os.getenv("AZURE_OPENAI_KEY"),  
+    api_version="2023-05-15",
+    azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
+    )
+deployment_name='GPT35TURBO'
+
+# チャットボットの初期メッセージ
+response = client.chat.completions.create(
+    model="GPT35TURBO16K",
+    messages=[{"role": "system", "content": "this is a prompt"}]
+)
+
+# レスポンスの確認
+if response:
+    # レスポンスが存在する場合、その内容を出力
+    st.write("Response received:")
+    st.write(response.choices[0].message.content)
+else:
+    # レスポンスがない場合、エラーメッセージを出力
+    st.write("No response received. Please check your API configuration.")
+
 initial_prompt = """
 # 命令 あなたは、以下に記載された趣味について、その趣味を全く知らず興味のないユーザにわかりやすく紹介するBotです。
 まずは趣味について概要を紹介し、そのあとはユーザがその趣味に興味を持つきっかけになるような質問例を提示しながら、
