@@ -8,7 +8,9 @@
 
 # 基本的に以下のコマンドをcmd上で打てば問題なくビルドできるはず
 
-cd C:\Users\%username%\github
+cd C:\Users\%username%
+
+mkdir -p github
 
 mkdir -p hackopenai2023
 
