@@ -2,7 +2,6 @@
 FROM continuumio/anaconda3
 
 # Install Python packages
-COPY requirements.txt ./ 
 RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y ffmpeg && \
