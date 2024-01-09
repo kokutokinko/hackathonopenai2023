@@ -17,6 +17,8 @@ cd github
 
 mkdir -p hackopenai2023
 
+cd hackopenai2023
+
 hackopenai2023にdockerfileとrequirements.txtを配置
 
 # dockerをビルドする
