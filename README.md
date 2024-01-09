@@ -8,11 +8,11 @@
 
 # 基本的に以下のコマンドをcmd上で打てば問題なくビルドできるはず
 
-cd C:\Users\%username%
+# cd C:\Users\%username%
 
-mkdir -p github
+# mkdir -p github
 
-mkdir -p hackopenai2023
+# mkdir -p hackopenai2023
 
 # hackopenai2023にdockerfileとrequirements.txtを配置
 
