@@ -4,11 +4,18 @@ import os
 import openai
 
 # APIの設定
-openai.api_type = "azure"
-openai.api_base = "https://sunhackathon45.openai.azure.com/"
-openai.api_version = '2023-05-15'
+
+
+
+
+"""
 openai.api_key = "a39dc5505f15492aa3d8962b153bd149"
-    
+openai.api_base = "https://sunhackathon45.openai.azure.com/"
+openai.api_type = 'azure'
+openai.api_version = '2023-05-15'
+
+deployment_name='GPT35TURBO16K'
+"""
 initial_prompt = """
 # 命令 あなたは、以下に記載された趣味について、その趣味を全く知らず興味のないユーザにわかりやすく紹介するBotです。
 まずは趣味について概要を紹介し、そのあとはユーザがその趣味に興味を持つきっかけになるような質問例を提示しながら、
@@ -51,11 +58,11 @@ def communicate():
     if "user_input" in st.session_state:      
         user_message = {"role": "user", "content": st.session_state["user_input"]}
         messages.append(user_message)
-    
+    """
     # OpenAI APIを呼び出し
-    response = openai.ChatCompletion.create(
-        engine="gpt-35-turbo", # モデルの名前
-        messages = messages, # 入力するプロンプト
+    response = openai.Completion.create(
+        engine=deployment_name, # モデルの名前
+        prompt = messages, # 入力するプロンプト
         temperature=0.7,     # 出力のランダム度合い(可変)
         max_tokens=800,      # 最大トークン数(固定)
         top_p=0.95,          # 予測する単語を上位何%からサンプリングするか(可変)
@@ -63,9 +70,12 @@ def communicate():
         presence_penalty=0,  # 同じ単語をどのくらい使うか(可変)
         stop=None            # # 文章生成を停止する単語を指定する(可変)
     )
-
-    bot_message = response["choices"][0]["message"] # GPTの出力内容を取得
-    messages.append(bot_message)                    # メッセージ履歴に追加
+    """
+    #bot_message = response["choices"][0]["message"] # GPTの出力内容を取得
+    # ダミーのBotメッセージを追加（正しい形式で）
+    bot_message = {"role": "assistant", "content": "test"}
+    messages.append(bot_message)
+    # メッセージ履歴に追加
 
     st.session_state["user_input"] = ""              # 入力欄を消去
 
