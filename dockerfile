@@ -6,8 +6,9 @@ COPY requirements.txt ./
 RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y ffmpeg && \
-RUN pip install -r requirements.txt && \
-    pip install streamlit
+    pip install streamlit　&& \
+    pip install openai
+
 
 # Create work directory
 RUN mkdir -p /home/work
