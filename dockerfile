@@ -6,7 +6,7 @@ COPY requirements.txt ./
 RUN apt-get update && \
     apt-get -y upgrade && \
     apt-get install -y ffmpeg && \
-    pip install -r requirements.txt && \
+RUN pip install -r requirements.txt && \
     pip install streamlit
 
 # Create work directory
