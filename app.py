@@ -110,9 +110,7 @@ def communicate():
             bot_message = {"role": "assistant", "content": response}
             st.session_state["messages"].append(bot_message)
             
-            # ボットのレスポンスを取得してメッセージリストに追加
-            bot_message = {"role": "assistant", "content": str(result)}
-            st.session_state["messages"].append(bot_message)
+            
             st.session_state["message_count"] += 1
 
         # 入力欄を消去
