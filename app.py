@@ -1,21 +1,24 @@
 # 必要なモジュールのインポート
 import streamlit as st
 import os
-from openai import AzureOpenAI
+import utils
+import openai
+import pandas as pd
 
 # APIの設定
 
 
 
 
+# APIキーなどの設定
+openai.api_key = os.getenv("AZURE_OPENAI_KEY")
+openai.api_base = os.getenv("AZURE_OPENAI_ENDPOINT")
+os.environ["OPENAI_API_KEY"] = os.getenv("AZURE_OPENAI_KEY")
+os.environ["OPENAI_API_BASE"] = os.getenv("AZURE_OPENAI_ENDPOINT")
+openai.api_type = 'azure'
+openai.api_version = '2023-05-15'
 
-    
-client = AzureOpenAI(
-    api_key=os.getenv("AZURE_OPENAI_KEY"),  
-    api_version="2023-05-15",
-    azure_endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-    )
-deployment_name='GPT35TURBO'
+
 
 
 initial_prompt = """
@@ -49,6 +52,8 @@ initial_prompt = """
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "system", "content": initial_prompt}]
+if "message_count" not in st.session_state:
+        st.session_state.message_count = 0
 
 # チャットボットとやりとりする関数
 def communicate():
@@ -59,18 +64,60 @@ def communicate():
         user_message = {"role": "user", "content": st.session_state["user_input"]}
         messages.append(user_message)
 
-        # OpenAI APIを呼び出し
-        response = client.chat.completions.create(
-            model=deployment_name,
-            messages=st.session_state["messages"]
-        )
 
-        # ボットのレスポンスを取得してメッセージリストに追加
-        bot_message = {"role": "assistant", "content": response.choices[0].message.content}
-        st.session_state["messages"].append(bot_message)
+        
+        #------------------------------------------------------------
+        #---------変更点-----------------(1/11 22:15~)---------------
+        if st.session_state["message_count"] == 0:
+            df = pd.read_csv("list.csv", encoding="shift-jis")
+            columns = df.columns
+            df["_text"] = ""
+            for column in columns:
+                df["_text"] = df["_text"] + f"【{column}】" + df[column]
+            document_list = df["_text"].values
+            documents = utils.llama_index_getdocument(document_list)
+            index = utils.llama_index_generate(documents)
+            
+            # クエリ （description：アップロードした顧客情報)
+            query = f"あなたは顧客に商品を推薦する営業です。\
+            以下の顧客情報に一番適しているものを提案してください。\
+            その理由も回答してください。\
+            また、推薦する際に顧客が購入したくなるような文章を生成してください。\
+            顧客情報：{messages} \
+            出力形式は以下のようにしてください。\
+            適しているもの：\
+            選んだ理由：\
+            推薦メッセージ："
+
+            # llama-indexによる回答の生成
+            result = utils.llama_generate(index=index, query=query, top_k=1)
+
+            # 回答の表示
+            
+            
+            # ボットのレスポンスを取得してメッセージリストに追加
+            bot_message = {"role": "assistant", "content": str(result)}
+            st.session_state["messages"].append(bot_message)
+            st.session_state["message_count"] += 1
+            
+            
+        else:
+            # OpenAI APIを呼び出し
+            response = utils.get_chatgpt_response(messages)
+            
+
+            # ボットのレスポンスを取得してメッセージリストに追加
+            bot_message = {"role": "assistant", "content": response}
+            st.session_state["messages"].append(bot_message)
+            
+            # ボットのレスポンスを取得してメッセージリストに追加
+            bot_message = {"role": "assistant", "content": str(result)}
+            st.session_state["messages"].append(bot_message)
+            st.session_state["message_count"] += 1
 
         # 入力欄を消去
         st.session_state["user_input"] = ""
+        #-----------------------------ここまで----------------------
 
 # ユーザインターフェイスの構築
 st.title("自己紹介_ChatBot")
