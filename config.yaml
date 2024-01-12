@@ -1,0 +1,22 @@
+cookie:
+  expiry_days: 30
+  key: some_signature_key
+  name: some_cookie_name
+credentials:
+  usernames:
+    test:
+      email: test
+      name: test
+      password: $2b$12$Wn16pPTMLH1ypRRjUFWrOOKu1Pl/R47E6HCw7EIbNom0QF5c3DcFO
+    test01:
+      email: test01
+      name: test01
+      password: $2b$12$M8OyOzbHyJ9T9QojKpjU5OXUpPJi2TDw.imotcdPVT68wF6KQbi7K
+    testuser:
+      email: test@example.com
+      name: testuser
+      password: $2b$12$otC4uSr/neCNX5.A1VIvCeefD/6INo3qzXkXhq1teFepFcfIDgxFS
+    testuser2:
+      email: test2@example.com
+      name: testuser2
+      password: $2b$12$lTuhxUbnOV4TG9wjUl4vH.DHfg5/4qSWVOqPyy5dEf05AN6puYVNK

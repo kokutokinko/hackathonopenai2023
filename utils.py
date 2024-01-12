@@ -26,6 +26,40 @@ os.environ["OPENAI_API_BASE"] = os.getenv("AZURE_OPENAI_ENDPOINT")
 openai.api_type = 'azure'
 openai.api_version = '2023-05-15'
 
+#service_contextの生成
+def create_service_context():
+    # LLM Predictor
+    llm_predictor = LLMPredictor(llm=AzureChatOpenAI(
+        deployment_name='gpt-35-turbo',         #デプロイ名
+        max_tokens=3000,                        #最大トークン数
+        temperature=1,                          #出力のランダム度合い
+        openai_api_version=openai.api_version   #openaiのapiのバージョン情報
+    ))
+
+    # テキストの埋め込みベクトル変換(Embedding)に関する設定
+    embeddings = LangchainEmbedding(OpenAIEmbeddings(
+        engine="text-embedding-ada-002",        #エンベディングに使うモデル
+        chunk_size=1,                           #ここでのチャンクサイズはバッチサイズ
+        openai_api_version=openai.api_version   #openaiのapiのバージョン情報
+    ))
+
+    # Prompt Helper（テキスト分割に関する設定）
+    prompt_helper = PromptHelper(
+        max_input_size=3000,    # 最大入力サイズ
+        num_output=1000,        # LLMの出力サイズ
+        chunk_size_limit=1000,  # 使用する最大チャンクサイズ（チャンク：テキストを細かく分割したもの）
+        max_chunk_overlap=0,    # チャンクオーバーラップの最大トークン数
+        separator="。"        # テキスト分割の区切り文字
+    )
+
+    # Service Contextの生成
+    service_context = ServiceContext.from_defaults(
+        llm_predictor=llm_predictor,    # LLM Predictor
+        embed_model=embeddings,         # エンベディングについての設定
+        prompt_helper=prompt_helper     # Prompt Helper
+    )
+
+    return service_context, prompt_helper
 
 def llama_index_generate(references):
     """llama-indexによるインデックスの生成"""
