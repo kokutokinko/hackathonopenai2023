@@ -26,6 +26,11 @@ chatbot_first_message = """
 私はデータサイエンスについて回答を行うチャットボットです.
 以下略
 """
+selected_chatbot_first_message="""
+こんにちは!
+私は趣味(これは仮で実際は違う)について回答を行うチャットボットです.
+以下略
+"""
 
 
 initial_prompt = """
@@ -57,14 +62,11 @@ initial_prompt = """
 """
 initial_prompt_2 = """
     あなたはデータサイエンスのスペシャリストであるとユーザーに自己紹介してください
-    
-    
-    
 """
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "system", "content": initial_prompt}]
-    st.session_state["messages"] = [{"role": "assistant", "content": initial_prompt}]
+    st.session_state["messages"].append({"role": "assistant", "content": chatbot_first_message})
 if "message_count" not in st.session_state:
     st.session_state.message_count = 0
 
@@ -185,6 +187,7 @@ if st.session_state["authentication_status"]:
     if "current_prompt" not in st.session_state or st.session_state["current_prompt"] != selected_prompt:
         st.session_state["current_prompt"] = selected_prompt
         st.session_state["messages"] = [{"role": "system", "content": selected_prompt}]
+        st.session_state["messages"].append({"role": "assistant", "content": selected_chatbot_first_message})
 
     #--------------------ボタンの追加----------------------------------------------------
 
@@ -197,6 +200,7 @@ if st.session_state["authentication_status"]:
 
     # メッセージ履歴の表示
     for message in st.session_state["messages"]:
+        print(message)
         # 初期プロンプトはスキップして表示
         if message["role"] != "system":
             speaker = "🙂" if message["role"] == "user" else "🤖"
