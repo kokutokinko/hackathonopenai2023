@@ -1,0 +1,301 @@
+ÉâÉCÉuÉâÉäñº,èÕ,êﬂ,ì‡óe
+Pandas,Combined_csv,pandas.read_csv,"pandas.read_csv#pandas.read_csv(filepath_or_buffer,*,sep=_NoDefault.no_default,delimiter=None,header='infer',names=_NoDefault.no_default,index_col=None,usecols=None,dtype=None,engine=None,converters=None,true_values=None,false_values=None,skipinitialspace=False,skiprows=None,skipfooter=0,nrows=None,na_values=None,keep_default_na=True,na_filter=True,verbose=False,skip_blank_lines=True,parse_dates=None,infer_datetime_format=_NoDefault.no_default,keep_date_col=False,date_parser=_NoDefault.no_default,date_format=None,dayfirst=False,cache_dates=True,iterator=False,chunksize=None,compression='infer',thousands=None,decimal='.',lineterminator=None,quotechar='""',quoting=0,doublequote=True,escapechar=None,comment=None,encoding=None,encoding_errors='strict',dialect=None,on_bad_lines='error',delim_whitespace=False,low_memory=True,memory_map=False,float_precision=None,storage_options=None,dtype_backend=_NoDefault.no_default)[source]#Read a comma-separated values (csv) file into DataFrame.Also supports optionally iterating or breaking of the file
+into chunks.Additional help can be found in the online docs forIO Tools.Parameters:filepath_or_bufferstr, path object or file-like objectAny valid string path is acceptable. The string could be a URL. Valid
+URL schemes include http, ftp, s3, gs, and file. For file URLs, a host is
+expected. A local file could be:file://localhost/path/to/table.csv.If you want to pass in a path object, pandas accepts anyos.PathLike.By file-like object, we refer to objects with aread()method, such as
+a file handle (e.g. via builtinopenfunction) orStringIO.sepstr, default Åe,ÅfCharacter or regex pattern to treat as the delimiter. Ifsep=None, the
+C engine cannot automatically detect
+the separator, but the Python parsing engine can, meaning the latter will
+be used and automatically detect the separator from only the first valid
+row of the file by PythonÅfs builtin sniffer tool,csv.Sniffer.
+In addition, separators longer than 1 character and different from'\s+'will be interpreted as regular expressions and will also force
+the use of the Python parsing engine. Note that regex delimiters are prone
+to ignoring quoted data. Regex example:'\r\t'.delimiterstr, optionalAlias forsep.headerint, Sequence of int, ÅeinferÅf or None, default ÅeinferÅfRow number(s) containing column labels and marking the start of the
+data (zero-indexed). Default behavior is to infer the column names: if nonamesare passed the behavior is identical toheader=0and column
+names are inferred from the first line of the file, if column
+names are passed explicitly tonamesthen the behavior is identical toheader=None. Explicitly passheader=0to be able to
+replace existing names. The header can be a list of integers that
+specify row locations for aMultiIndexon the columns
+e.g.[0,1,3]. Intervening rows that are not specified will be
+skipped (e.g. 2 in this example is skipped). Note that this
+parameter ignores commented lines and empty lines ifskip_blank_lines=True, soheader=0denotes the first line of
+data rather than the first line of the file.namesSequence of Hashable, optionalSequence of column labels to apply. If the file contains a header row,
+then you should explicitly passheader=0to override the column names.
+Duplicates in this list are not allowed.index_colHashable, Sequence of Hashable or False, optionalColumn(s) to use as row label(s), denoted either by column labels or column
+indices. If a sequence of labels or indices is given,MultiIndexwill be formed for the row labels.Note:index_col=Falsecan be used to force pandas tonotuse the first
+column as the index, e.g., when you have a malformed file with delimiters at
+the end of each line.usecolslist of Hashable or Callable, optionalSubset of columns to select, denoted either by column labels or column indices.
+If list-like, all elements must either
+be positional (i.e. integer indices into the document columns) or strings
+that correspond to column names provided either by the user innamesor
+inferred from the document header row(s). Ifnamesare given, the document
+header row(s) are not taken into account. For example, a valid list-likeusecolsparameter would be[0,1,2]or['foo','bar','baz'].
+Element order is ignored, sousecols=[0,1]is the same as[1,0].
+To instantiate aDataFramefromdatawith element order
+preserved usepd.read_csv(data,usecols=['foo','bar'])[['foo','bar']]for columns in['foo','bar']order orpd.read_csv(data,usecols=['foo','bar'])[['bar','foo']]for['bar','foo']order.If callable, the callable function will be evaluated against the column
+names, returning names where the callable function evaluates toTrue. An
+example of a valid callable argument would belambdax:x.upper()in['AAA','BBB','DDD']. Using this parameter results in much faster
+parsing time and lower memory usage.dtypedtype or dict of {Hashabledtype}, optionalData type(s) to apply to either the whole dataset or individual columns.
+E.g.,{'a':np.float64,'b':np.int32,'c':'Int64'}Usestrorobjecttogether with suitablena_valuessettings
+to preserve and not interpretdtype.
+Ifconvertersare specified, they will be applied INSTEAD
+ofdtypeconversion.New in version 1.5.0:Support fordefaultdictwas added. Specify adefaultdictas input where
+the default determines thedtypeof the columns which are not explicitly
+listed.engine{ÅecÅf, ÅepythonÅf, ÅepyarrowÅf}, optionalParser engine to use. The C and pyarrow engines are faster, while the python engine
+is currently more feature-complete. Multithreading is currently only supported by
+the pyarrow engine.New in version 1.4.0:The ÅepyarrowÅf engine was added as anexperimentalengine, and some features
+are unsupported, or may not work correctly, with this engine.convertersdict of {HashableCallable}, optionalFunctions for converting values in specified columns. Keys can either
+be column labels or column indices.true_valueslist, optionalValues to consider asTruein addition to case-insensitive variants of ÅeTrueÅf.false_valueslist, optionalValues to consider asFalsein addition to case-insensitive variants of ÅeFalseÅf.skipinitialspacebool, default FalseSkip spaces after delimiter.skiprowsint, list of int or Callable, optionalLine numbers to skip (0-indexed) or number of lines to skip (int)
+at the start of the file.If callable, the callable function will be evaluated against the row
+indices, returningTrueif the row should be skipped andFalseotherwise.
+An example of a valid callable argument would belambdax:xin[0,2].skipfooterint, default 0Number of lines at bottom of file to skip (Unsupported withengine='c').nrowsint, optionalNumber of rows of file to read. Useful for reading pieces of large files.na_valuesHashable, Iterable of Hashable or dict of {HashableIterable}, optionalAdditional strings to recognize asNA/NaN. Ifdictpassed, specific
+per-columnNAvalues. By default the following values are interpreted asNaN: Åg Åg, Åg#N/AÅh, Åg#N/A N/AÅh, Åg#NAÅh, Åg-1.#INDÅh, Åg-1.#QNANÅh, Åg-NaNÅh, Åg-nanÅh,
+Åg1.#INDÅh, Åg1.#QNANÅh, Åg<NA>Åh, ÅgN/AÅh, ÅgNAÅh, ÅgNULLÅh, ÅgNaNÅh, ÅgNoneÅh,
+Ågn/aÅh, ÅgnanÅh, Ågnull Åg.keep_default_nabool, default TrueWhether or not to include the defaultNaNvalues when parsing the data.
+Depending on whetherna_valuesis passed in, the behavior is as follows:Ifkeep_default_naisTrue, andna_valuesare specified,na_valuesis appended to the defaultNaNvalues used for parsing.Ifkeep_default_naisTrue, andna_valuesare not specified, only
+the defaultNaNvalues are used for parsing.Ifkeep_default_naisFalse, andna_valuesare specified, only
+theNaNvalues specifiedna_valuesare used for parsing.Ifkeep_default_naisFalse, andna_valuesare not specified, no
+strings will be parsed asNaN.Note that ifna_filteris passed in asFalse, thekeep_default_naandna_valuesparameters will be ignored.na_filterbool, default TrueDetect missing value markers (empty strings and the value ofna_values). In
+data without anyNAvalues, passingna_filter=Falsecan improve the
+performance of reading a large file.verbosebool, default FalseIndicate number ofNAvalues placed in non-numeric columns.skip_blank_linesbool, default TrueIfTrue, skip over blank lines rather than interpreting asNaNvalues.parse_datesbool, list of Hashable, list of lists or dict of {Hashablelist}, default FalseThe behavior is as follows:bool. IfTrue-> try parsing the index.listofintor names. e.g. If[1,2,3]-> try parsing columns 1, 2, 3
+each as a separate date column.listoflist. e.g. If[[1,3]]-> combine columns 1 and 3 and parse
+as a single date column.dict, e.g.{'foo':[1,3]}-> parse columns 1, 3 as date and call
+result ÅefooÅfIf a column or index cannot be represented as an array ofdatetime,
+say because of an unparsable value or a mixture of timezones, the column
+or index will be returned unaltered as anobjectdata type. For
+non-standarddatetimeparsing, useto_datetime()afterread_csv().Note: A fast-path exists for iso8601-formatted dates.infer_datetime_formatbool, default FalseIfTrueandparse_datesis enabled, pandas will attempt to infer the
+format of thedatetimestrings in the columns, and if it can be inferred,
+switch to a faster method of parsing them. In some cases this can increase
+the parsing speed by 5-10x.Deprecated since version 2.0.0:A strict version of this argument is now the default, passing it has no effect.keep_date_colbool, default FalseIfTrueandparse_datesspecifies combining multiple columns then
+keep the original columns.date_parserCallable, optionalFunction to use for converting a sequence of string columns to an array ofdatetimeinstances. The default usesdateutil.parser.parserto do the
+conversion. pandas will try to calldate_parserin three different ways,
+advancing to the next if an exception occurs: 1) Pass one or more arrays
+(as defined byparse_dates) as arguments; 2) concatenate (row-wise) the
+string values from the columns defined byparse_datesinto a single array
+and pass that; and 3) calldate_parseronce for each row using one or
+more strings (corresponding to the columns defined byparse_dates) as
+arguments.Deprecated since version 2.0.0:Usedate_formatinstead, or read in asobjectand then applyto_datetime()as-needed.date_formatstr or dict of column -> format, optionalFormat to use for parsing dates when used in conjunction withparse_dates.
+For anything more complex, please read in asobjectand then applyto_datetime()as-needed.New in version 2.0.0.dayfirstbool, default FalseDD/MM format dates, international and European format.cache_datesbool, default TrueIfTrue, use a cache of unique, converted dates to apply thedatetimeconversion. May produce significant speed-up when parsing duplicate
+date strings, especially ones with timezone offsets.iteratorbool, default FalseReturnTextFileReaderobject for iteration or getting chunks withget_chunk().Changed in version 1.2:TextFileReaderis a context manager.chunksizeint, optionalNumber of lines to read from the file per chunk. Passing a value will cause the
+function to return aTextFileReaderobject for iteration.
+See theIO Tools docsfor more information oniteratorandchunksize.Changed in version 1.2:TextFileReaderis a context manager.compressionstr or dict, default ÅeinferÅfFor on-the-fly decompression of on-disk data. If ÅeinferÅf and Åefilepath_or_bufferÅf is
+path-like, then detect compression from the following extensions: Åe.gzÅf,
+Åe.bz2Åf, Åe.zipÅf, Åe.xzÅf, Åe.zstÅf, Åe.tarÅf, Åe.tar.gzÅf, Åe.tar.xzÅf or Åe.tar.bz2Åf
+(otherwise no compression).
+If using ÅezipÅf or ÅetarÅf, the ZIP file must contain only one data file to be read in.
+Set toNonefor no decompression.
+Can also be a dict with key'method'set
+to one of {'zip','gzip','bz2','zstd','xz','tar'} and
+other key-value pairs are forwarded tozipfile.ZipFile,gzip.GzipFile,bz2.BZ2File,zstandard.ZstdDecompressor,lzma.LZMAFileortarfile.TarFile, respectively.
+As an example, the following could be passed for Zstandard decompression using a
+custom compression dictionary:compression={'method':'zstd','dict_data':my_compression_dict}.New in version 1.5.0:Added support for.tarfiles.Changed in version 1.4.0:Zstandard support.thousandsstr (length 1), optionalCharacter acting as the thousands separator in numerical values.decimalstr (length 1), default Åe.ÅfCharacter to recognize as decimal point (e.g., use Åe,Åf for European data).lineterminatorstr (length 1), optionalCharacter used to denote a line break. Only valid with C parser.quotecharstr (length 1), optionalCharacter used to denote the start and end of a quoted item. Quoted
+items can include thedelimiterand it will be ignored.quoting{0 or csv.QUOTE_MINIMAL, 1 or csv.QUOTE_ALL, 2 or csv.QUOTE_NONNUMERIC, 3 or csv.QUOTE_NONE}, default csv.QUOTE_MINIMALControl field quoting behavior percsv.QUOTE_*constants. Default iscsv.QUOTE_MINIMAL(i.e., 0) which implies that only fields containing special
+characters are quoted (e.g., characters defined inquotechar,delimiter,
+orlineterminator.doublequotebool, default TrueWhenquotecharis specified andquotingis notQUOTE_NONE, indicate
+whether or not to interpret two consecutivequotecharelements INSIDE a
+field as a singlequotecharelement.escapecharstr (length 1), optionalCharacter used to escape other characters.commentstr (length 1), optionalCharacter indicating that the remainder of line should not be parsed.
+If found at the beginning
+of a line, the line will be ignored altogether. This parameter must be a
+single character. Like empty lines (as long asskip_blank_lines=True),
+fully commented lines are ignored by the parameterheaderbut not byskiprows. For example, ifcomment='#', parsing#empty\na,b,c\n1,2,3withheader=0will result in'a,b,c'being
+treated as the header.encodingstr, optional, default Åeutf-8ÅfEncoding to use for UTF when reading/writing (ex.'utf-8').List of Python
+standard encodings.Changed in version 1.2:WhenencodingisNone,errors='replace'is passed toopen(). Otherwise,errors='strict'is passed toopen().
+This behavior was previously only the case forengine='python'.Changed in version 1.3.0:encoding_errorsis a new argument.encodinghas no longer an
+influence on how encoding errors are handled.encoding_errorsstr, optional, default ÅestrictÅfHow encoding errors are treated.List of possible values.New in version 1.3.0.dialectstr or csv.Dialect, optionalIf provided, this parameter will override values (default or not) for the
+following parameters:delimiter,doublequote,escapechar,skipinitialspace,quotechar, andquoting. If it is necessary to
+override values, aParserWarningwill be issued. Seecsv.Dialectdocumentation for more details.on_bad_lines{ÅeerrorÅf, ÅewarnÅf, ÅeskipÅf} or Callable, default ÅeerrorÅfSpecifies what to do upon encountering a bad line (a line with too many fields).
+Allowed values are :'error', raise an Exception when a bad line is encountered.'warn', raise a warning when a bad line is encountered and skip that line.'skip', skip bad lines without raising or warning when they are encountered.New in version 1.3.0.New in version 1.4.0:Callable, function with signature(bad_line:list[str])->list[str]|Nonethat will process a single
+bad line.bad_lineis a list of strings split by thesep.
+If the function returnsNone, the bad line will be ignored.
+If the function returns a newlistof strings with more elements than
+expected, aParserWarningwill be emitted while dropping extra elements.
+Only supported whenengine='python'delim_whitespacebool, default FalseSpecifies whether or not whitespace (e.g.''or'\t') will be
+used as thesepdelimiter. Equivalent to settingsep='\s+'. If this option
+is set toTrue, nothing should be passed in for thedelimiterparameter.low_memorybool, default TrueInternally process the file in chunks, resulting in lower memory use
+while parsing, but possibly mixed type inference. To ensure no mixed
+types either setFalse, or specify the type with thedtypeparameter.
+Note that the entire file is read into a singleDataFrameregardless, use thechunksizeoriteratorparameter to return the data in
+chunks. (Only valid with C parser).memory_mapbool, default FalseIf a filepath is provided forfilepath_or_buffer, map the file object
+directly onto memory and access the data directly from there. Using this
+option can improve performance because there is no longer any I/O overhead.float_precision{ÅehighÅf, ÅelegacyÅf, Åeround_tripÅf}, optionalSpecifies which converter the C engine should use for floating-point
+values. The options areNoneor'high'for the ordinary converter,'legacy'for the original lower precision pandas converter, and'round_trip'for the round-trip converter.Changed in version 1.2.storage_optionsdict, optionalExtra options that make sense for a particular storage connection, e.g.
+host, port, username, password, etc. For HTTP(S) URLs the key-value pairs
+are forwarded tourllib.request.Requestas header options. For other
+URLs (e.g. starting with Ågs3://Åh, and Åggcs://Åh) the key-value pairs are
+forwarded tofsspec.open. Please seefsspecandurllibfor more
+details, and for more examples on storage options referhere.New in version 1.2.dtype_backend{Åenumpy_nullableÅf, ÅepyarrowÅf}, default Åenumpy_nullableÅfBack-end data type applied to the resultantDataFrame(still experimental). Behaviour is as follows:""numpy_nullable"": returns nullable-dtype-backedDataFrame(default).""pyarrow"": returns pyarrow-backed nullableArrowDtypeDataFrame.New in version 2.0.Returns:DataFrame or TextFileReaderA comma-separated values (csv) file is returned as two-dimensional
+data structure with labeled axes.See alsoDataFrame.to_csvWrite DataFrame to a comma-separated values (csv) file.read_tableRead general delimited file into DataFrame.read_fwfRead a table of fixed-width formatted lines into DataFrame.Examples>>>pd.read_csv('data.csv')"
+Pandas,Combined_csv,pandas.DataFrame.to_csv,"pandas.DataFrame.to_csv#DataFrame.to_csv(path_or_buf=None,sep=',',na_rep='',float_format=None,columns=None,header=True,index=True,index_label=None,mode='w',encoding=None,compression='infer',quoting=None,quotechar='""',lineterminator=None,chunksize=None,date_format=None,doublequote=True,escapechar=None,decimal='.',errors='strict',storage_options=None)[source]#Write object to a comma-separated values (csv) file.Parameters:path_or_bufstr, path object, file-like object, or None, default NoneString, path object (implementing os.PathLike[str]), or file-like
+object implementing a write() function. If None, the result is
+returned as a string. If a non-binary file object is passed, it should
+be opened withnewline=ÅfÅf, disabling universal newlines. If a binary
+file object is passed,modemight need to contain aÅebÅf.Changed in version 1.2.0:Support for binary file objects was introduced.sepstr, default Åe,ÅfString of length 1. Field delimiter for the output file.na_repstr, default ÅeÅfMissing data representation.float_formatstr, Callable, default NoneFormat string for floating point numbers. If a Callable is given, it takes
+precedence over other numeric formatting parameters, like decimal.columnssequence, optionalColumns to write.headerbool or list of str, default TrueWrite out the column names. If a list of strings is given it is
+assumed to be aliases for the column names.indexbool, default TrueWrite row names (index).index_labelstr or sequence, or False, default NoneColumn label for index column(s) if desired. If None is given, andheaderandindexare True, then the index names are used. A
+sequence should be given if the object uses MultiIndex. If
+False do not print fields for index names. Use index_label=False
+for easier importing in R.mode{ÅewÅf, ÅexÅf, ÅeaÅf}, default ÅewÅfForwarded to eitheropen(mode=)orfsspec.open(mode=)to control
+the file opening. Typical values include:ÅewÅf, truncate the file first.ÅexÅf, exclusive creation, failing if the file already exists.ÅeaÅf, append to the end of file if it exists.encodingstr, optionalA string representing the encoding to use in the output file,
+defaults to Åeutf-8Åf.encodingis not supported ifpath_or_bufis a non-binary file object.compressionstr or dict, default ÅeinferÅfFor on-the-fly compression of the output data. If ÅeinferÅf and Åepath_or_bufÅf is
+path-like, then detect compression from the following extensions: Åe.gzÅf,
+Åe.bz2Åf, Åe.zipÅf, Åe.xzÅf, Åe.zstÅf, Åe.tarÅf, Åe.tar.gzÅf, Åe.tar.xzÅf or Åe.tar.bz2Åf
+(otherwise no compression).
+Set toNonefor no compression.
+Can also be a dict with key'method'set
+to one of {'zip','gzip','bz2','zstd','xz','tar'} and
+other key-value pairs are forwarded tozipfile.ZipFile,gzip.GzipFile,bz2.BZ2File,zstandard.ZstdCompressor,lzma.LZMAFileortarfile.TarFile, respectively.
+As an example, the following could be passed for faster compression and to create
+a reproducible gzip archive:compression={'method':'gzip','compresslevel':1,'mtime':1}.New in version 1.5.0:Added support for.tarfiles.May be a dict with key ÅemethodÅf as compression mode
+and other entries as additional compression options if
+compression mode is ÅezipÅf.Passing compression options as keys in dict is
+supported for compression modes ÅegzipÅf, Åebz2Åf, ÅezstdÅf, and ÅezipÅf.Changed in version 1.2.0:Compression is supported for binary file objects.Changed in version 1.2.0:Previous versions forwarded dict entries for ÅegzipÅf togzip.openinstead ofgzip.GzipFilewhich prevented
+settingmtime.quotingoptional constant from csv moduleDefaults to csv.QUOTE_MINIMAL. If you have set afloat_formatthen floats are converted to strings and thus csv.QUOTE_NONNUMERIC
+will treat them as non-numeric.quotecharstr, default Åe""ÅfString of length 1. Character used to quote fields.lineterminatorstr, optionalThe newline character or character sequence to use in the output
+file. Defaults toos.linesep, which depends on the OS in which
+this method is called (Åf\nÅf for linux, Åe\r\nÅf for Windows, i.e.).Changed in version 1.5.0:Previously was line_terminator, changed for consistency with
+read_csv and the standard library ÅecsvÅf module.chunksizeint or NoneRows to write at a time.date_formatstr, default NoneFormat string for datetime objects.doublequotebool, default TrueControl quoting ofquotecharinside a field.escapecharstr, default NoneString of length 1. Character used to escapesepandquotecharwhen appropriate.decimalstr, default Åe.ÅfCharacter recognized as decimal separator. E.g. use Åe,Åf for
+European data.errorsstr, default ÅestrictÅfSpecifies how encoding and decoding errors are to be handled.
+See the errors argument foropen()for a full list
+of options.storage_optionsdict, optionalExtra options that make sense for a particular storage connection, e.g.
+host, port, username, password, etc. For HTTP(S) URLs the key-value pairs
+are forwarded tourllib.request.Requestas header options. For other
+URLs (e.g. starting with Ågs3://Åh, and Åggcs://Åh) the key-value pairs are
+forwarded tofsspec.open. Please seefsspecandurllibfor more
+details, and for more examples on storage options referhere.New in version 1.2.0.Returns:None or strIf path_or_buf is None, returns the resulting csv format as a
+string. Otherwise returns None.See alsoread_csvLoad a CSV file into a DataFrame.to_excelWrite DataFrame to an Excel file.Examples>>>df=pd.DataFrame({'name':['Raphael','Donatello'],...'mask':['red','purple'],...'weapon':['sai','bo staff']})>>>df.to_csv(index=False)'name,mask,weapon\nRaphael,red,sai\nDonatello,purple,bo staff\n'Create Åeout.zipÅf containing Åeout.csvÅf>>>compression_opts=dict(method='zip',...archive_name='out.csv')>>>df.to_csv('out.zip',index=False,...compression=compression_opts)To write a csv file to a new folder or nested folder you will first
+need to create it using either Pathlib or os:>>>frompathlibimportPath>>>filepath=Path('folder/subfolder/out.csv')>>>filepath.parent.mkdir(parents=True,exist_ok=True)>>>df.to_csv(filepath)>>>importos>>>os.makedirs('folder/subfolder',exist_ok=True)>>>df.to_csv('folder/subfolder/out.csv')"
+Pandas,Combined_csv,pandas.DataFrame.head,"pandas.DataFrame.head#DataFrame.head(n=5)[source]#Return the firstnrows.This function returns the firstnrows for the object based
+on position. It is useful for quickly testing if your object
+has the right type of data in it.For negative values ofn, this function returns all rows except
+the last|n|rows, equivalent todf[:n].If n is larger than the number of rows, this function returns all rows.Parameters:nint, default 5Number of rows to select.Returns:same type as callerThe firstnrows of the caller object.See alsoDataFrame.tailReturns the lastnrows.Examples>>>df=pd.DataFrame({'animal':['alligator','bee','falcon','lion',...'monkey','parrot','shark','whale','zebra']})>>>dfanimal0  alligator1        bee2     falcon3       lion4     monkey5     parrot6      shark7      whale8      zebraViewing the first 5 lines>>>df.head()animal0  alligator1        bee2     falcon3       lion4     monkeyViewing the firstnlines (three in this case)>>>df.head(3)animal0  alligator1        bee2     falconFor negative values ofn>>>df.head(-3)animal0  alligator1        bee2     falcon3       lion4     monkey5     parrot"
+Pandas,Combined_csv,pandas.DataFrame.tail,"pandas.DataFrame.tail#DataFrame.tail(n=5)[source]#Return the lastnrows.This function returns lastnrows from the object based on
+position. It is useful for quickly verifying data, for example,
+after sorting or appending rows.For negative values ofn, this function returns all rows except
+the first|n|rows, equivalent todf[|n|:].If n is larger than the number of rows, this function returns all rows.Parameters:nint, default 5Number of rows to select.Returns:type of callerThe lastnrows of the caller object.See alsoDataFrame.headThe firstnrows of the caller object.Examples>>>df=pd.DataFrame({'animal':['alligator','bee','falcon','lion',...'monkey','parrot','shark','whale','zebra']})>>>dfanimal0  alligator1        bee2     falcon3       lion4     monkey5     parrot6      shark7      whale8      zebraViewing the last 5 lines>>>df.tail()animal4  monkey5  parrot6   shark7   whale8   zebraViewing the lastnlines (three in this case)>>>df.tail(3)animal6  shark7  whale8  zebraFor negative values ofn>>>df.tail(-3)animal3    lion4  monkey5  parrot6   shark7   whale8   zebra"
+Pandas,Combined_csv,pandas.DataFrame.describe,"pandas.DataFrame.describe#DataFrame.describe(percentiles=None,include=None,exclude=None)[source]#Generate descriptive statistics.Descriptive statistics include those that summarize the central
+tendency, dispersion and shape of a
+datasetÅfs distribution, excludingNaNvalues.Analyzes both numeric and object series, as well
+asDataFramecolumn sets of mixed data types. The output
+will vary depending on what is provided. Refer to the notes
+below for more detail.Parameters:percentileslist-like of numbers, optionalThe percentiles to include in the output. All should
+fall between 0 and 1. The default is[.25,.5,.75], which returns the 25th, 50th, and
+75th percentiles.includeÅeallÅf, list-like of dtypes or None (default), optionalA white list of data types to include in the result. Ignored
+forSeries. Here are the options:ÅeallÅf : All columns of the input will be included in the output.A list-like of dtypes : Limits the results to the
+provided data types.
+To limit the result to numeric types submitnumpy.number. To limit it instead to object columns submit
+thenumpy.objectdata type. Strings
+can also be used in the style ofselect_dtypes(e.g.df.describe(include=['O'])). To
+select pandas categorical columns, use'category'None (default) : The result will include all numeric columns.excludelist-like of dtypes or None (default), optional,A black list of data types to omit from the result. Ignored
+forSeries. Here are the options:A list-like of dtypes : Excludes the provided data types
+from the result. To exclude numeric types submitnumpy.number. To exclude object columns submit the data
+typenumpy.object. Strings can also be used in the style ofselect_dtypes(e.g.df.describe(exclude=['O'])). To
+exclude pandas categorical columns, use'category'None (default) : The result will exclude nothing.Returns:Series or DataFrameSummary statistics of the Series or Dataframe provided.See alsoDataFrame.countCount number of non-NA/null observations.DataFrame.maxMaximum of the values in the object.DataFrame.minMinimum of the values in the object.DataFrame.meanMean of the values.DataFrame.stdStandard deviation of the observations.DataFrame.select_dtypesSubset of a DataFrame including/excluding columns based on their dtype.NotesFor numeric data, the resultÅfs index will includecount,mean,std,min,maxas well as lower,50and
+upper percentiles. By default the lower percentile is25and the
+upper percentile is75. The50percentile is the
+same as the median.For object data (e.g. strings or timestamps), the resultÅfs index
+will includecount,unique,top, andfreq. Thetopis the most common value. Thefreqis the most common valueÅfs
+frequency. Timestamps also include thefirstandlastitems.If multiple object values have the highest count, then thecountandtopresults will be arbitrarily chosen from
+among those with the highest count.For mixed data types provided via aDataFrame, the default is to
+return only an analysis of numeric columns. If the dataframe consists
+only of object and categorical data without any numeric columns, the
+default is to return an analysis of both the object and categorical
+columns. Ifinclude='all'is provided as an option, the result
+will include a union of attributes of each type.Theincludeandexcludeparameters can be used to limit
+which columns in aDataFrameare analyzed for the output.
+The parameters are ignored when analyzing aSeries.ExamplesDescribing a numericSeries.>>>s=pd.Series([1,2,3])>>>s.describe()count    3.0mean     2.0std      1.0min      1.025%      1.550%      2.075%      2.5max      3.0dtype: float64Describing a categoricalSeries.>>>s=pd.Series(['a','a','b','c'])>>>s.describe()count     4unique    3top       afreq      2dtype: objectDescribing a timestampSeries.>>>s=pd.Series([...np.datetime64(""2000-01-01""),...np.datetime64(""2010-01-01""),...np.datetime64(""2010-01-01"")...])>>>s.describe()count                      3mean     2006-09-01 08:00:00min      2000-01-01 00:00:0025%      2004-12-31 12:00:0050%      2010-01-01 00:00:0075%      2010-01-01 00:00:00max      2010-01-01 00:00:00dtype: objectDescribing aDataFrame. By default only numeric fields
+are returned.>>>df=pd.DataFrame({'categorical':pd.Categorical(['d','e','f']),...'numeric':[1,2,3],...'object':['a','b','c']...})>>>df.describe()numericcount      3.0mean       2.0std        1.0min        1.025%        1.550%        2.075%        2.5max        3.0Describing all columns of aDataFrameregardless of data type.>>>df.describe(include='all')categorical  numeric objectcount            3      3.0      3unique           3      NaN      3top              f      NaN      afreq             1      NaN      1mean           NaN      2.0    NaNstd            NaN      1.0    NaNmin            NaN      1.0    NaN25%            NaN      1.5    NaN50%            NaN      2.0    NaN75%            NaN      2.5    NaNmax            NaN      3.0    NaNDescribing a column from aDataFrameby accessing it as
+an attribute.>>>df.numeric.describe()count    3.0mean     2.0std      1.0min      1.025%      1.550%      2.075%      2.5max      3.0Name: numeric, dtype: float64Including only numeric columns in aDataFramedescription.>>>df.describe(include=[np.number])numericcount      3.0mean       2.0std        1.0min        1.025%        1.550%        2.075%        2.5max        3.0Including only string columns in aDataFramedescription.>>>df.describe(include=[object])objectcount       3unique      3top         afreq        1Including only categorical columns from aDataFramedescription.>>>df.describe(include=['category'])categoricalcount            3unique           3top              dfreq             1Excluding numeric columns from aDataFramedescription.>>>df.describe(exclude=[np.number])categorical objectcount            3      3unique           3      3top              f      afreq             1      1Excluding object columns from aDataFramedescription.>>>df.describe(exclude=[object])categorical  numericcount            3      3.0unique           3      NaNtop              f      NaNfreq             1      NaNmean           NaN      2.0std            NaN      1.0min            NaN      1.025%            NaN      1.550%            NaN      2.075%            NaN      2.5max            NaN      3.0"
+Pandas,Combined_csv,pandas.DataFrame.drop,"pandas.DataFrame.drop#DataFrame.drop(labels=None,*,axis=0,index=None,columns=None,level=None,inplace=False,errors='raise')[source]#Drop specified labels from rows or columns.Remove rows or columns by specifying label names and corresponding
+axis, or by directly specifying index or column names. When using a
+multi-index, labels on different levels can be removed by specifying
+the level. See theuser guidefor more information about the now unused levels.Parameters:labelssingle label or list-likeIndex or column labels to drop. A tuple will be used as a single
+label and not treated as a list-like.axis{0 or ÅeindexÅf, 1 or ÅecolumnsÅf}, default 0Whether to drop labels from the index (0 or ÅeindexÅf) or
+columns (1 or ÅecolumnsÅf).indexsingle label or list-likeAlternative to specifying axis (labels,axis=0is equivalent toindex=labels).columnssingle label or list-likeAlternative to specifying axis (labels,axis=1is equivalent tocolumns=labels).levelint or level name, optionalFor MultiIndex, level from which the labels will be removed.inplacebool, default FalseIf False, return a copy. Otherwise, do operation
+in place and return None.errors{ÅeignoreÅf, ÅeraiseÅf}, default ÅeraiseÅfIf ÅeignoreÅf, suppress error and only existing labels are
+dropped.Returns:DataFrame or NoneReturns DataFrame or None DataFrame with the specified
+index or column labels removed or None if inplace=True.Raises:KeyErrorIf any of the labels is not found in the selected axis.See alsoDataFrame.locLabel-location based indexer for selection by label.DataFrame.dropnaReturn DataFrame with labels on given axis omitted where (all or any) data are missing.DataFrame.drop_duplicatesReturn DataFrame with duplicate rows removed, optionally only considering certain columns.Series.dropReturn Series with specified index labels removed.Examples>>>df=pd.DataFrame(np.arange(12).reshape(3,4),...columns=['A','B','C','D'])>>>dfA  B   C   D0  0  1   2   31  4  5   6   72  8  9  10  11Drop columns>>>df.drop(['B','C'],axis=1)A   D0  0   31  4   72  8  11>>>df.drop(columns=['B','C'])A   D0  0   31  4   72  8  11Drop a row by index>>>df.drop([0,1])A  B   C   D2  8  9  10  11Drop columns and/or rows of MultiIndex DataFrame>>>midx=pd.MultiIndex(levels=[['llama','cow','falcon'],...['speed','weight','length']],...codes=[[0,0,0,1,1,1,2,2,2],...[0,1,2,0,1,2,0,1,2]])>>>df=pd.DataFrame(index=midx,columns=['big','small'],...data=[[45,30],[200,100],[1.5,1],[30,20],...[250,150],[1.5,0.8],[320,250],...[1,0.8],[0.3,0.2]])>>>dfbig     smallllama   speed   45.0    30.0weight  200.0   100.0length  1.5     1.0cow     speed   30.0    20.0weight  250.0   150.0length  1.5     0.8falcon  speed   320.0   250.0weight  1.0     0.8length  0.3     0.2Drop a specific index combination from the MultiIndex
+DataFrame, i.e., drop the combination'falcon'and'weight', which deletes only the corresponding row>>>df.drop(index=('falcon','weight'))big     smallllama   speed   45.0    30.0weight  200.0   100.0length  1.5     1.0cow     speed   30.0    20.0weight  250.0   150.0length  1.5     0.8falcon  speed   320.0   250.0length  0.3     0.2>>>df.drop(index='cow',columns='small')bigllama   speed   45.0weight  200.0length  1.5falcon  speed   320.0weight  1.0length  0.3>>>df.drop(index='length',level=1)big     smallllama   speed   45.0    30.0weight  200.0   100.0cow     speed   30.0    20.0weight  250.0   150.0falcon  speed   320.0   250.0weight  1.0     0.8"
+Pandas,Combined_csv,pandas.DataFrame.dropna,"pandas.DataFrame.dropna#DataFrame.dropna(*,axis=0,how=_NoDefault.no_default,thresh=_NoDefault.no_default,subset=None,inplace=False,ignore_index=False)[source]#Remove missing values.See theUser Guidefor more on which values are
+considered missing, and how to work with missing data.Parameters:axis{0 or ÅeindexÅf, 1 or ÅecolumnsÅf}, default 0Determine if rows or columns which contain missing values are
+removed.0, or ÅeindexÅf : Drop rows which contain missing values.1, or ÅecolumnsÅf : Drop columns which contain missing value.Only a single axis is allowed.how{ÅeanyÅf, ÅeallÅf}, default ÅeanyÅfDetermine if row or column is removed from DataFrame, when we have
+at least one NA or all NA.ÅeanyÅf : If any NA values are present, drop that row or column.ÅeallÅf : If all values are NA, drop that row or column.threshint, optionalRequire that many non-NA values. Cannot be combined with how.subsetcolumn label or sequence of labels, optionalLabels along other axis to consider, e.g. if you are dropping rows
+these would be a list of columns to include.inplacebool, default FalseWhether to modify the DataFrame rather than creating a new one.ignore_indexbool, defaultFalseIfTrue, the resulting axis will be labeled 0, 1, Åc, n - 1.New in version 2.0.0.Returns:DataFrame or NoneDataFrame with NA entries dropped from it or None ifinplace=True.See alsoDataFrame.isnaIndicate missing values.DataFrame.notnaIndicate existing (non-missing) values.DataFrame.fillnaReplace missing values.Series.dropnaDrop missing values.Index.dropnaDrop missing indices.Examples>>>df=pd.DataFrame({""name"":['Alfred','Batman','Catwoman'],...""toy"":[np.nan,'Batmobile','Bullwhip'],...""born"":[pd.NaT,pd.Timestamp(""1940-04-25""),...pd.NaT]})>>>dfname        toy       born0    Alfred        NaN        NaT1    Batman  Batmobile 1940-04-252  Catwoman   Bullwhip        NaTDrop the rows where at least one element is missing.>>>df.dropna()name        toy       born1  Batman  Batmobile 1940-04-25Drop the columns where at least one element is missing.>>>df.dropna(axis='columns')name0    Alfred1    Batman2  CatwomanDrop the rows where all elements are missing.>>>df.dropna(how='all')name        toy       born0    Alfred        NaN        NaT1    Batman  Batmobile 1940-04-252  Catwoman   Bullwhip        NaTKeep only the rows with at least 2 non-NA values.>>>df.dropna(thresh=2)name        toy       born1    Batman  Batmobile 1940-04-252  Catwoman   Bullwhip        NaTDefine in which columns to look for missing values.>>>df.dropna(subset=['name','toy'])name        toy       born1    Batman  Batmobile 1940-04-252  Catwoman   Bullwhip        NaT"
+Pandas,Combined_csv,pandas.merge,"pandas.merge#pandas.merge(left,right,how='inner',on=None,left_on=None,right_on=None,left_index=False,right_index=False,sort=False,suffixes=('_x','_y'),copy=None,indicator=False,validate=None)[source]#Merge DataFrame or named Series objects with a database-style join.A named Series object is treated as a DataFrame with a single named column.The join is done on columns or indexes. If joining columns on
+columns, the DataFrame indexeswill be ignored. Otherwise if joining indexes
+on indexes or indexes on a column or columns, the index will be passed on.
+When performing a cross merge, no column specifications to merge on are
+allowed.WarningIf both key columns contain rows where the key is a null value, those
+rows will be matched against each other. This is different from usual SQL
+join behaviour and can lead to unexpected results.Parameters:leftDataFrame or named SeriesrightDataFrame or named SeriesObject to merge with.how{ÅeleftÅf, ÅerightÅf, ÅeouterÅf, ÅeinnerÅf, ÅecrossÅf}, default ÅeinnerÅfType of merge to be performed.left: use only keys from left frame, similar to a SQL left outer join;
+preserve key order.right: use only keys from right frame, similar to a SQL right outer join;
+preserve key order.outer: use union of keys from both frames, similar to a SQL full outer
+join; sort keys lexicographically.inner: use intersection of keys from both frames, similar to a SQL inner
+join; preserve the order of the left keys.cross: creates the cartesian product from both frames, preserves the order
+of the left keys.New in version 1.2.0.onlabel or listColumn or index level names to join on. These must be found in both
+DataFrames. Ifonis None and not merging on indexes then this defaults
+to the intersection of the columns in both DataFrames.left_onlabel or list, or array-likeColumn or index level names to join on in the left DataFrame. Can also
+be an array or list of arrays of the length of the left DataFrame.
+These arrays are treated as if they are columns.right_onlabel or list, or array-likeColumn or index level names to join on in the right DataFrame. Can also
+be an array or list of arrays of the length of the right DataFrame.
+These arrays are treated as if they are columns.left_indexbool, default FalseUse the index from the left DataFrame as the join key(s). If it is a
+MultiIndex, the number of keys in the other DataFrame (either the index
+or a number of columns) must match the number of levels.right_indexbool, default FalseUse the index from the right DataFrame as the join key. Same caveats as
+left_index.sortbool, default FalseSort the join keys lexicographically in the result DataFrame. If False,
+the order of the join keys depends on the join type (how keyword).suffixeslist-like, default is (Åg_xÅh, Åg_yÅh)A length-2 sequence where each element is optionally a string
+indicating the suffix to add to overlapping column names inleftandrightrespectively. Pass a value ofNoneinstead
+of a string to indicate that the column name fromleftorrightshould be left as-is, with no suffix. At least one of the
+values must not be None.copybool, default TrueIf False, avoid copy if possible.indicatorbool or str, default FalseIf True, adds a column to the output DataFrame called Åg_mergeÅh with
+information on the source of each row. The column can be given a different
+name by providing a string argument. The column will have a Categorical
+type with the value of Ågleft_onlyÅh for observations whose merge key only
+appears in the left DataFrame, Ågright_onlyÅh for observations
+whose merge key only appears in the right DataFrame, and ÅgbothÅh
+if the observationÅfs merge key is found in both DataFrames.validatestr, optionalIf specified, checks if merge is of specified type.Ågone_to_oneÅh or Åg1:1Åh: check if merge keys are unique in both
+left and right datasets.Ågone_to_manyÅh or Åg1:mÅh: check if merge keys are unique in left
+dataset.Ågmany_to_oneÅh or Ågm:1Åh: check if merge keys are unique in right
+dataset.Ågmany_to_manyÅh or Ågm:mÅh: allowed, but does not result in checks.Returns:DataFrameA DataFrame of the two merged objects.See alsomerge_orderedMerge with optional filling/interpolation.merge_asofMerge on nearest keys.DataFrame.joinSimilar method using indices.Examples>>>df1=pd.DataFrame({'lkey':['foo','bar','baz','foo'],...'value':[1,2,3,5]})>>>df2=pd.DataFrame({'rkey':['foo','bar','baz','foo'],...'value':[5,6,7,8]})>>>df1lkey value0   foo      11   bar      22   baz      33   foo      5>>>df2rkey value0   foo      51   bar      62   baz      73   foo      8Merge df1 and df2 on the lkey and rkey columns. The value columns have
+the default suffixes, _x and _y, appended.>>>df1.merge(df2,left_on='lkey',right_on='rkey')lkey  value_x rkey  value_y0  foo        1  foo        51  foo        1  foo        82  foo        5  foo        53  foo        5  foo        84  bar        2  bar        65  baz        3  baz        7Merge DataFrames df1 and df2 with specified left and right suffixes
+appended to any overlapping columns.>>>df1.merge(df2,left_on='lkey',right_on='rkey',...suffixes=('_left','_right'))lkey  value_left rkey  value_right0  foo           1  foo            51  foo           1  foo            82  foo           5  foo            53  foo           5  foo            84  bar           2  bar            65  baz           3  baz            7Merge DataFrames df1 and df2, but raise an exception if the DataFrames have
+any overlapping columns.>>>df1.merge(df2,left_on='lkey',right_on='rkey',suffixes=(False,False))Traceback (most recent call last):...ValueError:columns overlap but no suffix specified:Index(['value'], dtype='object')>>>df1=pd.DataFrame({'a':['foo','bar'],'b':[1,2]})>>>df2=pd.DataFrame({'a':['foo','baz'],'c':[3,4]})>>>df1a  b0   foo  11   bar  2>>>df2a  c0   foo  31   baz  4>>>df1.merge(df2,how='inner',on='a')a  b  c0   foo  1  3>>>df1.merge(df2,how='left',on='a')a  b  c0   foo  1  3.01   bar  2  NaN>>>df1=pd.DataFrame({'left':['foo','bar']})>>>df2=pd.DataFrame({'right':[7,8]})>>>df1left0   foo1   bar>>>df2right0   71   8>>>df1.merge(df2,how='cross')left  right0   foo      71   foo      82   bar      73   bar      8"
+Pandas,Combined_csv,pandas.DataFrame.groupby,"pandas.DataFrame.groupby#DataFrame.groupby(by=None,axis=_NoDefault.no_default,level=None,as_index=True,sort=True,group_keys=True,observed=_NoDefault.no_default,dropna=True)[source]#Group DataFrame using a mapper or by a Series of columns.A groupby operation involves some combination of splitting the
+object, applying a function, and combining the results. This can be
+used to group large amounts of data and compute operations on these
+groups.Parameters:bymapping, function, label, pd.Grouper or list of suchUsed to determine the groups for the groupby.
+Ifbyis a function, itÅfs called on each value of the objectÅfs
+index. If a dict or Series is passed, the Series or dict VALUES
+will be used to determine the groups (the SeriesÅf values are first
+aligned; see.align()method). If a list or ndarray of length
+equal to the selected axis is passed (see thegroupby user guide),
+the values are used as-is to determine the groups. A label or list
+of labels may be passed to group by the columns inself.
+Notice that a tuple is interpreted as a (single) key.axis{0 or ÅeindexÅf, 1 or ÅecolumnsÅf}, default 0Split along rows (0) or columns (1). ForSeriesthis parameter
+is unused and defaults to 0.Deprecated since version 2.1.0:Will be removed and behave like axis=0 in a future version.
+Foraxis=1, doframe.T.groupby(...)instead.levelint, level name, or sequence of such, default NoneIf the axis is a MultiIndex (hierarchical), group by a particular
+level or levels. Do not specify bothbyandlevel.as_indexbool, default TrueReturn object with group labels as the
+index. Only relevant for DataFrame input. as_index=False is
+effectively ÅgSQL-styleÅh grouped output. This argument has no effect
+on filtrations (see thefiltrations in the user guide),
+such ashead(),tail(),nth()and in transformations
+(see thetransformations in the user guide).sortbool, default TrueSort group keys. Get better performance by turning this off.
+Note this does not influence the order of observations within each
+group. Groupby preserves the order of rows within each group. If False,
+the groups will appear in the same order as they did in the original DataFrame.
+This argument has no effect on filtrations (see thefiltrations in the user guide),
+such ashead(),tail(),nth()and in transformations
+(see thetransformations in the user guide).Changed in version 2.0.0:Specifyingsort=Falsewith an ordered categorical grouper will no
+longer sort the values.group_keysbool, default TrueWhen calling apply and thebyargument produces a like-indexed
+(i.e.a transform) result, add group keys to
+index to identify pieces. By default group keys are not included
+when the resultÅfs index (and column) labels match the inputs, and
+are included otherwise.Changed in version 1.5.0:Warns thatgroup_keyswill no longer be ignored when the
+result fromapplyis a like-indexed Series or DataFrame.
+Specifygroup_keysexplicitly to include the group keys or
+not.Changed in version 2.0.0:group_keysnow defaults toTrue.observedbool, default FalseThis only applies if any of the groupers are Categoricals.
+If True: only show observed values for categorical groupers.
+If False: show all values for categorical groupers.Deprecated since version 2.1.0:The default value will change to True in a future version of pandas.dropnabool, default TrueIf True, and if group keys contain NA values, NA values together
+with row/column will be dropped.
+If False, NA values will also be treated as the key in groups.Returns:pandas.api.typing.DataFrameGroupByReturns a groupby object that contains information about the groups.See alsoresampleConvenience method for frequency conversion and resampling of time series.NotesSee theuser guidefor more
+detailed usage and examples, including splitting an object into groups,
+iterating through groups, selecting a group, aggregation, and more.Examples>>>df=pd.DataFrame({'Animal':['Falcon','Falcon',...'Parrot','Parrot'],...'Max Speed':[380.,370.,24.,26.]})>>>dfAnimal  Max Speed0  Falcon      380.01  Falcon      370.02  Parrot       24.03  Parrot       26.0>>>df.groupby(['Animal']).mean()Max SpeedAnimalFalcon      375.0Parrot       25.0Hierarchical IndexesWe can groupby different levels of a hierarchical index
+using thelevelparameter:>>>arrays=[['Falcon','Falcon','Parrot','Parrot'],...['Captive','Wild','Captive','Wild']]>>>index=pd.MultiIndex.from_arrays(arrays,names=('Animal','Type'))>>>df=pd.DataFrame({'Max Speed':[390.,350.,30.,20.]},...index=index)>>>dfMax SpeedAnimal TypeFalcon Captive      390.0Wild         350.0Parrot Captive       30.0Wild          20.0>>>df.groupby(level=0).mean()Max SpeedAnimalFalcon      370.0Parrot       25.0>>>df.groupby(level=""Type"").mean()Max SpeedTypeCaptive      210.0Wild         185.0We can also choose to include NA in group keys or not by settingdropnaparameter, the default setting isTrue.>>>l=[[1,2,3],[1,None,4],[2,1,3],[1,2,2]]>>>df=pd.DataFrame(l,columns=[""a"",""b"",""c""])>>>df.groupby(by=[""b""]).sum()a   cb1.0 2   32.0 2   5>>>df.groupby(by=[""b""],dropna=False).sum()a   cb1.0 2   32.0 2   5NaN 1   4>>>l=[[""a"",12,12],[None,12.3,33.],[""b"",12.3,123],[""a"",1,1]]>>>df=pd.DataFrame(l,columns=[""a"",""b"",""c""])>>>df.groupby(by=""a"").sum()b     caa   13.0   13.0b   12.3  123.0>>>df.groupby(by=""a"",dropna=False).sum()b     caa   13.0   13.0b   12.3  123.0NaN 12.3   33.0When using.apply(), usegroup_keysto include or exclude the
+group keys. Thegroup_keysargument defaults toTrue(include).>>>df=pd.DataFrame({'Animal':['Falcon','Falcon',...'Parrot','Parrot'],...'Max Speed':[380.,370.,24.,26.]})>>>df.groupby(""Animal"",group_keys=True).apply(lambdax:x)Animal  Max SpeedAnimalFalcon 0  Falcon      380.01  Falcon      370.0Parrot 2  Parrot       24.03  Parrot       26.0>>>df.groupby(""Animal"",group_keys=False).apply(lambdax:x)Animal  Max Speed0  Falcon      380.01  Falcon      370.02  Parrot       24.03  Parrot       26.0"
