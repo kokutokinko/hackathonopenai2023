@@ -22,47 +22,29 @@ openai.api_type = 'azure'
 openai.api_version = '2023-05-15'
 
 chatbot_first_message = """
-こんにちは!
-私はデータサイエンスについて回答を行うチャットボットです.
-以下略
+Hello!
+A chatbot that supports learning in the data science field.
+We're here to answer any questions you may have regarding the field of data collection in data science.
 """
 selected_chatbot_first_message="""
-こんにちは!
-私は趣味(これは仮で実際は違う)について回答を行うチャットボットです.
-以下略
+Hello!
+A chatbot that supports learning in the data science field.
+We will answer your questions about the field of data preprocessing in data science.
 """
 
 
 initial_prompt = """
-    # 命令 あなたは、以下に記載された趣味について、その趣味を全く知らず興味のないユーザにわかりやすく紹介するBotです。
-    まずは趣味について概要を紹介し、そのあとはユーザがその趣味に興味を持つきっかけになるような質問例を提示しながら、
-    常に積極的に会話を主導してください。
-    基本的にはその趣味のポジティブな面について言及する事を心がけ、
-    ネガティブな面についても聞かれた場合には正直に前向きに回答してください。
-    また、対話の際は1文100文字以下で知的な口調で、少しでも趣味に興味を持ってもらうように努めてください。
-    あなたの最初の発言は、「私は増田圭亮に代わって{趣味名}の良さを紹介するために開発されたChatBotです。」から始めてください。
-    Limit the text to 100 characters or fewer
-    返答の最後に返答が何文字であるかを({文字数}文字)のように記載してください。
 
-    # 紹介する趣味情報 
-    ## 概要
-    車
-    ##趣味についての前提情報
-    ・車の運転が好き。
-    ・車のエンジン音が好き。
-    ・車のデザインが好き。
-    ## 特に面白い・メリットと感じる点
-    ・エンジン音が好き。
-    ## デメリットだと感じる点
-    ・燃費が悪い。
-    ## 話し方
-    知的な口調で話してください。
-    ## 会話の制限
-
+あなたはデータサイエンスのデータ収集分野におけるスペシャリストです。
+データ収集の分野でユーザーをサポートしてください。
 """
+
+
 initial_prompt_2 = """
-    あなたはデータサイエンスのスペシャリストであるとユーザーに自己紹介してください
+あなたはデータサイエンスのデータの前処理におけるスペシャリストです。
+データの前処理の分野でユーザーをサポートしてください。
 """
+
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "system", "content": initial_prompt}]
@@ -88,10 +70,10 @@ def communicate():
 
 
         
-        #------------------------------------------------------------
-
+        #------------------------------------------------------------        
+        
         if st.session_state["message_count"] == 0:
-            df = pd.read_csv("list.csv", encoding="shift-jis")
+            df = pd.read_csv("output.csv", encoding="shift-jis")
             columns = df.columns
             df["_text"] = ""
             for column in columns:
@@ -99,8 +81,8 @@ def communicate():
             document_list = df["_text"].values
             documents = utils.llama_index_getdocument(document_list)
             index = utils.llama_index_generate(documents)
-            with st.spinner("ドキュメント検索中（1分ほどかかります）..."):
-                df = pd.read_csv("list.csv", encoding="shift-jis")
+            with st.spinner("Searching for documents（It takes about 1 minute.）..."):
+                df = pd.read_csv("output.csv", encoding="shift-jis")
                 columns = df.columns
                 df["_text"] = ""
                 for column in columns:
@@ -111,15 +93,21 @@ def communicate():
                 
 
             # クエリ （description：アップロードした顧客情報)
-            query = f"あなたは顧客に商品を推薦する営業です。\
-            以下の顧客情報に一番適しているものを提案してください。\
-            その理由も回答してください。\
-            また、推薦する際に顧客が購入したくなるような文章を生成してください。\
-            顧客情報：{messages} \
-            出力形式は以下のようにしてください。\
-            適しているもの：\
-            選んだ理由：\
-            推薦メッセージ："
+            query = """
+
+            # Background
+            You are an expert in the field of data collection in data science.
+            Your job is to use your data collection expertise in data science to support user learning. 
+
+            # Customer Info
+            User request: {user_message}
+
+            # Instructions
+            データサイエンスに関する質問をされた場合、そのプロセスを最適化するために、ユーザーをサポートしてください。
+            具体的には、user requestの疑問に応えられそうなライブラリ名や選定理由、コードと使用方法、ベストプラクティスなどを含めるとよいかもしれません。
+            詳しく説明することを意識してください。文章が長くなっても構いませんが、説明が冗長になることは避けてください。
+            関数の使い方などは、その関数でできる多くのことを伝えてください。"""
+
 
             # llama-indexによる回答の生成
             result = utils.llama_generate(index=index, query=query, top_k=1)
@@ -162,7 +150,7 @@ authenticator=stauth.Authenticate(
 
 )
 
-authenticator.login("ログイン","main")
+authenticator.login("Login","main")
 #-------------------------ログイン------------------------------------------------------
 
 
@@ -178,10 +166,10 @@ if st.session_state["authentication_status"]:
     #--------------------ボタンの追加----------------------------------------------------
 
     #モード選択のためのボタン
-    prompt_selection = st.radio("初期プロンプトを選択してください:", ('趣味(車)について', 'データサイエンスについて'))
+    prompt_selection = st.radio("Please select an initial prompt:", ('About Data Collection', 'About data preprocessing'))
 
     # 選択に基づいて初期プロンプトを設定
-    selected_prompt = initial_prompt_1 if prompt_selection == '趣味について' else initial_prompt_2
+    selected_prompt = initial_prompt if prompt_selection == 'データ収集について' else initial_prompt_2
 
     # 選択が変更された場合、メッセージをリセットし新しいプロンプトで開始
     if "current_prompt" not in st.session_state or st.session_state["current_prompt"] != selected_prompt:
@@ -189,6 +177,8 @@ if st.session_state["authentication_status"]:
         st.session_state["messages"] = [{"role": "system", "content": selected_prompt}]
         st.session_state["messages"].append({"role": "assistant", "content": selected_chatbot_first_message})
 
+        
+        
     #--------------------ボタンの追加----------------------------------------------------
 
 
@@ -196,7 +186,7 @@ if st.session_state["authentication_status"]:
     
 
     # ユーザインターフェイスの構築
-    st.title("自己紹介_ChatBot")
+    st.title("self-introduction_ChatBot")
 
     # メッセージ履歴の表示
     for message in st.session_state["messages"]:
@@ -207,7 +197,7 @@ if st.session_state["authentication_status"]:
             st.write(f"{speaker}: {message['content']}")
 
     # ユーザ入力欄の表示
-    user_input = st.text_input("メッセージを入力してください。", key="user_input", on_change=communicate)
+    user_input = st.text_input("Please enter your message", key="user_input", on_change=communicate)
 
 elif st.session_state["authentication_status"] == False:
     st.error('Username/password is incorrect')
@@ -215,11 +205,11 @@ elif st.session_state["authentication_status"] == None:
     st.warning('Please enter your username and password')
 
 with st.sidebar:
-    st.title("どきゅめんくん")
-    st.caption("機械学習コンペティション初心者のためのアプリケーション")
-    st.markdown("・利用するライブラリの使い方についてをチャット形式で相談することができます")
-    st.markdown("・また実現したいことを伝えることでコードの提案もしてくれます")
+    st.title("Documentor-GPT")
+    st.caption("Applications for Beginners in Machine Learning Competitions")
+    st.markdown("・Chat with us about how to use the libraries you use!")
+    st.markdown("・They can also make code suggestions by telling you what they want to achieve!")
     
     if st.session_state["authentication_status"]:
-        authenticator.logout('ログアウト','sidebar')
-
+        authenticator.logout('Logout','sidebar')
+        
