@@ -23,13 +23,13 @@ openai.api_version = '2023-05-15'
 
 chatbot_first_message = """
 Hello!
-A chatbot that supports learning in the data science field.
-We're here to answer any questions you may have regarding the field of data collection in data science.
+I am a chatbot here to support learning in the field of data science.
+Feel free to ask any questions you have regarding data collection in data science.
 """
 selected_chatbot_first_message="""
 Hello!
-A chatbot that supports learning in the data science field.
-We will answer your questions about the field of data preprocessing in data science.
+I am a chatbot here to support learning in the field of data science.
+Feel free to ask any questions you have data preprocessing in data science.
 """
 
 
@@ -72,14 +72,6 @@ def communicate():
         #------------------------------------------------------------        
         
         if st.session_state["message_count"] == 0:
-            df = pd.read_csv("output.csv", encoding="shift-jis")
-            columns = df.columns
-            df["_text"] = ""
-            for column in columns:
-                df["_text"] = df["_text"] + f"【{column}】" + df[column]
-            document_list = df["_text"].values
-            documents = utils.llama_index_getdocument(document_list)
-            index = utils.llama_index_generate(documents)
             with st.spinner("Searching for documents（It takes about 1 minute.）..."):
                 df = pd.read_csv("output.csv", encoding="shift-jis")
                 columns = df.columns
