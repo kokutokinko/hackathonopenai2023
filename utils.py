@@ -34,7 +34,7 @@ def llama_index_generate(references):
     llm_predictor = LLMPredictor(llm=AzureChatOpenAI(
         deployment_name='GPT35TURBO',         # デプロイ名 #←ここを変更
         max_tokens=1000,                      # 最大トークン数
-        temperature=0,                        # 出力のランダム度合い
+        temperature=1,                        # 出力のランダム度合い
         openai_api_version=openai.api_version # openaiのapiのバージョン情報
     ))
 
@@ -84,7 +84,7 @@ def llama_generate(index, query, top_k):
         "---------------------\n"
         "{context_str}"
         "\n---------------------\n"
-        "この情報をもとに質問に日本語で回答してください。: {query_str}\n"
+        "この情報をもとに質問に英語で回答してください。: {query_str}\n"
     )
     qa_prompt = QuestionAnswerPrompt(QA_PROMPT_TMPL)
     
