@@ -73,14 +73,6 @@ def communicate():
         #------------------------------------------------------------        
         
         if st.session_state["message_count"] == 0:
-            df = pd.read_csv("output.csv", encoding="shift-jis")
-            columns = df.columns
-            df["_text"] = ""
-            for column in columns:
-                df["_text"] = df["_text"] + f"【{column}】" + df[column]
-            document_list = df["_text"].values
-            documents = utils.llama_index_getdocument(document_list)
-            index = utils.llama_index_generate(documents)
             with st.spinner("Searching for documents（It takes about 1 minute.）..."):
                 df = pd.read_csv("output.csv", encoding="shift-jis")
                 columns = df.columns
@@ -90,6 +82,8 @@ def communicate():
                 document_list = df["_text"].values
                 documents = utils.llama_index_getdocument(document_list)
                 index = utils.llama_index_generate(documents)
+                
+                
                 
 
             # クエリ （description：アップロードした顧客情報)
