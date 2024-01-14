@@ -23,13 +23,13 @@ openai.api_version = '2023-05-15'
 
 chatbot_first_message = """
 Hello!
-A chatbot that supports learning in the data science field.
-We're here to answer any questions you may have regarding the field of data collection in data science.
+I am a chatbot here to support learning in the field of data science.
+Feel free to ask any questions you have regarding data collection in data science.
 """
 selected_chatbot_first_message="""
 Hello!
-A chatbot that supports learning in the data science field.
-We will answer your questions about the field of data preprocessing in data science.
+I am a chatbot here to support learning in the field of data science.
+Feel free to ask any questions you have data preprocessing in data science.
 """
 
 
@@ -154,7 +154,7 @@ authenticator.login("Login","main")
 
 if st.session_state["authentication_status"]:
 
-    st.title("Chat")
+    st.title("Documentor-GPT")
     # メッセージ履歴の表示
 
     #--------------------ボタンの追加----------------------------------------------------
