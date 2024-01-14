@@ -89,7 +89,7 @@ def llama_generate(index, query, top_k):
     qa_prompt = QuestionAnswerPrompt(QA_PROMPT_TMPL)
     
     # 回答生成
-    with st.spinner("Searching for documents（It takes about 1 minute.）..."):
+    with st.spinner("Genatrate Answer（It takes about 1 minute.）..."):
         # プロンプトと上位いくつまでの類似度を使用するか設定
         query_engine = index.as_query_engine(
             engine='gpt-35-turbo',#←ここを変更
