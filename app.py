@@ -23,18 +23,17 @@ openai.api_version = '2023-05-15'
 
 chatbot_first_message = """
 Hello!
-I am a chatbot here to support learning in the field of data science.
-Feel free to ask any questions you have regarding data collection in data science.
+A chatbot that supports learning in the data science field.
+We're here to answer any questions you may have regarding the field of data collection in data science.
 """
 selected_chatbot_first_message="""
 Hello!
-I am a chatbot here to support learning in the field of data science.
-Feel free to ask any questions you have data preprocessing in data science.
+A chatbot that supports learning in the data science field.
+We will answer your questions about the field of data preprocessing in data science.
 """
 
 
 initial_prompt = """
-
 あなたはデータサイエンスのデータ収集分野におけるスペシャリストです。
 データ収集の分野でユーザーをサポートしてください。
 """
@@ -73,6 +72,14 @@ def communicate():
         #------------------------------------------------------------        
         
         if st.session_state["message_count"] == 0:
+            df = pd.read_csv("output.csv", encoding="shift-jis")
+            columns = df.columns
+            df["_text"] = ""
+            for column in columns:
+                df["_text"] = df["_text"] + f"【{column}】" + df[column]
+            document_list = df["_text"].values
+            documents = utils.llama_index_getdocument(document_list)
+            index = utils.llama_index_generate(documents)
             with st.spinner("Searching for documents（It takes about 1 minute.）..."):
                 df = pd.read_csv("output.csv", encoding="shift-jis")
                 columns = df.columns
@@ -83,8 +90,6 @@ def communicate():
                 documents = utils.llama_index_getdocument(document_list)
                 index = utils.llama_index_generate(documents)
                 
-                
-                
 
             # クエリ （description：アップロードした顧客情報)
             query = f"""
@@ -92,15 +97,20 @@ def communicate():
             # Background
             You are an expert in the field of data collection in data science.
             Your job is to use your data collection expertise in data science to support user learning. 
+            However, you can also enjoy stories other than data science.
 
             # Customer Info
             User request: {user_message}
 
             # Instructions
             データサイエンスに関する質問をされた場合、そのプロセスを最適化するために、ユーザーをサポートしてください。
-            具体的には、user requestの疑問に応えられそうなライブラリ名や選定理由、コードと使用方法、ベストプラクティスなどを含めるとよいかもしれません。
-            詳しく説明することを意識してください。文章が長くなっても構いませんが、説明が冗長になることは避けてください。
-            関数の使い方などは、その関数でできる多くのことを伝えてください。"""
+            具体的には、User requestを解決するライブラリ名や選定理由、コードと使用方法、ベストプラクティスなどを含めてください。
+            ユーザーの要求に対して役立つコードを提示し、説明をセットで
+            詳しく説明することを意識してください。ライブラリを使用するために必要なimport文、基本的な使用方法から実戦的な使い方まで順を追って説明してください。
+            コードは見やすくするために、他の文章と続けて文章にせず、コードとして区別してください。
+            コードを書いた場合には、そのコードの実行結果として出力を必ずセットで提供してください。
+                        
+            """
 
 
             # llama-indexによる回答の生成
@@ -154,7 +164,7 @@ authenticator.login("Login","main")
 
 if st.session_state["authentication_status"]:
 
-    st.title("Documentor-GPT")
+    st.title("Chat")
     # メッセージ履歴の表示
 
     #--------------------ボタンの追加----------------------------------------------------
