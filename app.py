@@ -156,7 +156,7 @@ authenticator.login("Login","main")
 
 if st.session_state["authentication_status"]:
 
-    st.title("Chat")
+    st.title("Documentor-GPT")
     # メッセージ履歴の表示
 
     #--------------------ボタンの追加----------------------------------------------------
