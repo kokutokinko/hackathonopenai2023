@@ -92,7 +92,7 @@ def communicate():
             However, you can also enjoy stories other than data science.
 
             # Customer Info
-            User request: {user_message}
+            User request: {messages}
 
             # Instructions
             データサイエンスに関する質問をされた場合、そのプロセスを最適化するために、ユーザーをサポートしてください。
