@@ -87,7 +87,7 @@ def communicate():
                 
 
             # クエリ （description：アップロードした顧客情報)
-            query = """
+            query = f"""
 
             # Background
             You are an expert in the field of data collection in data science.
