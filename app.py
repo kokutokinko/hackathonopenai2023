@@ -1,6 +1,7 @@
 # 必要なモジュールのインポート
 import streamlit as st
 import os
+import datetime
 import utils
 import openai
 import pandas as pd
@@ -8,6 +9,7 @@ from llama_index import StorageContext, load_index_from_storage
 import yaml
 import streamlit_authenticator as stauth
 from yaml.loader import SafeLoader
+import json
 # APIの設定
 
 
@@ -42,6 +44,11 @@ initial_prompt = """
 initial_prompt_2 = """
 あなたはデータサイエンスのデータの前処理におけるスペシャリストです。
 データの前処理の分野でユーザーをサポートしてください。
+"""
+
+make_filename_prompt  = """
+ユーザーメッセージから会話のタイトルを10文字で作成してください
+タイトルのみを返信してください
 """
 
 # st.session_stateを使いメッセージのやりとりを保存
@@ -194,6 +201,21 @@ elif st.session_state["authentication_status"] == False:
     st.error('Username/password is incorrect')
 elif st.session_state["authentication_status"] == None:
     st.warning('Please enter your username and password')
+    
+if st.button('save chat history', key='my_button', help='save chat history and watch history tab'):
+    with st.spinner("Save for historys（It takes about 5 seconde.）..."):
+        
+    
+        base_title = datetime.datetime.now().strftime('%Y %m %d %H:%M:%S')
+        title = base_title
+        file_list = os.listdir('pages/data')
+        i = 1
+        while f'{title}.json' in file_list:
+            title = f'{base_title}_{i}'
+            i += 1
+        with open(f'pages/data/{title}.json', 'w') as f:
+            json.dump(st.session_state["messages"], f)
+        st.write('save complete!!')
 
 with st.sidebar:
     st.title("Documentor-GPT")
