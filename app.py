@@ -22,19 +22,18 @@ openai.api_type = 'azure'
 openai.api_version = '2023-05-15'
 
 chatbot_first_message = """
-こんにちは!
-私はデータサイエンス分野においてあなたの学習のサポートを行うチャットボットです。
-データサイエンスについて質問があればお答えします。
+Hello!
+I am a chatbot here to support learning in the field of data science.
+Feel free to ask any questions you have regarding data collection in data science.
 """
-selected_chatbot_first_message=""" # 現時点で初めにBotが話す部分
-こんにちは!
-私はデータサイエンス分野においてあなたの学習のサポートを行うチャットボットです。
-データサイエンスについて質問があればお答えします。
+selected_chatbot_first_message="""
+Hello!
+I am a chatbot here to support learning in the field of data science.
+Feel free to ask any questions you have data preprocessing in data science.
 """
 
 
 initial_prompt = """
-
 あなたはデータサイエンスのデータ収集分野におけるスペシャリストです。
 データ収集の分野でユーザーをサポートしてください。
 """
@@ -73,40 +72,32 @@ def communicate():
         #------------------------------------------------------------        
         
         if st.session_state["message_count"] == 0:
-            df = pd.read_csv("output.csv", encoding="shift-jis")
-            columns = df.columns
-            df["_text"] = ""
-            for column in columns:
-                df["_text"] = df["_text"] + f"【{column}】" + df[column]
-            document_list = df["_text"].values
-            documents = utils.llama_index_getdocument(document_list)
-            index = utils.llama_index_generate(documents)
-            with st.spinner("ドキュメント検索中（1分ほどかかります）..."):
-                df = pd.read_csv("output.csv", encoding="shift-jis")
-                columns = df.columns
-                df["_text"] = ""
-                for column in columns:
-                    df["_text"] = df["_text"] + f"【{column}】" + df[column]
-                document_list = df["_text"].values
-                documents = utils.llama_index_getdocument(document_list)
-                index = utils.llama_index_generate(documents)
+            with st.spinner("Searching for documents（It takes about 1 minute.）..."):
+                service_context, prompt_helper = utils.create_service_context()
+                storage_context = StorageContext.from_defaults(persist_dir="./storage")
+                index = load_index_from_storage(storage_context, service_context=service_context)
                 
 
             # クエリ （description：アップロードした顧客情報)
-            query = """
+            query = f"""
 
             # Background
             You are an expert in the field of data collection in data science.
             Your job is to use your data collection expertise in data science to support user learning. 
+            However, you can also enjoy stories other than data science.
 
             # Customer Info
-            User request: {user_message}
+            User request: {messages}
 
             # Instructions
             データサイエンスに関する質問をされた場合、そのプロセスを最適化するために、ユーザーをサポートしてください。
-            具体的には、user requestの疑問に応えられそうなライブラリ名や選定理由、コードと使用方法、ベストプラクティスなどを含めるとよいかもしれません。
-            詳しく説明することを意識してください。文章が長くなっても構いませんが、説明が冗長になることは避けてください。
-            関数の使い方などは、その関数でできる多くのことを伝えてください。"""
+            具体的には、User requestを解決するライブラリ名や選定理由、コードと使用方法、ベストプラクティスなどを含めてください。
+            ユーザーの要求に対して役立つコードを提示し、説明をセットで
+            詳しく説明することを意識してください。ライブラリを使用するために必要なimport文、基本的な使用方法から実戦的な使い方まで順を追って説明してください。
+            コードは見やすくするために、他の文章と続けて文章にせず、コードとして区別してください。
+            コードを書いた場合には、そのコードの実行結果として出力を必ずセットで提供してください。
+                        
+            """
 
 
             # llama-indexによる回答の生成
@@ -150,7 +141,7 @@ authenticator=stauth.Authenticate(
 
 )
 
-authenticator.login("ログイン","main")
+authenticator.login("Login","main")
 #-------------------------ログイン------------------------------------------------------
 
 
@@ -160,13 +151,13 @@ authenticator.login("ログイン","main")
 
 if st.session_state["authentication_status"]:
 
-    st.title("Chat")
+    st.title("Documentor-GPT")
     # メッセージ履歴の表示
 
     #--------------------ボタンの追加----------------------------------------------------
 
     #モード選択のためのボタン
-    prompt_selection = st.radio("初期プロンプトを選択してください:", ('データ収集について', 'データの前処理について'))
+    prompt_selection = st.radio("Please select an initial prompt:", ('About Data Collection', 'About data preprocessing'))
 
     # 選択に基づいて初期プロンプトを設定
     selected_prompt = initial_prompt if prompt_selection == 'データ収集について' else initial_prompt_2
@@ -186,7 +177,7 @@ if st.session_state["authentication_status"]:
     
 
     # ユーザインターフェイスの構築
-    st.title("自己紹介_ChatBot")
+    st.title("self-introduction_ChatBot")
 
     # メッセージ履歴の表示
     for message in st.session_state["messages"]:
@@ -197,7 +188,7 @@ if st.session_state["authentication_status"]:
             st.write(f"{speaker}: {message['content']}")
 
     # ユーザ入力欄の表示
-    user_input = st.text_input("メッセージを入力してください。", key="user_input", on_change=communicate)
+    user_input = st.text_input("Please enter your message", key="user_input", on_change=communicate)
 
 elif st.session_state["authentication_status"] == False:
     st.error('Username/password is incorrect')
@@ -205,10 +196,11 @@ elif st.session_state["authentication_status"] == None:
     st.warning('Please enter your username and password')
 
 with st.sidebar:
-    st.title("どきゅめんくん")
-    st.caption("機械学習コンペティション初心者のためのアプリケーション")
-    st.markdown("・利用するライブラリの使い方についてをチャット形式で相談することができます")
-    st.markdown("・また実現したいことを伝えることでコードの提案もしてくれます")
+    st.title("Documentor-GPT")
+    st.caption("Applications for Beginners in Machine Learning Competitions")
+    st.markdown("・Chat with us about how to use the libraries you use!")
+    st.markdown("・They can also make code suggestions by telling you what they want to achieve!")
     
     if st.session_state["authentication_status"]:
-        authenticator.logout('ログアウト','sidebar')
+        authenticator.logout('Logout','sidebar')
+        
