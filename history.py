@@ -35,3 +35,19 @@ for message in st.session_state["messages"]:
     if message["role"] != "system":
         speaker = "🙂" if message["role"] == "user" else "🤖"
         st.write(f"{speaker}: {message['content']}")
+
+    
+# Delete button at the bottom of the page
+if st.button('Delete Selected History'):
+    file_to_delete = os.path.join(data_directory, st.session_state.show_db + '.json')
+    
+    # Check if file exists before trying to delete
+    if os.path.exists(file_to_delete):
+        os.remove(file_to_delete)
+        st.success(f'File {st.session_state.show_db} deleted successfully.')
+        
+        # Update the file list and session state after deletion
+        file_list = [file[:-5] for file in os.listdir(data_directory) if file.endswith('.json')]
+        st.session_state.show_db = file_list[0] if file_list else None
+    else:
+        st.error('File not found.')
