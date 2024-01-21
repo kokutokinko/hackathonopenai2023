@@ -46,10 +46,7 @@ initial_prompt_2 = """
 データの前処理の分野でユーザーをサポートしてください。
 """
 
-make_filename_prompt  = """
-ユーザーメッセージから会話のタイトルを10文字で作成してください
-タイトルのみを返信してください
-"""
+
 
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
@@ -94,7 +91,8 @@ def communicate():
             However, you can also enjoy stories other than data science.
 
             # Customer Info
-            User request: {messages}
+            initial_prompt: {messages[0]['content']}
+            User request: {messages[2]['content']}
 
             # Instructions
             データサイエンスに関する質問をされた場合、そのプロセスを最適化するために、ユーザーをサポートしてください。
@@ -105,7 +103,9 @@ def communicate():
             コードを書いた場合には、そのコードの実行結果として出力を必ずセットで提供してください。
                         
             """
-
+            print("---------debug---------")
+            print(query)
+            print("---------end-----------")
 
             # llama-indexによる回答の生成
             result = utils.llama_generate(index=index, query=query, top_k=1)
@@ -115,6 +115,7 @@ def communicate():
 
             # ボットのレスポンスを取得してメッセージリストに追加
             bot_message = {"role": "assistant", "content": str(result)}
+            print(bot_message)
             st.session_state["messages"].append(bot_message)
             st.session_state["message_count"] += 1
 
@@ -188,7 +189,7 @@ if st.session_state["authentication_status"]:
 
     # メッセージ履歴の表示
     for message in st.session_state["messages"]:
-        print(message)
+        
         # 初期プロンプトはスキップして表示
         if message["role"] != "system":
             speaker = "🙂" if message["role"] == "user" else "🤖"
