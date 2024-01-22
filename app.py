@@ -1,6 +1,7 @@
 # 必要なモジュールのインポート
 import streamlit as st
 import os
+import re
 import datetime
 import utils
 import openai
@@ -23,37 +24,40 @@ os.environ["OPENAI_API_BASE"] = os.getenv("AZURE_OPENAI_ENDPOINT")
 openai.api_type = 'azure'
 openai.api_version = '2023-05-15'
 
-chatbot_first_message = """
+numpy_first_message = """
 Hello!
-I am a chatbot here to support learning in the field of data science.
-Feel free to ask any questions you have regarding data collection in data science.
+I am a chatbot here to support learning in the field of numpy.
+Feel free to ask any questions you have regarding data collection in numpy.
 """
-selected_chatbot_first_message="""
+pandas_first_message="""
 Hello!
-I am a chatbot here to support learning in the field of data science.
-Feel free to ask any questions you have data preprocessing in data science.
+I am a chatbot here to support learning in the field of pandas.
+Feel free to ask any questions you have regarding data collection in pandas.
 """
 
 
-initial_prompt = """
-あなたはデータサイエンスのデータ収集分野におけるスペシャリストです。
-データ収集の分野でユーザーをサポートしてください。
+numpy_prompt = """
+あなたはデータサイエンスのnumpyにおけるスペシャリストです。
+numpyの分野でユーザーをサポートしてください。
 """
 
 
-initial_prompt_2 = """
-あなたはデータサイエンスのデータの前処理におけるスペシャリストです。
-データの前処理の分野でユーザーをサポートしてください。
+pandas_prompt = """
+あなたはデータサイエンスのpandasにおけるスペシャリストです。
+pandasの分野でユーザーをサポートしてください。
 """
 
 
 
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [{"role": "system", "content": initial_prompt}]
-    st.session_state["messages"].append({"role": "assistant", "content": chatbot_first_message})
+    st.session_state["messages"] = [{"role": "system", "content": numpy_prompt}]
+    st.session_state["messages"].append({"role": "assistant", "content": numpy_first_message})
 if "message_count" not in st.session_state:
     st.session_state.message_count = 0
+    
+if "select_storage" not in st.session_state:
+    st.session_state["select_storage"] = 1
 
                 
 
@@ -78,7 +82,12 @@ def communicate():
         if st.session_state["message_count"] == 0:
             with st.spinner("Searching for documents（It takes about 1 minute.）..."):
                 service_context, prompt_helper = utils.create_service_context()
-                storage_context = StorageContext.from_defaults(persist_dir="./storage")
+                #select_storageでindex制御
+                if st.session_state["select_storage"] == 1:
+                    storage_context = StorageContext.from_defaults(persist_dir="./storage_numpy")
+                elif st.session_state["select_storage"] == 2:
+                    storage_context = StorageContext.from_defaults(persist_dir="./storage_pandas")
+                
                 index = load_index_from_storage(storage_context, service_context=service_context)
                 
 
@@ -135,6 +144,18 @@ def communicate():
 
             # 入力欄を消去
             st.session_state["user_input"] = ""
+            
+# ファイル名に使用できない文字を除去する関数
+def sanitize_filename(filename):
+    # ファイルシステムで使用不可な文字を削除または置換
+    return re.sub(r'[<>:"/\\|?*]', '', filename)
+
+# チャット履歴をリセットする関数
+def reset_chat_history():
+    st.session_state["messages"] = []
+    st.session_state["message_count"] = 0
+    st.session_state["last_selection"] = None
+
 #-------------------------ログイン----------------------------------------------
 
 #ログイン機能
@@ -164,17 +185,30 @@ if st.session_state["authentication_status"]:
 
     #--------------------ボタンの追加----------------------------------------------------
 
-    #モード選択のためのボタン
-    prompt_selection = st.radio("Please select an initial prompt:", ('About Data Collection', 'About data preprocessing'))
+    # モード選択のためのボタン
+    prompt_selection = st.radio("Please select an initial prompt:", ('About Numpy', 'About Pandas'))
 
     # 選択に基づいて初期プロンプトを設定
-    selected_prompt = initial_prompt if prompt_selection == 'データ収集について' else initial_prompt_2
+    if prompt_selection != st.session_state.get("last_selection", None):
+        if prompt_selection == 'About Numpy':
+            st.session_state["select_storage"] = 1
+            st.session_state["last_selection"] = 'About Numpy'
+            st.session_state["messages"] = [{"role": "system", "content": numpy_prompt}]
+            st.session_state["messages"].append({"role": "assistant", "content": numpy_first_message})
+        else:
+            st.session_state["select_storage"] = 2
+            st.session_state["last_selection"] = 'About Pandas'
+            st.session_state["messages"] = [{"role": "system", "content": pandas_prompt}]
+            st.session_state["messages"].append({"role": "assistant", "content": pandas_first_message})
+            
 
-    # 選択が変更された場合、メッセージをリセットし新しいプロンプトで開始
-    if "current_prompt" not in st.session_state or st.session_state["current_prompt"] != selected_prompt:
-        st.session_state["current_prompt"] = selected_prompt
-        st.session_state["messages"] = [{"role": "system", "content": selected_prompt}]
-        st.session_state["messages"].append({"role": "assistant", "content": selected_chatbot_first_message})
+
+
+
+
+        
+        
+
 
         
         
@@ -185,7 +219,7 @@ if st.session_state["authentication_status"]:
     
 
     # ユーザインターフェイスの構築
-    st.title("self-introduction_ChatBot")
+    st.title("ChatBot")
 
     # メッセージ履歴の表示
     for message in st.session_state["messages"]:
@@ -202,25 +236,37 @@ elif st.session_state["authentication_status"] == False:
     st.error('Username/password is incorrect')
 elif st.session_state["authentication_status"] == None:
     st.warning('Please enter your username and password')
-    
-if st.button('save chat history', key='my_button', help='save chat history and watch history tab'):
+
+#チャット履歴の記録機能
+if st.button('save', key='my_button', help='save chat history and watch history tab'):
     with st.spinner("Save for historys（It takes about 5 seconde.）..."):
-        
-    
+
+
         base_title = datetime.datetime.now().strftime('%Y %m %d %H:%M:%S')
-        title = base_title
+        t=st.session_state["messages"][2]['content']
+        title = f"{base_title}_{str(t)}"
         file_list = os.listdir('pages/data')
+
         i = 1
         while f'{title}.json' in file_list:
-            title = f'{base_title}_{i}'
+            title = f'{base_title}_{str(t)}_{i}'
+            print(title)
             i += 1
-        with open(f'pages/data/{title}.json', 'w') as f:
+
+        sanitized_title = sanitize_filename(title)
+        with open(f'pages/data/{sanitized_title}.json', 'w') as f:
             json.dump(st.session_state["messages"], f)
         st.write('save complete!!')
+# ユーザインターフェイスにリセットボタンを追加
+if st.button('reset'):
+    reset_chat_history()
+    st.experimental_rerun()
+    
+
 
 with st.sidebar:
     st.title("Documentor-GPT")
-    st.caption("Applications for Beginners in Machine Learning Competitions")
+    st.caption("Application for Assisting Beginners in Reading Introductory Documents")
     st.markdown("・Chat with us about how to use the libraries you use!")
     st.markdown("・They can also make code suggestions by telling you what they want to achieve!")
     

@@ -1,0 +1,715 @@
+Name,Chapter,Section,Content
+Numpy,Array and fft,numpy.fft.fft,"numpy.fft.fft#fft.fft(a,n=None,axis=-1,norm=None)[source]#Compute the one-dimensional discrete Fourier Transform.This function computes the one-dimensionaln-point discrete Fourier
+Transform (DFT) with the efficient Fast Fourier Transform (FFT)
+algorithm [CT].Parameters:aarray_likeInput array, can be complex.nint, optionalLength of the transformed axis of the output.
+Ifnis smaller than the length of the input, the input is cropped.
+If it is larger, the input is padded with zeros.  Ifnis not given,
+the length of the input along the axis specified byaxisis used.axisint, optionalAxis over which to compute the FFT.  If not given, the last axis is
+used.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outcomplex ndarrayThe truncated or zero-padded input, transformed along the axis
+indicated byaxis, or the last one ifaxisis not specified.Raises:IndexErrorIfaxisis not a valid axis ofa.See alsonumpy.fftfor definition of the DFT and conventions used.ifftThe inverse offft.fft2The two-dimensional FFT.fftnThen-dimensional FFT.rfftnThen-dimensional FFT of real input.fftfreqFrequency bins for given FFT parameters.NotesFFT (Fast Fourier Transform) refers to a way the discrete Fourier
+Transform (DFT) can be calculated efficiently, by using symmetries in the
+calculated terms.  The symmetry is highest whennis a power of 2, and
+the transform is therefore most efficient for these sizes.The DFT is defined, with the conventions used in this implementation, in
+the documentation for thenumpy.fftmodule.References[CT]Cooley, James W., and John W. Tukey, 1965, ÅgAn algorithm for the
+machine calculation of complex Fourier series,ÅhMath. Comput.19: 297-301.Examples>>>np.fft.fft(np.exp(2j*np.pi*np.arange(8)/8))array([-2.33486982e-16+1.14423775e-17j,  8.00000000e+00-1.25557246e-15j,2.33486982e-16+2.33486982e-16j,  0.00000000e+00+1.22464680e-16j,-1.14423775e-17+2.33486982e-16j,  0.00000000e+00+5.20784380e-16j,1.14423775e-17+1.14423775e-17j,  0.00000000e+00+1.22464680e-16j])In this example, real input has an FFT which is Hermitian, i.e., symmetric
+in the real part and anti-symmetric in the imaginary part, as described in
+thenumpy.fftdocumentation:>>>importmatplotlib.pyplotasplt>>>t=np.arange(256)>>>sp=np.fft.fft(np.sin(t))>>>freq=np.fft.fftfreq(t.shape[-1])>>>plt.plot(freq,sp.real,freq,sp.imag)[<matplotlib.lines.Line2D object at 0x...>, <matplotlib.lines.Line2D object at 0x...>]>>>plt.show()"
+Numpy,Array and fft,numpy.fft.ifft,"numpy.fft.ifft#fft.ifft(a,n=None,axis=-1,norm=None)[source]#Compute the one-dimensional inverse discrete Fourier Transform.This function computes the inverse of the one-dimensionaln-point
+discrete Fourier transform computed byfft.  In other words,ifft(fft(a))==ato within numerical accuracy.
+For a general description of the algorithm and definitions,
+seenumpy.fft.The input should be ordered in the same way as is returned byfft,
+i.e.,a[0]should contain the zero frequency term,a[1:n//2]should contain the positive-frequency terms,a[n//2+1:]should contain the negative-frequency terms, in
+increasing order starting from the most negative frequency.For an even number of input points,A[n//2]represents the sum of
+the values at the positive and negative Nyquist frequencies, as the two
+are aliased together. Seenumpy.fftfor details.Parameters:aarray_likeInput array, can be complex.nint, optionalLength of the transformed axis of the output.
+Ifnis smaller than the length of the input, the input is cropped.
+If it is larger, the input is padded with zeros.  Ifnis not given,
+the length of the input along the axis specified byaxisis used.
+See notes about padding issues.axisint, optionalAxis over which to compute the inverse DFT.  If not given, the last
+axis is used.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outcomplex ndarrayThe truncated or zero-padded input, transformed along the axis
+indicated byaxis, or the last one ifaxisis not specified.Raises:IndexErrorIfaxisis not a valid axis ofa.See alsonumpy.fftAn introduction, with definitions and general explanations.fftThe one-dimensional (forward) FFT, of whichifftis the inverseifft2The two-dimensional inverse FFT.ifftnThe n-dimensional inverse FFT.NotesIf the input parameternis larger than the size of the input, the input
+is padded by appending zeros at the end.  Even though this is the common
+approach, it might lead to surprising results.  If a different padding is
+desired, it must be performed before callingifft.Examples>>>np.fft.ifft([0,4,0,0])array([ 1.+0.j,  0.+1.j, -1.+0.j,  0.-1.j]) # may varyCreate and plot a band-limited signal with random phases:>>>importmatplotlib.pyplotasplt>>>t=np.arange(400)>>>n=np.zeros((400,),dtype=complex)>>>n[40:60]=np.exp(1j*np.random.uniform(0,2*np.pi,(20,)))>>>s=np.fft.ifft(n)>>>plt.plot(t,s.real,label='real')[<matplotlib.lines.Line2D object at ...>]>>>plt.plot(t,s.imag,'--',label='imaginary')[<matplotlib.lines.Line2D object at ...>]>>>plt.legend()<matplotlib.legend.Legend object at ...>>>>plt.show()"
+Numpy,Array and fft,numpy.fft.fft2,"numpy.fft.fft2#fft.fft2(a,s=None,axes=(-2,-1),norm=None)[source]#Compute the 2-dimensional discrete Fourier Transform.This function computes then-dimensional discrete Fourier Transform
+over any axes in anM-dimensional array by means of the
+Fast Fourier Transform (FFT).  By default, the transform is computed over
+the last two axes of the input array, i.e., a 2-dimensional FFT.Parameters:aarray_likeInput array, can be complexssequence of ints, optionalShape (length of each transformed axis) of the output
+(s[0]refers to axis 0,s[1]to axis 1, etc.).
+This corresponds tonforfft(x,n).
+Along each axis, if the given shape is smaller than that of the input,
+the input is cropped.  If it is larger, the input is padded with zeros.
+ifsis not given, the shape of the input along the axes specified
+byaxesis used.axessequence of ints, optionalAxes over which to compute the FFT.  If not given, the last two
+axes are used.  A repeated index inaxesmeans the transform over
+that axis is performed multiple times.  A one-element sequence means
+that a one-dimensional FFT is performed.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outcomplex ndarrayThe truncated or zero-padded input, transformed along the axes
+indicated byaxes, or the last two axes ifaxesis not given.Raises:ValueErrorIfsandaxeshave different length, oraxesnot given andlen(s)!=2.IndexErrorIf an element ofaxesis larger than than the number of axes ofa.See alsonumpy.fftOverall view of discrete Fourier transforms, with definitions and conventions used.ifft2The inverse two-dimensional FFT.fftThe one-dimensional FFT.fftnThen-dimensional FFT.fftshiftShifts zero-frequency terms to the center of the array. For two-dimensional input, swaps first and third quadrants, and second and fourth quadrants.Notesfft2is justfftnwith a different default foraxes.The output, analogously tofft, contains the term for zero frequency in
+the low-order corner of the transformed axes, the positive frequency terms
+in the first half of these axes, the term for the Nyquist frequency in the
+middle of the axes and the negative frequency terms in the second half of
+the axes, in order of decreasingly negative frequency.Seefftnfor details and a plotting example, andnumpy.fftfor
+definitions and conventions used.Examples>>>a=np.mgrid[:5,:5][0]>>>np.fft.fft2(a)array([[ 50.  +0.j        ,   0.  +0.j        ,   0.  +0.j        , # may vary0.  +0.j        ,   0.  +0.j        ],[-12.5+17.20477401j,   0.  +0.j        ,   0.  +0.j        ,0.  +0.j        ,   0.  +0.j        ],[-12.5 +4.0614962j ,   0.  +0.j        ,   0.  +0.j        ,0.  +0.j        ,   0.  +0.j        ],[-12.5 -4.0614962j ,   0.  +0.j        ,   0.  +0.j        ,0.  +0.j        ,   0.  +0.j        ],[-12.5-17.20477401j,   0.  +0.j        ,   0.  +0.j        ,0.  +0.j        ,   0.  +0.j        ]])"
+Numpy,Array and fft,numpy.fft.ifft2,"numpy.fft.ifft2#fft.ifft2(a,s=None,axes=(-2,-1),norm=None)[source]#Compute the 2-dimensional inverse discrete Fourier Transform.This function computes the inverse of the 2-dimensional discrete Fourier
+Transform over any number of axes in an M-dimensional array by means of
+the Fast Fourier Transform (FFT).  In other words,ifft2(fft2(a))==ato within numerical accuracy.  By default, the inverse transform is
+computed over the last two axes of the input array.The input, analogously toifft, should be ordered in the same way as is
+returned byfft2, i.e. it should have the term for zero frequency
+in the low-order corner of the two axes, the positive frequency terms in
+the first half of these axes, the term for the Nyquist frequency in the
+middle of the axes and the negative frequency terms in the second half of
+both axes, in order of decreasingly negative frequency.Parameters:aarray_likeInput array, can be complex.ssequence of ints, optionalShape (length of each axis) of the output (s[0]refers to axis 0,s[1]to axis 1, etc.).  This corresponds tonforifft(x,n).
+Along each axis, if the given shape is smaller than that of the input,
+the input is cropped.  If it is larger, the input is padded with zeros.
+ifsis not given, the shape of the input along the axes specified
+byaxesis used.  See notes for issue onifftzero padding.axessequence of ints, optionalAxes over which to compute the FFT.  If not given, the last two
+axes are used.  A repeated index inaxesmeans the transform over
+that axis is performed multiple times.  A one-element sequence means
+that a one-dimensional FFT is performed.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outcomplex ndarrayThe truncated or zero-padded input, transformed along the axes
+indicated byaxes, or the last two axes ifaxesis not given.Raises:ValueErrorIfsandaxeshave different length, oraxesnot given andlen(s)!=2.IndexErrorIf an element ofaxesis larger than than the number of axes ofa.See alsonumpy.fftOverall view of discrete Fourier transforms, with definitions and conventions used.fft2The forward 2-dimensional FFT, of whichifft2is the inverse.ifftnThe inverse of then-dimensional FFT.fftThe one-dimensional FFT.ifftThe one-dimensional inverse FFT.Notesifft2is justifftnwith a different default foraxes.Seeifftnfor details and a plotting example, andnumpy.fftfor
+definition and conventions used.Zero-padding, analogously withifft, is performed by appending zeros to
+the input along the specified dimension.  Although this is the common
+approach, it might lead to surprising results.  If another form of zero
+padding is desired, it must be performed beforeifft2is called.Examples>>>a=4*np.eye(4)>>>np.fft.ifft2(a)array([[1.+0.j,  0.+0.j,  0.+0.j,  0.+0.j], # may vary[0.+0.j,  0.+0.j,  0.+0.j,  1.+0.j],[0.+0.j,  0.+0.j,  1.+0.j,  0.+0.j],[0.+0.j,  1.+0.j,  0.+0.j,  0.+0.j]])"
+Numpy,Array and fft,numpy.fft.fftn,"numpy.fft.fftn#fft.fftn(a,s=None,axes=None,norm=None)[source]#Compute the N-dimensional discrete Fourier Transform.This function computes theN-dimensional discrete Fourier Transform over
+any number of axes in anM-dimensional array by means of the Fast Fourier
+Transform (FFT).Parameters:aarray_likeInput array, can be complex.ssequence of ints, optionalShape (length of each transformed axis) of the output
+(s[0]refers to axis 0,s[1]to axis 1, etc.).
+This corresponds tonforfft(x,n).
+Along any axis, if the given shape is smaller than that of the input,
+the input is cropped.  If it is larger, the input is padded with zeros.
+ifsis not given, the shape of the input along the axes specified
+byaxesis used.axessequence of ints, optionalAxes over which to compute the FFT.  If not given, the lastlen(s)axes are used, or all axes ifsis also not specified.
+Repeated indices inaxesmeans that the transform over that axis is
+performed multiple times.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outcomplex ndarrayThe truncated or zero-padded input, transformed along the axes
+indicated byaxes, or by a combination ofsanda,
+as explained in the parameters section above.Raises:ValueErrorIfsandaxeshave different length.IndexErrorIf an element ofaxesis larger than than the number of axes ofa.See alsonumpy.fftOverall view of discrete Fourier transforms, with definitions and conventions used.ifftnThe inverse offftn, the inversen-dimensional FFT.fftThe one-dimensional FFT, with definitions and conventions used.rfftnThen-dimensional FFT of real input.fft2The two-dimensional FFT.fftshiftShifts zero-frequency terms to centre of arrayNotesThe output, analogously tofft, contains the term for zero frequency in
+the low-order corner of all axes, the positive frequency terms in the
+first half of all axes, the term for the Nyquist frequency in the middle
+of all axes and the negative frequency terms in the second half of all
+axes, in order of decreasingly negative frequency.Seenumpy.fftfor details, definitions and conventions used.Examples>>>a=np.mgrid[:3,:3,:3][0]>>>np.fft.fftn(a,axes=(1,2))array([[[ 0.+0.j,   0.+0.j,   0.+0.j], # may vary[ 0.+0.j,   0.+0.j,   0.+0.j],[ 0.+0.j,   0.+0.j,   0.+0.j]],[[ 9.+0.j,   0.+0.j,   0.+0.j],[ 0.+0.j,   0.+0.j,   0.+0.j],[ 0.+0.j,   0.+0.j,   0.+0.j]],[[18.+0.j,   0.+0.j,   0.+0.j],[ 0.+0.j,   0.+0.j,   0.+0.j],[ 0.+0.j,   0.+0.j,   0.+0.j]]])>>>np.fft.fftn(a,(2,2),axes=(0,1))array([[[ 2.+0.j,  2.+0.j,  2.+0.j], # may vary[ 0.+0.j,  0.+0.j,  0.+0.j]],[[-2.+0.j, -2.+0.j, -2.+0.j],[ 0.+0.j,  0.+0.j,  0.+0.j]]])>>>importmatplotlib.pyplotasplt>>>[X,Y]=np.meshgrid(2*np.pi*np.arange(200)/12,...2*np.pi*np.arange(200)/34)>>>S=np.sin(X)+np.cos(Y)+np.random.uniform(0,1,X.shape)>>>FS=np.fft.fftn(S)>>>plt.imshow(np.log(np.abs(np.fft.fftshift(FS))**2))<matplotlib.image.AxesImage object at 0x...>>>>plt.show()"
+Numpy,Array and fft,numpy.fft.ifftn,"numpy.fft.ifftn#fft.ifftn(a,s=None,axes=None,norm=None)[source]#Compute the N-dimensional inverse discrete Fourier Transform.This function computes the inverse of the N-dimensional discrete
+Fourier Transform over any number of axes in an M-dimensional array by
+means of the Fast Fourier Transform (FFT).  In other words,ifftn(fftn(a))==ato within numerical accuracy.
+For a description of the definitions and conventions used, seenumpy.fft.The input, analogously toifft, should be ordered in the same way as is
+returned byfftn, i.e. it should have the term for zero frequency
+in all axes in the low-order corner, the positive frequency terms in the
+first half of all axes, the term for the Nyquist frequency in the middle
+of all axes and the negative frequency terms in the second half of all
+axes, in order of decreasingly negative frequency.Parameters:aarray_likeInput array, can be complex.ssequence of ints, optionalShape (length of each transformed axis) of the output
+(s[0]refers to axis 0,s[1]to axis 1, etc.).
+This corresponds tonforifft(x,n).
+Along any axis, if the given shape is smaller than that of the input,
+the input is cropped.  If it is larger, the input is padded with zeros.
+ifsis not given, the shape of the input along the axes specified
+byaxesis used.  See notes for issue onifftzero padding.axessequence of ints, optionalAxes over which to compute the IFFT.  If not given, the lastlen(s)axes are used, or all axes ifsis also not specified.
+Repeated indices inaxesmeans that the inverse transform over that
+axis is performed multiple times.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outcomplex ndarrayThe truncated or zero-padded input, transformed along the axes
+indicated byaxes, or by a combination ofsora,
+as explained in the parameters section above.Raises:ValueErrorIfsandaxeshave different length.IndexErrorIf an element ofaxesis larger than than the number of axes ofa.See alsonumpy.fftOverall view of discrete Fourier transforms, with definitions and conventions used.fftnThe forwardn-dimensional FFT, of whichifftnis the inverse.ifftThe one-dimensional inverse FFT.ifft2The two-dimensional inverse FFT.ifftshiftUndoesfftshift, shifts zero-frequency terms to beginning of array.NotesSeenumpy.fftfor definitions and conventions used.Zero-padding, analogously withifft, is performed by appending zeros to
+the input along the specified dimension.  Although this is the common
+approach, it might lead to surprising results.  If another form of zero
+padding is desired, it must be performed beforeifftnis called.Examples>>>a=np.eye(4)>>>np.fft.ifftn(np.fft.fftn(a,axes=(0,)),axes=(1,))array([[1.+0.j,  0.+0.j,  0.+0.j,  0.+0.j], # may vary[0.+0.j,  1.+0.j,  0.+0.j,  0.+0.j],[0.+0.j,  0.+0.j,  1.+0.j,  0.+0.j],[0.+0.j,  0.+0.j,  0.+0.j,  1.+0.j]])Create and plot an image with band-limited frequency content:>>>importmatplotlib.pyplotasplt>>>n=np.zeros((200,200),dtype=complex)>>>n[60:80,20:40]=np.exp(1j*np.random.uniform(0,2*np.pi,(20,20)))>>>im=np.fft.ifftn(n).real>>>plt.imshow(im)<matplotlib.image.AxesImage object at 0x...>>>>plt.show()"
+Numpy,Array and fft,numpy.fft.rfft,"numpy.fft.rfft#fft.rfft(a,n=None,axis=-1,norm=None)[source]#Compute the one-dimensional discrete Fourier Transform for real input.This function computes the one-dimensionaln-point discrete Fourier
+Transform (DFT) of a real-valued array by means of an efficient algorithm
+called the Fast Fourier Transform (FFT).Parameters:aarray_likeInput arraynint, optionalNumber of points along transformation axis in the input to use.
+Ifnis smaller than the length of the input, the input is cropped.
+If it is larger, the input is padded with zeros. Ifnis not given,
+the length of the input along the axis specified byaxisis used.axisint, optionalAxis over which to compute the FFT. If not given, the last axis is
+used.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outcomplex ndarrayThe truncated or zero-padded input, transformed along the axis
+indicated byaxis, or the last one ifaxisis not specified.
+Ifnis even, the length of the transformed axis is(n/2)+1.
+Ifnis odd, the length is(n+1)/2.Raises:IndexErrorIfaxisis not a valid axis ofa.See alsonumpy.fftFor definition of the DFT and conventions used.irfftThe inverse ofrfft.fftThe one-dimensional FFT of general (complex) input.fftnThen-dimensional FFT.rfftnThen-dimensional FFT of real input.NotesWhen the DFT is computed for purely real input, the output is
+Hermitian-symmetric, i.e. the negative frequency terms are just the complex
+conjugates of the corresponding positive-frequency terms, and the
+negative-frequency terms are therefore redundant.  This function does not
+compute the negative frequency terms, and the length of the transformed
+axis of the output is thereforen//2+1.WhenA=rfft(a)and fs is the sampling frequency,A[0]contains
+the zero-frequency term 0*fs, which is real due to Hermitian symmetry.Ifnis even,A[-1]contains the term representing both positive
+and negative Nyquist frequency (+fs/2 and -fs/2), and must also be purely
+real. Ifnis odd, there is no term at fs/2;A[-1]contains
+the largest positive frequency (fs/2*(n-1)/n), and is complex in the
+general case.If the inputacontains an imaginary part, it is silently discarded.Examples>>>np.fft.fft([0,1,0,0])array([ 1.+0.j,  0.-1.j, -1.+0.j,  0.+1.j]) # may vary>>>np.fft.rfft([0,1,0,0])array([ 1.+0.j,  0.-1.j, -1.+0.j]) # may varyNotice how the final element of thefftoutput is the complex conjugate
+of the second element, for real input. Forrfft, this symmetry is
+exploited to compute only the non-negative frequency terms."
+Numpy,Array and fft,numpy.fft.irfft,"numpy.fft.irfft#fft.irfft(a,n=None,axis=-1,norm=None)[source]#Computes the inverse ofrfft.This function computes the inverse of the one-dimensionaln-point
+discrete Fourier Transform of real input computed byrfft.
+In other words,irfft(rfft(a),len(a))==ato within numerical
+accuracy. (See Notes below for whylen(a)is necessary here.)The input is expected to be in the form returned byrfft, i.e. the
+real zero-frequency term followed by the complex positive frequency terms
+in order of increasing frequency.  Since the discrete Fourier Transform of
+real input is Hermitian-symmetric, the negative frequency terms are taken
+to be the complex conjugates of the corresponding positive frequency terms.Parameters:aarray_likeThe input array.nint, optionalLength of the transformed axis of the output.
+Fornoutput points,n//2+1input points are necessary.  If the
+input is longer than this, it is cropped.  If it is shorter than this,
+it is padded with zeros.  Ifnis not given, it is taken to be2*(m-1)wheremis the length of the input along the axis
+specified byaxis.axisint, optionalAxis over which to compute the inverse FFT. If not given, the last
+axis is used.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outndarrayThe truncated or zero-padded input, transformed along the axis
+indicated byaxis, or the last one ifaxisis not specified.
+The length of the transformed axis isn, or, ifnis not given,2*(m-1)wheremis the length of the transformed axis of the
+input. To get an odd number of output points,nmust be specified.Raises:IndexErrorIfaxisis not a valid axis ofa.See alsonumpy.fftFor definition of the DFT and conventions used.rfftThe one-dimensional FFT of real input, of whichirfftis inverse.fftThe one-dimensional FFT.irfft2The inverse of the two-dimensional FFT of real input.irfftnThe inverse of then-dimensional FFT of real input.NotesReturns the real valuedn-point inverse discrete Fourier transform
+ofa, whereacontains the non-negative frequency terms of a
+Hermitian-symmetric sequence.nis the length of the result, not the
+input.If you specify annsuch thatamust be zero-padded or truncated, the
+extra/removed values will be added/removed at high frequencies. One can
+thus resample a series tompoints via Fourier interpolation by:a_resamp=irfft(rfft(a),m).The correct interpretation of the hermitian input depends on the length of
+the original data, as given byn. This is because each input shape could
+correspond to either an odd or even length signal. By default,irfftassumes an even output length which puts the last entry at the Nyquist
+frequency; aliasing with its symmetric counterpart. By Hermitian symmetry,
+the value is thus treated as purely real. To avoid losing information, the
+correct length of the real inputmustbe given.Examples>>>np.fft.ifft([1,-1j,-1,1j])array([0.+0.j,  1.+0.j,  0.+0.j,  0.+0.j]) # may vary>>>np.fft.irfft([1,-1j,-1])array([0.,  1.,  0.,  0.])Notice how the last term in the input to the ordinaryifftis the
+complex conjugate of the second term, and the output has zero imaginary
+part everywhere.  When callingirfft, the negative frequencies are not
+specified, and the output array is purely real."
+Numpy,Array and fft,numpy.fft.rfft2,"numpy.fft.rfft2#fft.rfft2(a,s=None,axes=(-2,-1),norm=None)[source]#Compute the 2-dimensional FFT of a real array.Parameters:aarrayInput array, taken to be real.ssequence of ints, optionalShape of the FFT.axessequence of ints, optionalAxes over which to compute the FFT.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outndarrayThe result of the real 2-D FFT.See alsorfftnCompute the N-dimensional discrete Fourier Transform for real input.NotesThis is really justrfftnwith different default behavior.
+For more details seerfftn.Examples>>>a=np.mgrid[:5,:5][0]>>>np.fft.rfft2(a)array([[ 50.  +0.j        ,   0.  +0.j        ,   0.  +0.j        ],[-12.5+17.20477401j,   0.  +0.j        ,   0.  +0.j        ],[-12.5 +4.0614962j ,   0.  +0.j        ,   0.  +0.j        ],[-12.5 -4.0614962j ,   0.  +0.j        ,   0.  +0.j        ],[-12.5-17.20477401j,   0.  +0.j        ,   0.  +0.j        ]])"
+Numpy,Array and fft,numpy.fft.irfft2,"numpy.fft.irfft2#fft.irfft2(a,s=None,axes=(-2,-1),norm=None)[source]#Computes the inverse ofrfft2.Parameters:aarray_likeThe input arrayssequence of ints, optionalShape of the real output to the inverse FFT.axessequence of ints, optionalThe axes over which to compute the inverse fft.
+Default is the last two axes.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outndarrayThe result of the inverse real 2-D FFT.See alsorfft2The forward two-dimensional FFT of real input, of whichirfft2is the inverse.rfftThe one-dimensional FFT for real input.irfftThe inverse of the one-dimensional FFT of real input.irfftnCompute the inverse of the N-dimensional FFT of real input.NotesThis is reallyirfftnwith different defaults.
+For more details seeirfftn.Examples>>>a=np.mgrid[:5,:5][0]>>>A=np.fft.rfft2(a)>>>np.fft.irfft2(A,s=a.shape)array([[0., 0., 0., 0., 0.],[1., 1., 1., 1., 1.],[2., 2., 2., 2., 2.],[3., 3., 3., 3., 3.],[4., 4., 4., 4., 4.]])"
+Numpy,Array and fft,numpy.fft.rfftn,"numpy.fft.rfftn#fft.rfftn(a,s=None,axes=None,norm=None)[source]#Compute the N-dimensional discrete Fourier Transform for real input.This function computes the N-dimensional discrete Fourier Transform over
+any number of axes in an M-dimensional real array by means of the Fast
+Fourier Transform (FFT).  By default, all axes are transformed, with the
+real transform performed over the last axis, while the remaining
+transforms are complex.Parameters:aarray_likeInput array, taken to be real.ssequence of ints, optionalShape (length along each transformed axis) to use from the input.
+(s[0]refers to axis 0,s[1]to axis 1, etc.).
+The final element ofscorresponds tonforrfft(x,n), while
+for the remaining axes, it corresponds tonforfft(x,n).
+Along any axis, if the given shape is smaller than that of the input,
+the input is cropped.  If it is larger, the input is padded with zeros.
+ifsis not given, the shape of the input along the axes specified
+byaxesis used.axessequence of ints, optionalAxes over which to compute the FFT.  If not given, the lastlen(s)axes are used, or all axes ifsis also not specified.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outcomplex ndarrayThe truncated or zero-padded input, transformed along the axes
+indicated byaxes, or by a combination ofsanda,
+as explained in the parameters section above.
+The length of the last axis transformed will bes[-1]//2+1,
+while the remaining transformed axes will have lengths according tos, or unchanged from the input.Raises:ValueErrorIfsandaxeshave different length.IndexErrorIf an element ofaxesis larger than than the number of axes ofa.See alsoirfftnThe inverse ofrfftn, i.e. the inverse of the n-dimensional FFT of real input.fftThe one-dimensional FFT, with definitions and conventions used.rfftThe one-dimensional FFT of real input.fftnThe n-dimensional FFT.rfft2The two-dimensional FFT of real input.NotesThe transform for real input is performed over the last transformation
+axis, as byrfft, then the transform over the remaining axes is
+performed as byfftn.  The order of the output is as forrfftfor the
+final transformation axis, and as forfftnfor the remaining
+transformation axes.Seefftfor details, definitions and conventions used.Examples>>>a=np.ones((2,2,2))>>>np.fft.rfftn(a)array([[[8.+0.j,  0.+0.j], # may vary[0.+0.j,  0.+0.j]],[[0.+0.j,  0.+0.j],[0.+0.j,  0.+0.j]]])>>>np.fft.rfftn(a,axes=(2,0))array([[[4.+0.j,  0.+0.j], # may vary[4.+0.j,  0.+0.j]],[[0.+0.j,  0.+0.j],[0.+0.j,  0.+0.j]]])"
+Numpy,Array and fft,numpy.fft.irfftn,"numpy.fft.irfftn#fft.irfftn(a,s=None,axes=None,norm=None)[source]#Computes the inverse ofrfftn.This function computes the inverse of the N-dimensional discrete
+Fourier Transform for real input over any number of axes in an
+M-dimensional array by means of the Fast Fourier Transform (FFT).  In
+other words,irfftn(rfftn(a),a.shape)==ato within numerical
+accuracy. (Thea.shapeis necessary likelen(a)is forirfft,
+and for the same reason.)The input should be ordered in the same way as is returned byrfftn,
+i.e. as forirfftfor the final transformation axis, and as forifftnalong all the other axes.Parameters:aarray_likeInput array.ssequence of ints, optionalShape (length of each transformed axis) of the output
+(s[0]refers to axis 0,s[1]to axis 1, etc.).sis also the
+number of input points used along this axis, except for the last axis,
+wheres[-1]//2+1points of the input are used.
+Along any axis, if the shape indicated bysis smaller than that of
+the input, the input is cropped.  If it is larger, the input is padded
+with zeros. Ifsis not given, the shape of the input along the axes
+specified by axes is used. Except for the last axis which is taken to
+be2*(m-1)wheremis the length of the input along that axis.axessequence of ints, optionalAxes over which to compute the inverse FFT. If not given, the lastlen(s)axes are used, or all axes ifsis also not specified.
+Repeated indices inaxesmeans that the inverse transform over that
+axis is performed multiple times.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outndarrayThe truncated or zero-padded input, transformed along the axes
+indicated byaxes, or by a combination ofsora,
+as explained in the parameters section above.
+The length of each transformed axis is as given by the corresponding
+element ofs, or the length of the input in every axis except for the
+last one ifsis not given.  In the final transformed axis the length
+of the output whensis not given is2*(m-1)wheremis the
+length of the final transformed axis of the input.  To get an odd
+number of output points in the final axis,smust be specified.Raises:ValueErrorIfsandaxeshave different length.IndexErrorIf an element ofaxesis larger than than the number of axes ofa.See alsorfftnThe forward n-dimensional FFT of real input, of whichifftnis the inverse.fftThe one-dimensional FFT, with definitions and conventions used.irfftThe inverse of the one-dimensional FFT of real input.irfft2The inverse of the two-dimensional FFT of real input.NotesSeefftfor definitions and conventions used.Seerfftfor definitions and conventions used for real input.The correct interpretation of the hermitian input depends on the shape of
+the original data, as given bys. This is because each input shape could
+correspond to either an odd or even length signal. By default,irfftnassumes an even output length which puts the last entry at the Nyquist
+frequency; aliasing with its symmetric counterpart. When performing the
+final complex to real transform, the last value is thus treated as purely
+real. To avoid losing information, the correct shape of the real inputmustbe given.Examples>>>a=np.zeros((3,2,2))>>>a[0,0,0]=3*2*2>>>np.fft.irfftn(a)array([[[1.,  1.],[1.,  1.]],[[1.,  1.],[1.,  1.]],[[1.,  1.],[1.,  1.]]])"
+Numpy,Array and fft,numpy.fft.hfft,"numpy.fft.hfft#fft.hfft(a,n=None,axis=-1,norm=None)[source]#Compute the FFT of a signal that has Hermitian symmetry, i.e., a real
+spectrum.Parameters:aarray_likeThe input array.nint, optionalLength of the transformed axis of the output. Fornoutput
+points,n//2+1input points are necessary.  If the input is
+longer than this, it is cropped.  If it is shorter than this, it is
+padded with zeros.  Ifnis not given, it is taken to be2*(m-1)wheremis the length of the input along the axis specified byaxis.axisint, optionalAxis over which to compute the FFT. If not given, the last
+axis is used.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outndarrayThe truncated or zero-padded input, transformed along the axis
+indicated byaxis, or the last one ifaxisis not specified.
+The length of the transformed axis isn, or, ifnis not given,2*m-2wheremis the length of the transformed axis of
+the input. To get an odd number of output points,nmust be
+specified, for instance as2*m-1in the typical case,Raises:IndexErrorIfaxisis not a valid axis ofa.See alsorfftCompute the one-dimensional FFT for real input.ihfftThe inverse ofhfft.Noteshfft/ihfftare a pair analogous torfft/irfft, but for the
+opposite case: here the signal has Hermitian symmetry in the time
+domain and is real in the frequency domain. So here itÅfshfftfor
+which you must supply the length of the result if it is to be odd.even:ihfft(hfft(a,2*len(a)-2))==a, within roundoff error,odd:ihfft(hfft(a,2*len(a)-1))==a, within roundoff error.The correct interpretation of the hermitian input depends on the length of
+the original data, as given byn. This is because each input shape could
+correspond to either an odd or even length signal. By default,hfftassumes an even output length which puts the last entry at the Nyquist
+frequency; aliasing with its symmetric counterpart. By Hermitian symmetry,
+the value is thus treated as purely real. To avoid losing information, the
+shape of the full signalmustbe given.Examples>>>signal=np.array([1,2,3,4,3,2])>>>np.fft.fft(signal)array([15.+0.j,  -4.+0.j,   0.+0.j,  -1.-0.j,   0.+0.j,  -4.+0.j]) # may vary>>>np.fft.hfft(signal[:4])# Input first half of signalarray([15.,  -4.,   0.,  -1.,   0.,  -4.])>>>np.fft.hfft(signal,6)# Input entire signal and truncatearray([15.,  -4.,   0.,  -1.,   0.,  -4.])>>>signal=np.array([[1,1.j],[-1.j,2]])>>>np.conj(signal.T)-signal# check Hermitian symmetryarray([[ 0.-0.j,  -0.+0.j], # may vary[ 0.+0.j,  0.-0.j]])>>>freq_spectrum=np.fft.hfft(signal)>>>freq_spectrumarray([[ 1.,  1.],[ 2., -2.]])"
+Numpy,Array and fft,numpy.fft.ihfft,"numpy.fft.ihfft#fft.ihfft(a,n=None,axis=-1,norm=None)[source]#Compute the inverse FFT of a signal that has Hermitian symmetry.Parameters:aarray_likeInput array.nint, optionalLength of the inverse FFT, the number of points along
+transformation axis in the input to use.  Ifnis smaller than
+the length of the input, the input is cropped.  If it is larger,
+the input is padded with zeros. Ifnis not given, the length of
+the input along the axis specified byaxisis used.axisint, optionalAxis over which to compute the inverse FFT. If not given, the last
+axis is used.norm{ÅgbackwardÅh, ÅgorthoÅh, ÅgforwardÅh}, optionalNew in version 1.10.0.Normalization mode (seenumpy.fft). Default is ÅgbackwardÅh.
+Indicates which direction of the forward/backward pair of transforms
+is scaled and with what normalization factor.New in version 1.20.0:The ÅgbackwardÅh, ÅgforwardÅh values were added.Returns:outcomplex ndarrayThe truncated or zero-padded input, transformed along the axis
+indicated byaxis, or the last one ifaxisis not specified.
+The length of the transformed axis isn//2+1.See alsohfft,irfftNoteshfft/ihfftare a pair analogous torfft/irfft, but for the
+opposite case: here the signal has Hermitian symmetry in the time
+domain and is real in the frequency domain. So here itÅfshfftfor
+which you must supply the length of the result if it is to be odd:even:ihfft(hfft(a,2*len(a)-2))==a, within roundoff error,odd:ihfft(hfft(a,2*len(a)-1))==a, within roundoff error.Examples>>>spectrum=np.array([15,-4,0,-1,0,-4])>>>np.fft.ifft(spectrum)array([1.+0.j,  2.+0.j,  3.+0.j,  4.+0.j,  3.+0.j,  2.+0.j]) # may vary>>>np.fft.ihfft(spectrum)array([ 1.-0.j,  2.-0.j,  3.-0.j,  4.-0.j]) # may vary"
+Numpy,Array and fft,numpy.fft.fftfreq,"numpy.fft.fftfreq#fft.fftfreq(n,d=1.0)[source]#Return the Discrete Fourier Transform sample frequencies.The returned float arrayfcontains the frequency bin centers in cycles
+per unit of the sample spacing (with zero at the start).  For instance, if
+the sample spacing is in seconds, then the frequency unit is cycles/second.Given a window lengthnand a sample spacingd:f=[0,1,...,n/2-1,-n/2,...,-1]/(d*n)ifnisevenf=[0,1,...,(n-1)/2,-(n-1)/2,...,-1]/(d*n)ifnisoddParameters:nintWindow length.dscalar, optionalSample spacing (inverse of the sampling rate). Defaults to 1.Returns:fndarrayArray of lengthncontaining the sample frequencies.Examples>>>signal=np.array([-2,8,6,4,1,0,3,5],dtype=float)>>>fourier=np.fft.fft(signal)>>>n=signal.size>>>timestep=0.1>>>freq=np.fft.fftfreq(n,d=timestep)>>>freqarray([ 0.  ,  1.25,  2.5 , ..., -3.75, -2.5 , -1.25])"
+Numpy,Array and fft,numpy.fft.rfftfreq,"numpy.fft.rfftfreq#fft.rfftfreq(n,d=1.0)[source]#Return the Discrete Fourier Transform sample frequencies
+(for usage with rfft, irfft).The returned float arrayfcontains the frequency bin centers in cycles
+per unit of the sample spacing (with zero at the start).  For instance, if
+the sample spacing is in seconds, then the frequency unit is cycles/second.Given a window lengthnand a sample spacingd:f=[0,1,...,n/2-1,n/2]/(d*n)ifnisevenf=[0,1,...,(n-1)/2-1,(n-1)/2]/(d*n)ifnisoddUnlikefftfreq(but likescipy.fftpack.rfftfreq)
+the Nyquist frequency component is considered to be positive.Parameters:nintWindow length.dscalar, optionalSample spacing (inverse of the sampling rate). Defaults to 1.Returns:fndarrayArray of lengthn//2+1containing the sample frequencies.Examples>>>signal=np.array([-2,8,6,4,1,0,3,5,-3,4],dtype=float)>>>fourier=np.fft.rfft(signal)>>>n=signal.size>>>sample_rate=100>>>freq=np.fft.fftfreq(n,d=1./sample_rate)>>>freqarray([  0.,  10.,  20., ..., -30., -20., -10.])>>>freq=np.fft.rfftfreq(n,d=1./sample_rate)>>>freqarray([  0.,  10.,  20.,  30.,  40.,  50.])"
+Numpy,Array and fft,numpy.fft.fftshift,"numpy.fft.fftshift#fft.fftshift(x,axes=None)[source]#Shift the zero-frequency component to the center of the spectrum.This function swaps half-spaces for all axes listed (defaults to all).
+Note thaty[0]is the Nyquist component only iflen(x)is even.Parameters:xarray_likeInput array.axesint or shape tuple, optionalAxes over which to shift.  Default is None, which shifts all axes.Returns:yndarrayThe shifted array.See alsoifftshiftThe inverse offftshift.Examples>>>freqs=np.fft.fftfreq(10,0.1)>>>freqsarray([ 0.,  1.,  2., ..., -3., -2., -1.])>>>np.fft.fftshift(freqs)array([-5., -4., -3., -2., -1.,  0.,  1.,  2.,  3.,  4.])Shift the zero-frequency component only along the second axis:>>>freqs=np.fft.fftfreq(9,d=1./9).reshape(3,3)>>>freqsarray([[ 0.,  1.,  2.],[ 3.,  4., -4.],[-3., -2., -1.]])>>>np.fft.fftshift(freqs,axes=(1,))array([[ 2.,  0.,  1.],[-4.,  3.,  4.],[-1., -3., -2.]])"
+Numpy,Array and fft,numpy.fft.ifftshift,"numpy.fft.ifftshift#fft.ifftshift(x,axes=None)[source]#The inverse offftshift. Although identical for even-lengthx, the
+functions differ by one sample for odd-lengthx.Parameters:xarray_likeInput array.axesint or shape tuple, optionalAxes over which to calculate.  Defaults to None, which shifts all axes.Returns:yndarrayThe shifted array.See alsofftshiftShift zero-frequency component to the center of the spectrum.Examples>>>freqs=np.fft.fftfreq(9,d=1./9).reshape(3,3)>>>freqsarray([[ 0.,  1.,  2.],[ 3.,  4., -4.],[-3., -2., -1.]])>>>np.fft.ifftshift(np.fft.fftshift(freqs))array([[ 0.,  1.,  2.],[ 3.,  4., -4.],[-3., -2., -1.]])"
+Numpy,Array and fft,numpy.empty,"numpy.empty#numpy.empty(shape,dtype=float,order='C',*,like=None)#Return a new array of given shape and type, without initializing entries.Parameters:shapeint or tuple of intShape of the empty array, e.g.,(2,3)or2.dtypedata-type, optionalDesired output data-type for the array, e.g,numpy.int8. Default isnumpy.float64.order{ÅeCÅf, ÅeFÅf}, optional, default: ÅeCÅfWhether to store multi-dimensional data in row-major
+(C-style) or column-major (Fortran-style) order in
+memory.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:outndarrayArray of uninitialized (arbitrary) data of the given shape, dtype, and
+order.  Object arrays will be initialized to None.See alsoempty_likeReturn an empty array with shape and type of input.onesReturn a new array setting values to one.zerosReturn a new array setting values to zero.fullReturn a new array of given shape filled with value.Notesempty, unlikezeros, does not set the array values to zero,
+and may therefore be marginally faster.  On the other hand, it requires
+the user to manually set all the values in the array, and should be
+used with caution.Examples>>>np.empty([2,2])array([[ -9.74499359e+001,   6.69583040e-309],[  2.13182611e-314,   3.06959433e-309]])         #uninitialized>>>np.empty([2,2],dtype=int)array([[-1073741821, -1067949133],[  496041986,    19249760]])                     #uninitialized"
+Numpy,Array and fft,numpy.empty_like,"numpy.empty_like#numpy.empty_like(prototype,dtype=None,order='K',subok=True,shape=None)#Return a new array with the same shape and type as a given array.Parameters:prototypearray_likeThe shape and data-type ofprototypedefine these same attributes
+of the returned array.dtypedata-type, optionalOverrides the data type of the result.New in version 1.6.0.order{ÅeCÅf, ÅeFÅf, ÅeAÅf, or ÅeKÅf}, optionalOverrides the memory layout of the result. ÅeCÅf means C-order,
+ÅeFÅf means F-order, ÅeAÅf means ÅeFÅf ifprototypeis Fortran
+contiguous, ÅeCÅf otherwise. ÅeKÅf means match the layout ofprototypeas closely as possible.New in version 1.6.0.subokbool, optional.If True, then the newly created array will use the sub-class
+type ofprototype, otherwise it will be a base-class array. Defaults
+to True.shapeint or sequence of ints, optional.Overrides the shape of the result. If order=ÅfKÅf and the number of
+dimensions is unchanged, will try to keep order, otherwise,
+order=ÅfCÅf is implied.New in version 1.17.0.Returns:outndarrayArray of uninitialized (arbitrary) data with the same
+shape and type asprototype.See alsoones_likeReturn an array of ones with shape and type of input.zeros_likeReturn an array of zeros with shape and type of input.full_likeReturn a new array with shape of input filled with value.emptyReturn a new uninitialized array.NotesThis function doesnotinitialize the returned array; to do that usezeros_likeorones_likeinstead.  It may be marginally faster than
+the functions that do set the array values.Examples>>>a=([1,2,3],[4,5,6])# a is array-like>>>np.empty_like(a)array([[-1073741821, -1073741821,           3],    # uninitialized[          0,           0, -1073741821]])>>>a=np.array([[1.,2.,3.],[4.,5.,6.]])>>>np.empty_like(a)array([[ -2.00000715e+000,   1.48219694e-323,  -2.00000572e+000], # uninitialized[  4.38791518e-305,  -2.00000715e+000,   4.17269252e-309]])"
+Numpy,Array and fft,numpy.eye,"numpy.eye#numpy.eye(N,M=None,k=0,dtype=<class'float'>,order='C',*,like=None)[source]#Return a 2-D array with ones on the diagonal and zeros elsewhere.Parameters:NintNumber of rows in the output.Mint, optionalNumber of columns in the output. If None, defaults toN.kint, optionalIndex of the diagonal: 0 (the default) refers to the main diagonal,
+a positive value refers to an upper diagonal, and a negative value
+to a lower diagonal.dtypedata-type, optionalData-type of the returned array.order{ÅeCÅf, ÅeFÅf}, optionalWhether the output should be stored in row-major (C-style) or
+column-major (Fortran-style) order in memory.New in version 1.14.0.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:Indarray of shape (N,M)An array where all elements are equal to zero, except for thek-th
+diagonal, whose values are equal to one.See alsoidentity(almost) equivalent functiondiagdiagonal 2-D array from a 1-D array specified by the user.Examples>>>np.eye(2,dtype=int)array([[1, 0],[0, 1]])>>>np.eye(3,k=1)array([[0.,  1.,  0.],[0.,  0.,  1.],[0.,  0.,  0.]])"
+Numpy,Array and fft,numpy.identity,"numpy.identity#numpy.identity(n,dtype=None,*,like=None)[source]#Return the identity array.The identity array is a square array with ones on
+the main diagonal.Parameters:nintNumber of rows (and columns) innxnoutput.dtypedata-type, optionalData-type of the output.  Defaults tofloat.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:outndarraynxnarray with its main diagonal set to one,
+and all other elements 0.Examples>>>np.identity(3)array([[1.,  0.,  0.],[0.,  1.,  0.],[0.,  0.,  1.]])"
+Numpy,Array and fft,numpy.ones,"numpy.ones#numpy.ones(shape,dtype=None,order='C',*,like=None)[source]#Return a new array of given shape and type, filled with ones.Parameters:shapeint or sequence of intsShape of the new array, e.g.,(2,3)or2.dtypedata-type, optionalThe desired data-type for the array, e.g.,numpy.int8.  Default isnumpy.float64.order{ÅeCÅf, ÅeFÅf}, optional, default: CWhether to store multi-dimensional data in row-major
+(C-style) or column-major (Fortran-style) order in
+memory.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:outndarrayArray of ones with the given shape, dtype, and order.See alsoones_likeReturn an array of ones with shape and type of input.emptyReturn a new uninitialized array.zerosReturn a new array setting values to zero.fullReturn a new array of given shape filled with value.Examples>>>np.ones(5)array([1., 1., 1., 1., 1.])>>>np.ones((5,),dtype=int)array([1, 1, 1, 1, 1])>>>np.ones((2,1))array([[1.],[1.]])>>>s=(2,2)>>>np.ones(s)array([[1.,  1.],[1.,  1.]])"
+Numpy,Array and fft,numpy.ones_like,"numpy.ones_like#numpy.ones_like(a,dtype=None,order='K',subok=True,shape=None)[source]#Return an array of ones with the same shape and type as a given array.Parameters:aarray_likeThe shape and data-type ofadefine these same attributes of
+the returned array.dtypedata-type, optionalOverrides the data type of the result.New in version 1.6.0.order{ÅeCÅf, ÅeFÅf, ÅeAÅf, or ÅeKÅf}, optionalOverrides the memory layout of the result. ÅeCÅf means C-order,
+ÅeFÅf means F-order, ÅeAÅf means ÅeFÅf ifais Fortran contiguous,
+ÅeCÅf otherwise. ÅeKÅf means match the layout ofaas closely
+as possible.New in version 1.6.0.subokbool, optional.If True, then the newly created array will use the sub-class
+type ofa, otherwise it will be a base-class array. Defaults
+to True.shapeint or sequence of ints, optional.Overrides the shape of the result. If order=ÅfKÅf and the number of
+dimensions is unchanged, will try to keep order, otherwise,
+order=ÅfCÅf is implied.New in version 1.17.0.Returns:outndarrayArray of ones with the same shape and type asa.See alsoempty_likeReturn an empty array with shape and type of input.zeros_likeReturn an array of zeros with shape and type of input.full_likeReturn a new array with shape of input filled with value.onesReturn a new array setting values to one.Examples>>>x=np.arange(6)>>>x=x.reshape((2,3))>>>xarray([[0, 1, 2],[3, 4, 5]])>>>np.ones_like(x)array([[1, 1, 1],[1, 1, 1]])>>>y=np.arange(3,dtype=float)>>>yarray([0., 1., 2.])>>>np.ones_like(y)array([1.,  1.,  1.])"
+Numpy,Array and fft,numpy.zeros,"numpy.zeros#numpy.zeros(shape,dtype=float,order='C',*,like=None)#Return a new array of given shape and type, filled with zeros.Parameters:shapeint or tuple of intsShape of the new array, e.g.,(2,3)or2.dtypedata-type, optionalThe desired data-type for the array, e.g.,numpy.int8.  Default isnumpy.float64.order{ÅeCÅf, ÅeFÅf}, optional, default: ÅeCÅfWhether to store multi-dimensional data in row-major
+(C-style) or column-major (Fortran-style) order in
+memory.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:outndarrayArray of zeros with the given shape, dtype, and order.See alsozeros_likeReturn an array of zeros with shape and type of input.emptyReturn a new uninitialized array.onesReturn a new array setting values to one.fullReturn a new array of given shape filled with value.Examples>>>np.zeros(5)array([ 0.,  0.,  0.,  0.,  0.])>>>np.zeros((5,),dtype=int)array([0, 0, 0, 0, 0])>>>np.zeros((2,1))array([[ 0.],[ 0.]])>>>s=(2,2)>>>np.zeros(s)array([[ 0.,  0.],[ 0.,  0.]])>>>np.zeros((2,),dtype=[('x','i4'),('y','i4')])# custom dtypearray([(0, 0), (0, 0)],dtype=[('x', '<i4'), ('y', '<i4')])"
+Numpy,Array and fft,numpy.zeros_like,"numpy.zeros_like#numpy.zeros_like(a,dtype=None,order='K',subok=True,shape=None)[source]#Return an array of zeros with the same shape and type as a given array.Parameters:aarray_likeThe shape and data-type ofadefine these same attributes of
+the returned array.dtypedata-type, optionalOverrides the data type of the result.New in version 1.6.0.order{ÅeCÅf, ÅeFÅf, ÅeAÅf, or ÅeKÅf}, optionalOverrides the memory layout of the result. ÅeCÅf means C-order,
+ÅeFÅf means F-order, ÅeAÅf means ÅeFÅf ifais Fortran contiguous,
+ÅeCÅf otherwise. ÅeKÅf means match the layout ofaas closely
+as possible.New in version 1.6.0.subokbool, optional.If True, then the newly created array will use the sub-class
+type ofa, otherwise it will be a base-class array. Defaults
+to True.shapeint or sequence of ints, optional.Overrides the shape of the result. If order=ÅfKÅf and the number of
+dimensions is unchanged, will try to keep order, otherwise,
+order=ÅfCÅf is implied.New in version 1.17.0.Returns:outndarrayArray of zeros with the same shape and type asa.See alsoempty_likeReturn an empty array with shape and type of input.ones_likeReturn an array of ones with shape and type of input.full_likeReturn a new array with shape of input filled with value.zerosReturn a new array setting values to zero.Examples>>>x=np.arange(6)>>>x=x.reshape((2,3))>>>xarray([[0, 1, 2],[3, 4, 5]])>>>np.zeros_like(x)array([[0, 0, 0],[0, 0, 0]])>>>y=np.arange(3,dtype=float)>>>yarray([0., 1., 2.])>>>np.zeros_like(y)array([0.,  0.,  0.])"
+Numpy,Array and fft,numpy.full,"numpy.full#numpy.full(shape,fill_value,dtype=None,order='C',*,like=None)[source]#Return a new array of given shape and type, filled withfill_value.Parameters:shapeint or sequence of intsShape of the new array, e.g.,(2,3)or2.fill_valuescalar or array_likeFill value.dtypedata-type, optionalThe desired data-type for the array  The default, None, meansnp.array(fill_value).dtype.order{ÅeCÅf, ÅeFÅf}, optionalWhether to store multidimensional data in C- or Fortran-contiguous
+(row- or column-wise) order in memory.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:outndarrayArray offill_valuewith the given shape, dtype, and order.See alsofull_likeReturn a new array with shape of input filled with value.emptyReturn a new uninitialized array.onesReturn a new array setting values to one.zerosReturn a new array setting values to zero.Examples>>>np.full((2,2),np.inf)array([[inf, inf],[inf, inf]])>>>np.full((2,2),10)array([[10, 10],[10, 10]])>>>np.full((2,2),[1,2])array([[1, 2],[1, 2]])"
+Numpy,Array and fft,numpy.full_like,"numpy.full_like#numpy.full_like(a,fill_value,dtype=None,order='K',subok=True,shape=None)[source]#Return a full array with the same shape and type as a given array.Parameters:aarray_likeThe shape and data-type ofadefine these same attributes of
+the returned array.fill_valuearray_likeFill value.dtypedata-type, optionalOverrides the data type of the result.order{ÅeCÅf, ÅeFÅf, ÅeAÅf, or ÅeKÅf}, optionalOverrides the memory layout of the result. ÅeCÅf means C-order,
+ÅeFÅf means F-order, ÅeAÅf means ÅeFÅf ifais Fortran contiguous,
+ÅeCÅf otherwise. ÅeKÅf means match the layout ofaas closely
+as possible.subokbool, optional.If True, then the newly created array will use the sub-class
+type ofa, otherwise it will be a base-class array. Defaults
+to True.shapeint or sequence of ints, optional.Overrides the shape of the result. If order=ÅfKÅf and the number of
+dimensions is unchanged, will try to keep order, otherwise,
+order=ÅfCÅf is implied.New in version 1.17.0.Returns:outndarrayArray offill_valuewith the same shape and type asa.See alsoempty_likeReturn an empty array with shape and type of input.ones_likeReturn an array of ones with shape and type of input.zeros_likeReturn an array of zeros with shape and type of input.fullReturn a new array of given shape filled with value.Examples>>>x=np.arange(6,dtype=int)>>>np.full_like(x,1)array([1, 1, 1, 1, 1, 1])>>>np.full_like(x,0.1)array([0, 0, 0, 0, 0, 0])>>>np.full_like(x,0.1,dtype=np.double)array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1])>>>np.full_like(x,np.nan,dtype=np.double)array([nan, nan, nan, nan, nan, nan])>>>y=np.arange(6,dtype=np.double)>>>np.full_like(y,0.1)array([0.1, 0.1, 0.1, 0.1, 0.1, 0.1])>>>y=np.zeros([2,2,3],dtype=int)>>>np.full_like(y,[0,0,255])array([[[  0,   0, 255],[  0,   0, 255]],[[  0,   0, 255],[  0,   0, 255]]])"
+Numpy,Array and fft,numpy.array,"numpy.array#numpy.array(object,dtype=None,*,copy=True,order='K',subok=False,ndmin=0,like=None)#Create an array.Parameters:objectarray_likeAn array, any object exposing the array interface, an object whose__array__method returns an array, or any (nested) sequence.
+If object is a scalar, a 0-dimensional array containing object is
+returned.dtypedata-type, optionalThe desired data-type for the array. If not given, NumPy will try to use
+a defaultdtypethat can represent the values (by applying promotion
+rules when necessary.)copybool, optionalIf true (default), then the object is copied.  Otherwise, a copy will
+only be made if__array__returns a copy, if obj is a nested
+sequence, or if a copy is needed to satisfy any of the other
+requirements (dtype,order, etc.).order{ÅeKÅf, ÅeAÅf, ÅeCÅf, ÅeFÅf}, optionalSpecify the memory layout of the array. If object is not an array, the
+newly created array will be in C order (row major) unless ÅeFÅf is
+specified, in which case it will be in Fortran order (column major).
+If object is an array the following holds.orderno copycopy=TrueÅeKÅfunchangedF & C order preserved, otherwise most similar orderÅeAÅfunchangedF order if input is F and not C, otherwise C orderÅeCÅfC orderC orderÅeFÅfF orderF orderWhencopy=Falseand a copy is made for other reasons, the result is
+the same as ifcopy=True, with some exceptions for ÅeAÅf, see the
+Notes section. The default order is ÅeKÅf.subokbool, optionalIf True, then sub-classes will be passed-through, otherwise
+the returned array will be forced to be a base-class array (default).ndminint, optionalSpecifies the minimum number of dimensions that the resulting
+array should have.  Ones will be prepended to the shape as
+needed to meet this requirement.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:outndarrayAn array object satisfying the specified requirements.See alsoempty_likeReturn an empty array with shape and type of input.ones_likeReturn an array of ones with shape and type of input.zeros_likeReturn an array of zeros with shape and type of input.full_likeReturn a new array with shape of input filled with value.emptyReturn a new uninitialized array.onesReturn a new array setting values to one.zerosReturn a new array setting values to zero.fullReturn a new array of given shape filled with value.NotesWhen order is ÅeAÅf andobjectis an array in neither ÅeCÅf nor ÅeFÅf order,
+and a copy is forced by a change in dtype, then the order of the result is
+not necessarily ÅeCÅf as expected. This is likely a bug.Examples>>>np.array([1,2,3])array([1, 2, 3])Upcasting:>>>np.array([1,2,3.0])array([ 1.,  2.,  3.])More than one dimension:>>>np.array([[1,2],[3,4]])array([[1, 2],[3, 4]])Minimum dimensions 2:>>>np.array([1,2,3],ndmin=2)array([[1, 2, 3]])Type provided:>>>np.array([1,2,3],dtype=complex)array([ 1.+0.j,  2.+0.j,  3.+0.j])Data-type consisting of more than one element:>>>x=np.array([(1,2),(3,4)],dtype=[('a','<i4'),('b','<i4')])>>>x['a']array([1, 3])Creating an array from sub-classes:>>>np.array(np.mat('1 2; 3 4'))array([[1, 2],[3, 4]])>>>np.array(np.mat('1 2; 3 4'),subok=True)matrix([[1, 2],[3, 4]])"
+Numpy,Array and fft,numpy.asarray,"numpy.asarray#numpy.asarray(a,dtype=None,order=None,*,like=None)#Convert the input to an array.Parameters:aarray_likeInput data, in any form that can be converted to an array.  This
+includes lists, lists of tuples, tuples, tuples of tuples, tuples
+of lists and ndarrays.dtypedata-type, optionalBy default, the data-type is inferred from the input data.order{ÅeCÅf, ÅeFÅf, ÅeAÅf, ÅeKÅf}, optionalMemory layout.  ÅeAÅf and ÅeKÅf depend on the order of input array a.
+ÅeCÅf row-major (C-style),
+ÅeFÅf column-major (Fortran-style) memory representation.
+ÅeAÅf (any) means ÅeFÅf ifais Fortran contiguous, ÅeCÅf otherwise
+ÅeKÅf (keep) preserve input order
+Defaults to ÅeKÅf.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:outndarrayArray interpretation ofa.  No copy is performed if the input
+is already an ndarray with matching dtype and order.  Ifais a
+subclass of ndarray, a base class ndarray is returned.See alsoasanyarraySimilar function which passes through subclasses.ascontiguousarrayConvert input to a contiguous array.asfarrayConvert input to a floating point ndarray.asfortranarrayConvert input to an ndarray with column-major memory order.asarray_chkfiniteSimilar function which checks input for NaNs and Infs.fromiterCreate an array from an iterator.fromfunctionConstruct an array by executing a function on grid positions.ExamplesConvert a list into an array:>>>a=[1,2]>>>np.asarray(a)array([1, 2])Existing arrays are not copied:>>>a=np.array([1,2])>>>np.asarray(a)isaTrueIfdtypeis set, array is copied only if dtype does not match:>>>a=np.array([1,2],dtype=np.float32)>>>np.asarray(a,dtype=np.float32)isaTrue>>>np.asarray(a,dtype=np.float64)isaFalseContrary toasanyarray, ndarray subclasses are not passed through:>>>issubclass(np.recarray,np.ndarray)True>>>a=np.array([(1.0,2),(3.0,4)],dtype='f4,i4').view(np.recarray)>>>np.asarray(a)isaFalse>>>np.asanyarray(a)isaTrue"
+Numpy,Array and fft,numpy.asanyarray,"numpy.asanyarray#numpy.asanyarray(a,dtype=None,order=None,*,like=None)#Convert the input to an ndarray, but pass ndarray subclasses through.Parameters:aarray_likeInput data, in any form that can be converted to an array.  This
+includes scalars, lists, lists of tuples, tuples, tuples of tuples,
+tuples of lists, and ndarrays.dtypedata-type, optionalBy default, the data-type is inferred from the input data.order{ÅeCÅf, ÅeFÅf, ÅeAÅf, ÅeKÅf}, optionalMemory layout.  ÅeAÅf and ÅeKÅf depend on the order of input array a.
+ÅeCÅf row-major (C-style),
+ÅeFÅf column-major (Fortran-style) memory representation.
+ÅeAÅf (any) means ÅeFÅf ifais Fortran contiguous, ÅeCÅf otherwise
+ÅeKÅf (keep) preserve input order
+Defaults to ÅeCÅf.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:outndarray or an ndarray subclassArray interpretation ofa.  Ifais an ndarray or a subclass
+of ndarray, it is returned as-is and no copy is performed.See alsoasarraySimilar function which always returns ndarrays.ascontiguousarrayConvert input to a contiguous array.asfarrayConvert input to a floating point ndarray.asfortranarrayConvert input to an ndarray with column-major memory order.asarray_chkfiniteSimilar function which checks input for NaNs and Infs.fromiterCreate an array from an iterator.fromfunctionConstruct an array by executing a function on grid positions.ExamplesConvert a list into an array:>>>a=[1,2]>>>np.asanyarray(a)array([1, 2])Instances ofndarraysubclasses are passed through as-is:>>>a=np.array([(1.0,2),(3.0,4)],dtype='f4,i4').view(np.recarray)>>>np.asanyarray(a)isaTrue"
+Numpy,Array and fft,numpy.ascontiguousarray,"numpy.ascontiguousarray#numpy.ascontiguousarray(a,dtype=None,*,like=None)#Return a contiguous array (ndim >= 1) in memory (C order).Parameters:aarray_likeInput array.dtypestr or dtype object, optionalData-type of returned array.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:outndarrayContiguous array of same shape and content asa, with typedtypeif specified.See alsoasfortranarrayConvert input to an ndarray with column-major memory order.requireReturn an ndarray that satisfies requirements.ndarray.flagsInformation about the memory layout of the array.ExamplesStarting with a Fortran-contiguous array:>>>x=np.ones((2,3),order='F')>>>x.flags['F_CONTIGUOUS']TrueCallingascontiguousarraymakes a C-contiguous copy:>>>y=np.ascontiguousarray(x)>>>y.flags['C_CONTIGUOUS']True>>>np.may_share_memory(x,y)FalseNow, starting with a C-contiguous array:>>>x=np.ones((2,3),order='C')>>>x.flags['C_CONTIGUOUS']TrueThen, callingascontiguousarrayreturns the same object:>>>y=np.ascontiguousarray(x)>>>xisyTrueNote: This function returns an array with at least one-dimension (1-d)
+so it will not preserve 0-d arrays."
+Numpy,Array and fft,numpy.asmatrix,"numpy.asmatrix#numpy.asmatrix(data,dtype=None)[source]#Interpret the input as a matrix.Unlikematrix,asmatrixdoes not make a copy if the input is already
+a matrix or an ndarray.  Equivalent tomatrix(data,copy=False).Parameters:dataarray_likeInput data.dtypedata-typeData-type of the output matrix.Returns:matmatrixdatainterpreted as a matrix.Examples>>>x=np.array([[1,2],[3,4]])>>>m=np.asmatrix(x)>>>x[0,0]=5>>>mmatrix([[5, 2],[3, 4]])"
+Numpy,Array and fft,numpy.copy,"numpy.copy#numpy.copy(a,order='K',subok=False)[source]#Return an array copy of the given object.Parameters:aarray_likeInput data.order{ÅeCÅf, ÅeFÅf, ÅeAÅf, ÅeKÅf}, optionalControls the memory layout of the copy. ÅeCÅf means C-order,
+ÅeFÅf means F-order, ÅeAÅf means ÅeFÅf ifais Fortran contiguous,
+ÅeCÅf otherwise. ÅeKÅf means match the layout ofaas closely
+as possible. (Note that this function andndarray.copyare very
+similar, but have different default values for their order=
+arguments.)subokbool, optionalIf True, then sub-classes will be passed-through, otherwise the
+returned array will be forced to be a base-class array (defaults to False).New in version 1.19.0.Returns:arrndarrayArray interpretation ofa.See alsondarray.copyPreferred method for creating an array copyNotesThis is equivalent to:>>>np.array(a,copy=True)ExamplesCreate an array x, with a reference y and a copy z:>>>x=np.array([1,2,3])>>>y=x>>>z=np.copy(x)Note that, when we modify x, y changes, but not z:>>>x[0]=10>>>x[0]==y[0]True>>>x[0]==z[0]FalseNote that, np.copy clears previously set WRITEABLE=False flag.>>>a=np.array([1,2,3])>>>a.flags[""WRITEABLE""]=False>>>b=np.copy(a)>>>b.flags[""WRITEABLE""]True>>>b[0]=3>>>barray([3, 2, 3])Note that np.copy is a shallow copy and will not copy object
+elements within arrays. This is mainly important for arrays
+containing Python objects. The new array will contain the
+same object which may lead to surprises if that object can
+be modified (is mutable):>>>a=np.array([1,'m',[2,3,4]],dtype=object)>>>b=np.copy(a)>>>b[2][0]=10>>>aarray([1, 'm', list([10, 3, 4])], dtype=object)To ensure all elements within anobjectarray are copied,
+usecopy.deepcopy:>>>importcopy>>>a=np.array([1,'m',[2,3,4]],dtype=object)>>>c=copy.deepcopy(a)>>>c[2][0]=10>>>carray([1, 'm', list([10, 3, 4])], dtype=object)>>>aarray([1, 'm', list([2, 3, 4])], dtype=object)"
+Numpy,Array and fft,numpy.frombuffer,"numpy.frombuffer#numpy.frombuffer(buffer,dtype=float,count=-1,offset=0,*,like=None)#Interpret a buffer as a 1-dimensional array.Parameters:bufferbuffer_likeAn object that exposes the buffer interface.dtypedata-type, optionalData-type of the returned array; default: float.countint, optionalNumber of items to read.-1means all data in the buffer.offsetint, optionalStart reading the buffer from this offset (in bytes); default: 0.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:outndarraySee alsondarray.tobytesInverse of this operation, construct Python bytes from the raw data bytes in the array.NotesIf the buffer has data that is not in machine byte-order, this should
+be specified as part of the data-type, e.g.:>>>dt=np.dtype(int)>>>dt=dt.newbyteorder('>')>>>np.frombuffer(buf,dtype=dt)The data of the resulting array will not be byteswapped, but will be
+interpreted correctly.This function creates a view into the original object.  This should be safe
+in general, but it may make sense to copy the result when the original
+object is mutable or untrusted.Examples>>>s=b'hello world'>>>np.frombuffer(s,dtype='S1',count=5,offset=6)array([b'w', b'o', b'r', b'l', b'd'], dtype='|S1')>>>np.frombuffer(b'\x01\x02',dtype=np.uint8)array([1, 2], dtype=uint8)>>>np.frombuffer(b'\x01\x02\x03\x04\x05',dtype=np.uint8,count=3)array([1, 2, 3], dtype=uint8)"
+Numpy,Array and fft,numpy.from_dlpack,"numpy.from_dlpack#numpy.from_dlpack(x,/)#Create a NumPy array from an object implementing the__dlpack__protocol. Generally, the returned NumPy array is a read-only view
+of the input object. See[1]and[2]for more details.Parameters:xobjectA Python object that implements the__dlpack__and__dlpack_device__methods.Returns:outndarrayReferences[1]Array API documentation,https://data-apis.org/array-api/latest/design_topics/data_interchange.html#syntax-for-data-interchange-with-dlpack[2]Python specification for DLPack,https://dmlc.github.io/dlpack/latest/python_spec.htmlExamples>>>importtorch>>>x=torch.arange(10)>>># create a view of the torch tensor ""x"" in NumPy>>>y=np.from_dlpack(x)"
+Numpy,Array and fft,numpy.fromfile,"numpy.fromfile#numpy.fromfile(file,dtype=float,count=-1,sep='',offset=0,*,like=None)#Construct an array from data in a text or binary file.A highly efficient way of reading binary data with a known data-type,
+as well as parsing simply formatted text files.  Data written using thetofilemethod can be read using this function.Parameters:filefile or str or PathOpen file object or filename.Changed in version 1.17.0:pathlib.Pathobjects are now accepted.dtypedata-typeData type of the returned array.
+For binary files, it is used to determine the size and byte-order
+of the items in the file.
+Most builtin numeric types are supported and extension types may be supported.New in version 1.18.0:Complex dtypes.countintNumber of items to read.-1means all items (i.e., the complete
+file).sepstrSeparator between items if file is a text file.
+Empty (ÅgÅh) separator means the file should be treated as binary.
+Spaces (Åh Åg) in the separator match zero or more whitespace characters.
+A separator consisting only of spaces must match at least one
+whitespace.offsetintThe offset (in bytes) from the fileÅfs current position. Defaults to 0.
+Only permitted for binary files.New in version 1.17.0.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.See alsoload,savendarray.tofileloadtxtMore flexible way of loading data from a text file.NotesDo not rely on the combination oftofileandfromfilefor
+data storage, as the binary files generated are not platform
+independent.  In particular, no byte-order or data-type information is
+saved.  Data can be stored in the platform independent.npyformat
+usingsaveandloadinstead.ExamplesConstruct an ndarray:>>>dt=np.dtype([('time',[('min',np.int64),('sec',np.int64)]),...('temp',float)])>>>x=np.zeros((1,),dtype=dt)>>>x['time']['min']=10;x['temp']=98.25>>>xarray([((10, 0), 98.25)],dtype=[('time', [('min', '<i8'), ('sec', '<i8')]), ('temp', '<f8')])Save the raw data to disk:>>>importtempfile>>>fname=tempfile.mkstemp()[1]>>>x.tofile(fname)Read the raw data from disk:>>>np.fromfile(fname,dtype=dt)array([((10, 0), 98.25)],dtype=[('time', [('min', '<i8'), ('sec', '<i8')]), ('temp', '<f8')])The recommended way to store and load data:>>>np.save(fname,x)>>>np.load(fname+'.npy')array([((10, 0), 98.25)],dtype=[('time', [('min', '<i8'), ('sec', '<i8')]), ('temp', '<f8')])"
+Numpy,Array and fft,numpy.fromfunction,"numpy.fromfunction#numpy.fromfunction(function,shape,*,dtype=<class'float'>,like=None,**kwargs)[source]#Construct an array by executing a function over each coordinate.The resulting array therefore has a valuefn(x,y,z)at
+coordinate(x,y,z).Parameters:functioncallableThe function is called with N parameters, where N is the rank ofshape.  Each parameter represents the coordinates of the array
+varying along a specific axis.  For example, ifshapewere(2,2), then the parameters would bearray([[0,0],[1,1]])andarray([[0,1],[0,1]])shape(N,) tuple of intsShape of the output array, which also determines the shape of
+the coordinate arrays passed tofunction.dtypedata-type, optionalData-type of the coordinate arrays passed tofunction.
+By default,dtypeis float.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:fromfunctionanyThe result of the call tofunctionis passed back directly.
+Therefore the shape offromfunctionis completely determined byfunction.  Iffunctionreturns a scalar value, the shape offromfunctionwould not match theshapeparameter.See alsoindices,meshgridNotesKeywords other thandtypeandlikeare passed tofunction.Examples>>>np.fromfunction(lambdai,j:i,(2,2),dtype=float)array([[0., 0.],[1., 1.]])>>>np.fromfunction(lambdai,j:j,(2,2),dtype=float)array([[0., 1.],[0., 1.]])>>>np.fromfunction(lambdai,j:i==j,(3,3),dtype=int)array([[ True, False, False],[False,  True, False],[False, False,  True]])>>>np.fromfunction(lambdai,j:i+j,(3,3),dtype=int)array([[0, 1, 2],[1, 2, 3],[2, 3, 4]])"
+Numpy,Array and fft,numpy.fromiter,"numpy.fromiter#numpy.fromiter(iter,dtype,count=-1,*,like=None)#Create a new 1-dimensional array from an iterable object.Parameters:iteriterable objectAn iterable object providing data for the array.dtypedata-typeThe data-type of the returned array.Changed in version 1.23:Object and subarray dtypes are now supported (note that the final
+result is not 1-D for a subarray dtype).countint, optionalThe number of items to read fromiterable.  The default is -1,
+which means all data is read.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:outndarrayThe output array.NotesSpecifycountto improve performance.  It allowsfromiterto
+pre-allocate the output array, instead of resizing it on demand.Examples>>>iterable=(x*xforxinrange(5))>>>np.fromiter(iterable,float)array([  0.,   1.,   4.,   9.,  16.])A carefully constructed subarray dtype will lead to higher dimensional
+results:>>>iterable=((x+1,x+2)forxinrange(5))>>>np.fromiter(iterable,dtype=np.dtype((int,2)))array([[1, 2],[2, 3],[3, 4],[4, 5],[5, 6]])"
+Numpy,Array and fft,numpy.fromstring,"numpy.fromstring#numpy.fromstring(string,dtype=float,count=-1,*,sep,like=None)#A new 1-D array initialized from text data in a string.Parameters:stringstrA string containing the data.dtypedata-type, optionalThe data type of the array; default: float.  For binary input data,
+the data must be in exactly this format. Most builtin numeric types are
+supported and extension types may be supported.New in version 1.18.0:Complex dtypes.countint, optionalRead this number ofdtypeelements from the data.  If this is
+negative (the default), the count will be determined from the
+length of the data.sepstr, optionalThe string separating numbers in the data; extra whitespace between
+elements is also ignored.Deprecated since version 1.14:Passingsep='', the default, is deprecated since it will
+trigger the deprecated binary mode of this function. This mode
+interpretsstringas binary bytes, rather than ASCII text with
+decimal numbers, an operation which is better speltfrombuffer(string,dtype,count). Ifstringcontains unicode
+text, the binary mode offromstringwill first encode it into
+bytes using utf-8, which will not produce sane results.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:arrndarrayThe constructed array.Raises:ValueErrorIf the string is not the correct size to satisfy the requesteddtypeandcount.See alsofrombuffer,fromfile,fromiterExamples>>>np.fromstring('1 2',dtype=int,sep=' ')array([1, 2])>>>np.fromstring('1, 2',dtype=int,sep=',')array([1, 2])"
+Numpy,Array and fft,numpy.loadtxt,"The numpy.loadtxt function allows you to load data from a text file into an ndarray. Here is a summary of the parameters:- fname: File or filename or list of files to read. The file can be a path or a generator. If the file is compressed, it will be decompressed first.- dtype: Data type of the resulting array. The default is float.- comments: Characters used to indicate the start of a comment. The default is '#' character.- delimiter: Character used to separate values. The default is whitespace.- converters: Functions to customize value parsing. Can be a dictionary or a callable.- skiprows: Number of lines to skip at the beginning, including comments. The default is 0.- usecols: Columns to read, with 0 being the first. Can be an integer, a sequence, or None to read all columns.- unpack: If True, the returned array is transposed. The default is False.- ndmin: Minimum number of dimensions for the resulting array. The default is 0.- encoding: Encoding used to decode the input file. The default value is 'bytes', which returns byte arrays. Set to None to receive unicode arrays.- max_rows: Maximum number of rows to read after skiprows. The default is to read all rows.- quotechar: Character used to denote the start and end of a quoted item. The default is None, which disables quoting support.- like: Reference object to allow creation of non-NumPy arrays.The function returns an ndarray containing the data read from the text file.Some additional information:- The function is designed to be a fast reader for simply formatted files.- The input text file must have the same number of values in each row.- You can specify the columns to read using the usecols parameter, which can be a single integer or a sequence of integers.- The converters parameter allows you to specify functions to preprocess the text prior to parsing.- Quoted fields can be handled using the quotechar parameter.- You can load a subset of columns when the rows do not contain an equal number of values.- The genfromtxt function provides more sophisticated handling of files with missing values.- The read_mat function can be used to read MATLAB data files."
+Numpy,Array and fft,numpy.core.records.array,"numpy.core.records.array#core.records.array(obj,dtype=None,shape=None,offset=0,strides=None,formats=None,names=None,titles=None,aligned=False,byteorder=None,copy=True)[source]#Construct a record array from a wide-variety of objects.A general-purpose record array constructor that dispatches to the
+appropriaterecarraycreation function based on the inputs (see Notes).Parameters:objanyInput object. See Notes for details on how various input types are
+treated.dtypedata-type, optionalValid dtype for array.shapeint or tuple of ints, optionalShape of each array.offsetint, optionalPosition in the file or buffer to start reading from.stridestuple of ints, optionalBuffer (buf) is interpreted according to these strides (strides
+define how many bytes each array element, row, column, etc.
+occupy in memory).formats, names, titles, aligned, byteorderIfdtypeisNone, these arguments are passed tonumpy.format_parserto construct a dtype. See that function for
+detailed documentation.copybool, optionalWhether to copy the input object (True), or to use a reference instead.
+This option only applies when the input is an ndarray or recarray.
+Defaults to True.Returns:np.recarrayRecord array created from the specified object.NotesIfobjisNone, then call therecarrayconstructor. Ifobjis a string, then call thefromstringconstructor. Ifobjis a
+list or a tuple, then if the first object is anndarray, callfromarrays, otherwise callfromrecords. Ifobjis arecarray, then make a copy of the data in the recarray
+(ifcopy=True) and use the new formats, names, and titles. Ifobjis a file, then callfromfile. Finally, if obj is anndarray, then
+returnobj.view(recarray), making a copy of the data ifcopy=True.Examples>>>a=np.array([[1,2,3],[4,5,6],[7,8,9]])array([[1, 2, 3],[4, 5, 6],[7, 8, 9]])>>>np.core.records.array(a)rec.array([[1, 2, 3],[4, 5, 6],[7, 8, 9]],dtype=int32)>>>b=[(1,1),(2,4),(3,9)]>>>c=np.core.records.array(b,formats=['i2','f2'],names=('x','y'))>>>crec.array([(1, 1.0), (2, 4.0), (3, 9.0)],dtype=[('x', '<i2'), ('y', '<f2')])>>>c.xrec.array([1, 2, 3], dtype=int16)>>>c.yrec.array([ 1.0,  4.0,  9.0], dtype=float16)>>>r=np.rec.array(['abc','def'],names=['col1','col2'])>>>print(r.col1)abc>>>r.col1array('abc', dtype='<U3')>>>r.col2array('def', dtype='<U3')"
+Numpy,Array and fft,numpy.core.records.fromarrays,"numpy.core.records.fromarrays#core.records.fromarrays(arrayList,dtype=None,shape=None,formats=None,names=None,titles=None,aligned=False,byteorder=None)[source]#Create a record array from a (flat) list of arraysParameters:arrayListlist or tupleList of array-like objects (such as lists, tuples,
+and ndarrays).dtypedata-type, optionalvalid dtype for all arraysshapeint or tuple of ints, optionalShape of the resulting array. If not provided, inferred fromarrayList[0].formats, names, titles, aligned, byteorderIfdtypeisNone, these arguments are passed tonumpy.format_parserto construct a dtype. See that function for
+detailed documentation.Returns:np.recarrayRecord array consisting of given arrayList columns.Examples>>>x1=np.array([1,2,3,4])>>>x2=np.array(['a','dd','xyz','12'])>>>x3=np.array([1.1,2,3,4])>>>r=np.core.records.fromarrays([x1,x2,x3],names='a,b,c')>>>print(r[1])(2, 'dd', 2.0) # may vary>>>x1[1]=34>>>r.aarray([1, 2, 3, 4])>>>x1=np.array([1,2,3,4])>>>x2=np.array(['a','dd','xyz','12'])>>>x3=np.array([1.1,2,3,4])>>>r=np.core.records.fromarrays(...[x1,x2,x3],...dtype=np.dtype([('a',np.int32),('b','S3'),('c',np.float32)]))>>>rrec.array([(1, b'a', 1.1), (2, b'dd', 2. ), (3, b'xyz', 3. ),(4, b'12', 4. )],dtype=[('a', '<i4'), ('b', 'S3'), ('c', '<f4')])"
+Numpy,Array and fft,numpy.core.records.fromrecords,"numpy.core.records.fromrecords#core.records.fromrecords(recList,dtype=None,shape=None,formats=None,names=None,titles=None,aligned=False,byteorder=None)[source]#Create a recarray from a list of records in text form.Parameters:recListsequencedata in the same field may be heterogeneous - they will be promoted
+to the highest data type.dtypedata-type, optionalvalid dtype for all arraysshapeint or tuple of ints, optionalshape of each array.formats, names, titles, aligned, byteorderIfdtypeisNone, these arguments are passed tonumpy.format_parserto construct a dtype. See that function for
+detailed documentation.If bothformatsanddtypeare None, then this will auto-detect
+formats. Use list of tuples rather than list of lists for faster
+processing.Returns:np.recarrayrecord array consisting of given recList rows.Examples>>>r=np.core.records.fromrecords([(456,'dbe',1.2),(2,'de',1.3)],...names='col1,col2,col3')>>>print(r[0])(456, 'dbe', 1.2)>>>r.col1array([456,   2])>>>r.col2array(['dbe', 'de'], dtype='<U3')>>>importpickle>>>pickle.loads(pickle.dumps(r))rec.array([(456, 'dbe', 1.2), (  2, 'de', 1.3)],dtype=[('col1', '<i8'), ('col2', '<U3'), ('col3', '<f8')])"
+Numpy,Array and fft,numpy.core.records.fromstring,"numpy.core.records.fromstring#core.records.fromstring(datastring,dtype=None,shape=None,offset=0,formats=None,names=None,titles=None,aligned=False,byteorder=None)[source]#Create a record array from binary dataNote that despite the name of this function it does not acceptstrinstances.Parameters:datastringbytes-likeBuffer of binary datadtypedata-type, optionalValid dtype for all arraysshapeint or tuple of ints, optionalShape of each array.offsetint, optionalPosition in the buffer to start reading from.formats, names, titles, aligned, byteorderIfdtypeisNone, these arguments are passed tonumpy.format_parserto construct a dtype. See that function for
+detailed documentation.Returns:np.recarrayRecord array view into the data in datastring. This will be readonly
+ifdatastringis readonly.See alsonumpy.frombufferExamples>>>a=b'\x01\x02\x03abc'>>>np.core.records.fromstring(a,dtype='u1,u1,u1,S3')rec.array([(1, 2, 3, b'abc')],dtype=[('f0', 'u1'), ('f1', 'u1'), ('f2', 'u1'), ('f3', 'S3')])>>>grades_dtype=[('Name',(np.str_,10)),('Marks',np.float64),...('GradeLevel',np.int32)]>>>grades_array=np.array([('Sam',33.3,3),('Mike',44.4,5),...('Aadi',66.6,6)],dtype=grades_dtype)>>>np.core.records.fromstring(grades_array.tobytes(),dtype=grades_dtype)rec.array([('Sam', 33.3, 3), ('Mike', 44.4, 5), ('Aadi', 66.6, 6)],dtype=[('Name', '<U10'), ('Marks', '<f8'), ('GradeLevel', '<i4')])>>>s='\x01\x02\x03abc'>>>np.core.records.fromstring(s,dtype='u1,u1,u1,S3')Traceback (most recent call last)...TypeError: a bytes-like object is required, not 'str'"
+Numpy,Array and fft,numpy.core.records.fromfile,"numpy.core.records.fromfile#core.records.fromfile(fd,dtype=None,shape=None,offset=0,formats=None,names=None,titles=None,aligned=False,byteorder=None)[source]#Create an array from binary file dataParameters:fdstr or file typeIf file is a string or a path-like object then that file is opened,
+else it is assumed to be a file object. The file object must
+support random access (i.e. it must have tell and seek methods).dtypedata-type, optionalvalid dtype for all arraysshapeint or tuple of ints, optionalshape of each array.offsetint, optionalPosition in the file to start reading from.formats, names, titles, aligned, byteorderIfdtypeisNone, these arguments are passed tonumpy.format_parserto construct a dtype. See that function for
+detailed documentationReturns:np.recarrayrecord array consisting of data enclosed in file.Examples>>>fromtempfileimportTemporaryFile>>>a=np.empty(10,dtype='f8,i4,a5')>>>a[5]=(0.5,10,'abcde')>>>>>>fd=TemporaryFile()>>>a=a.newbyteorder('<')>>>a.tofile(fd)>>>>>>_=fd.seek(0)>>>r=np.core.records.fromfile(fd,formats='f8,i4,a5',shape=10,...byteorder='<')>>>print(r[5])(0.5, 10, 'abcde')>>>r.shape(10,)"
+Numpy,Array and fft,numpy.core.defchararray.array,"numpy.core.defchararray.array#core.defchararray.array(obj,itemsize=None,copy=True,unicode=None,order=None)[source]#Create achararray.NoteThis class is provided for numarray backward-compatibility.
+New code (not concerned with numarray compatibility) should use
+arrays of typebytes_orstr_and use the free functions
+innumpy.charfor fast
+vectorized string operations instead.Versus a regular NumPy array of typestrorunicode, this
+class adds the following functionality:values automatically have whitespace removed from the end
+when indexedcomparison operators automatically remove whitespace from the
+end when comparing valuesvectorized string operations are provided as methods
+(e.g.str.endswith) and infix operators (e.g.+,*,%)Parameters:objarray of str or unicode-likeitemsizeint, optionalitemsizeis the number of characters per scalar in the
+resulting array.  Ifitemsizeis None, andobjis an
+object array or a Python list, theitemsizewill be
+automatically determined.  Ifitemsizeis provided andobjis of type str or unicode, then theobjstring will be
+chunked intoitemsizepieces.copybool, optionalIf true (default), then the object is copied.  Otherwise, a copy
+will only be made if __array__ returns a copy, if obj is a
+nested sequence, or if a copy is needed to satisfy any of the other
+requirements (itemsize, unicode,order, etc.).unicodebool, optionalWhen true, the resultingchararraycan contain Unicode
+characters, when false only 8-bit characters.  If unicode is
+None andobjis one of the following:achararray,an ndarray of typestrorunicodea Python str or unicode object,then the unicode setting of the output array will be
+automatically determined.order{ÅeCÅf, ÅeFÅf, ÅeAÅf}, optionalSpecify the order of the array.  If order is ÅeCÅf (default), then the
+array will be in C-contiguous order (last-index varies the
+fastest).  If order is ÅeFÅf, then the returned array
+will be in Fortran-contiguous order (first-index varies the
+fastest).  If order is ÅeAÅf, then the returned array may
+be in any order (either C-, Fortran-contiguous, or even
+discontiguous)."
+Numpy,Array and fft,numpy.core.defchararray.asarray,"numpy.core.defchararray.asarray#core.defchararray.asarray(obj,itemsize=None,unicode=None,order=None)[source]#Convert the input to achararray, copying the data only if
+necessary.Versus a regular NumPy array of typestrorunicode, this
+class adds the following functionality:values automatically have whitespace removed from the end
+when indexedcomparison operators automatically remove whitespace from the
+end when comparing valuesvectorized string operations are provided as methods
+(e.g.str.endswith) and infix operators (e.g.+,*,``%``)Parameters:objarray of str or unicode-likeitemsizeint, optionalitemsizeis the number of characters per scalar in the
+resulting array.  Ifitemsizeis None, andobjis an
+object array or a Python list, theitemsizewill be
+automatically determined.  Ifitemsizeis provided andobjis of type str or unicode, then theobjstring will be
+chunked intoitemsizepieces.unicodebool, optionalWhen true, the resultingchararraycan contain Unicode
+characters, when false only 8-bit characters.  If unicode is
+None andobjis one of the following:achararray,an ndarray of typestror Åeunicode`a Python str or unicode object,then the unicode setting of the output array will be
+automatically determined.order{ÅeCÅf, ÅeFÅf}, optionalSpecify the order of the array.  If order is ÅeCÅf (default), then the
+array will be in C-contiguous order (last-index varies the
+fastest).  If order is ÅeFÅf, then the returned array
+will be in Fortran-contiguous order (first-index varies the
+fastest)."
+Numpy,Array and fft,numpy.arange,"numpy.arange#numpy.arange([start,]stop,[step,]dtype=None,*,like=None)#Return evenly spaced values within a given interval.arangecan be called with a varying number of positional arguments:arange(stop): Values are generated within the half-open interval[0,stop)(in other words, the interval includingstartbut
+excludingstop).arange(start,stop): Values are generated within the half-open
+interval[start,stop).arange(start,stop,step)Values are generated within the half-open
+interval[start,stop), with spacing between values given bystep.For integer arguments the function is roughly equivalent to the Python
+built-inrange, but returns an ndarray rather than arangeinstance.When using a non-integer step, such as 0.1, it is often better to usenumpy.linspace.See the Warning sections below for more information.Parameters:startinteger or real, optionalStart of interval.  The interval includes this value.  The default
+start value is 0.stopinteger or realEnd of interval.  The interval does not include this value, except
+in some cases wherestepis not an integer and floating point
+round-off affects the length ofout.stepinteger or real, optionalSpacing between values.  For any outputout, this is the distance
+between two adjacent values,out[i+1]-out[i].  The default
+step size is 1.  Ifstepis specified as a position argument,startmust also be given.dtypedtype, optionalThe type of the output array.  Ifdtypeis not given, infer the data
+type from the other input arguments.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:arangendarrayArray of evenly spaced values.For floating point arguments, the length of the result isceil((stop-start)/step).  Because of floating point overflow,
+this rule may result in the last element ofoutbeing greater
+thanstop.WarningThe length of the output might not be numerically stable.Another stability issue is due to the internal implementation ofnumpy.arange.
+The actual step value used to populate the array isdtype(start+step)-dtype(start)and notstep. Precision loss
+can occur here, due to casting or due to using floating points whenstartis much larger thanstep. This can lead to unexpected
+behaviour. For example:>>>np.arange(0,5,0.5,dtype=int)array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0])>>>np.arange(-3,3,0.5,dtype=int)array([-3, -2, -1,  0,  1,  2,  3,  4,  5,  6,  7,  8])In such cases, the use ofnumpy.linspaceshould be preferred.The built-inrangegeneratesPython built-in integers
+that have arbitrary size, whilenumpy.arangeproducesnumpy.int32ornumpy.int64numbers. This may result in
+incorrect results for large integer values:>>>power=40>>>modulo=10000>>>x1=[(n**power)%moduloforninrange(8)]>>>x2=[(n**power)%moduloforninnp.arange(8)]>>>print(x1)[0, 1, 7776, 8801, 6176, 625, 6576, 4001]  # correct>>>print(x2)[0, 1, 7776, 7185, 0, 5969, 4816, 3361]  # incorrectSee alsonumpy.linspaceEvenly spaced numbers with careful handling of endpoints.numpy.ogridArrays of evenly spaced numbers in N-dimensions.numpy.mgridGrid-shaped arrays of evenly spaced numbers in N-dimensions.How to create arrays with regularly-spaced valuesExamples>>>np.arange(3)array([0, 1, 2])>>>np.arange(3.0)array([ 0.,  1.,  2.])>>>np.arange(3,7)array([3, 4, 5, 6])>>>np.arange(3,7,2)array([3, 5])"
+Numpy,Array and fft,numpy.linspace,"numpy.linspace#numpy.linspace(start,stop,num=50,endpoint=True,retstep=False,dtype=None,axis=0)[source]#Return evenly spaced numbers over a specified interval.Returnsnumevenly spaced samples, calculated over the
+interval [start,stop].The endpoint of the interval can optionally be excluded.Changed in version 1.16.0:Non-scalarstartandstopare now supported.Changed in version 1.20.0:Values are rounded towards-infinstead of0when an
+integerdtypeis specified. The old behavior can
+still be obtained withnp.linspace(start,stop,num).astype(int)Parameters:startarray_likeThe starting value of the sequence.stoparray_likeThe end value of the sequence, unlessendpointis set to False.
+In that case, the sequence consists of all but the last ofnum+1evenly spaced samples, so thatstopis excluded.  Note that the step
+size changes whenendpointis False.numint, optionalNumber of samples to generate. Default is 50. Must be non-negative.endpointbool, optionalIf True,stopis the last sample. Otherwise, it is not included.
+Default is True.retstepbool, optionalIf True, return (samples,step), wherestepis the spacing
+between samples.dtypedtype, optionalThe type of the output array.  Ifdtypeis not given, the data type
+is inferred fromstartandstop. The inferred dtype will never be
+an integer;floatis chosen even if the arguments would produce an
+array of integers.New in version 1.9.0.axisint, optionalThe axis in the result to store the samples.  Relevant only if start
+or stop are array-like.  By default (0), the samples will be along a
+new axis inserted at the beginning. Use -1 to get an axis at the end.New in version 1.16.0.Returns:samplesndarrayThere arenumequally spaced samples in the closed interval[start,stop]or the half-open interval[start,stop)(depending on whetherendpointis True or False).stepfloat, optionalOnly returned ifretstepis TrueSize of spacing between samples.See alsoarangeSimilar tolinspace, but uses a step size (instead of the number of samples).geomspaceSimilar tolinspace, but with numbers spaced evenly on a log scale (a geometric progression).logspaceSimilar togeomspace, but with the end points specified as logarithms.How to create arrays with regularly-spaced valuesExamples>>>np.linspace(2.0,3.0,num=5)array([2.  , 2.25, 2.5 , 2.75, 3.  ])>>>np.linspace(2.0,3.0,num=5,endpoint=False)array([2. ,  2.2,  2.4,  2.6,  2.8])>>>np.linspace(2.0,3.0,num=5,retstep=True)(array([2.  ,  2.25,  2.5 ,  2.75,  3.  ]), 0.25)Graphical illustration:>>>importmatplotlib.pyplotasplt>>>N=8>>>y=np.zeros(N)>>>x1=np.linspace(0,10,N,endpoint=True)>>>x2=np.linspace(0,10,N,endpoint=False)>>>plt.plot(x1,y,'o')[<matplotlib.lines.Line2D object at 0x...>]>>>plt.plot(x2,y+0.5,'o')[<matplotlib.lines.Line2D object at 0x...>]>>>plt.ylim([-0.5,1])(-0.5, 1)>>>plt.show()"
+Numpy,Array and fft,numpy.logspace,"numpy.logspace#numpy.logspace(start,stop,num=50,endpoint=True,base=10.0,dtype=None,axis=0)[source]#Return numbers spaced evenly on a log scale.In linear space, the sequence starts atbase**start(baseto the power ofstart) and ends withbase**stop(seeendpointbelow).Changed in version 1.16.0:Non-scalarstartandstopare now supported.Changed in version 1.25.0:Non-scalar Åebase` is now supportedParameters:startarray_likebase**startis the starting value of the sequence.stoparray_likebase**stopis the final value of the sequence, unlessendpointis False.  In that case,num+1values are spaced over the
+interval in log-space, of which all but the last (a sequence of
+lengthnum) are returned.numinteger, optionalNumber of samples to generate.  Default is 50.endpointboolean, optionalIf true,stopis the last sample. Otherwise, it is not included.
+Default is True.basearray_like, optionalThe base of the log space. The step size between the elements inln(samples)/ln(base)(orlog_base(samples)) is uniform.
+Default is 10.0.dtypedtypeThe type of the output array.  Ifdtypeis not given, the data type
+is inferred fromstartandstop. The inferred type will never be
+an integer;floatis chosen even if the arguments would produce an
+array of integers.axisint, optionalThe axis in the result to store the samples.  Relevant only if start,
+stop, or base are array-like.  By default (0), the samples will be
+along a new axis inserted at the beginning. Use -1 to get an axis at
+the end.New in version 1.16.0.Returns:samplesndarraynumsamples, equally spaced on a log scale.See alsoarangeSimilar to linspace, with the step size specified instead of the number of samples. Note that, when used with a float endpoint, the endpoint may or may not be included.linspaceSimilar to logspace, but with the samples uniformly distributed in linear space, instead of log space.geomspaceSimilar to logspace, but with endpoints specified directly.How to create arrays with regularly-spaced valuesNotesIf base is a scalar, logspace is equivalent to the code>>>y=np.linspace(start,stop,num=num,endpoint=endpoint)...>>>power(base,y).astype(dtype)...Examples>>>np.logspace(2.0,3.0,num=4)array([ 100.        ,  215.443469  ,  464.15888336, 1000.        ])>>>np.logspace(2.0,3.0,num=4,endpoint=False)array([100.        ,  177.827941  ,  316.22776602,  562.34132519])>>>np.logspace(2.0,3.0,num=4,base=2.0)array([4.        ,  5.0396842 ,  6.34960421,  8.        ])>>>np.logspace(2.0,3.0,num=4,base=[2.0,3.0],axis=-1)array([[ 4.        ,  5.0396842 ,  6.34960421,  8.        ],[ 9.        , 12.98024613, 18.72075441, 27.        ]])Graphical illustration:>>>importmatplotlib.pyplotasplt>>>N=10>>>x1=np.logspace(0.1,1,N,endpoint=True)>>>x2=np.logspace(0.1,1,N,endpoint=False)>>>y=np.zeros(N)>>>plt.plot(x1,y,'o')[<matplotlib.lines.Line2D object at 0x...>]>>>plt.plot(x2,y+0.5,'o')[<matplotlib.lines.Line2D object at 0x...>]>>>plt.ylim([-0.5,1])(-0.5, 1)>>>plt.show()"
+Numpy,Array and fft,numpy.geomspace,"numpy.geomspace#numpy.geomspace(start,stop,num=50,endpoint=True,dtype=None,axis=0)[source]#Return numbers spaced evenly on a log scale (a geometric progression).This is similar tologspace, but with endpoints specified directly.
+Each output sample is a constant multiple of the previous.Changed in version 1.16.0:Non-scalarstartandstopare now supported.Parameters:startarray_likeThe starting value of the sequence.stoparray_likeThe final value of the sequence, unlessendpointis False.
+In that case,num+1values are spaced over the
+interval in log-space, of which all but the last (a sequence of
+lengthnum) are returned.numinteger, optionalNumber of samples to generate.  Default is 50.endpointboolean, optionalIf true,stopis the last sample. Otherwise, it is not included.
+Default is True.dtypedtypeThe type of the output array.  Ifdtypeis not given, the data type
+is inferred fromstartandstop. The inferred dtype will never be
+an integer;floatis chosen even if the arguments would produce an
+array of integers.axisint, optionalThe axis in the result to store the samples.  Relevant only if start
+or stop are array-like.  By default (0), the samples will be along a
+new axis inserted at the beginning. Use -1 to get an axis at the end.New in version 1.16.0.Returns:samplesndarraynumsamples, equally spaced on a log scale.See alsologspaceSimilar to geomspace, but with endpoints specified using log and base.linspaceSimilar to geomspace, but with arithmetic instead of geometric progression.arangeSimilar to linspace, with the step size specified instead of the number of samples.How to create arrays with regularly-spaced valuesNotesIf the inputs or dtype are complex, the output will follow a logarithmic
+spiral in the complex plane.  (There are an infinite number of spirals
+passing through two points; the output will follow the shortest such path.)Examples>>>np.geomspace(1,1000,num=4)array([    1.,    10.,   100.,  1000.])>>>np.geomspace(1,1000,num=3,endpoint=False)array([   1.,   10.,  100.])>>>np.geomspace(1,1000,num=4,endpoint=False)array([   1.        ,    5.62341325,   31.6227766 ,  177.827941  ])>>>np.geomspace(1,256,num=9)array([   1.,    2.,    4.,    8.,   16.,   32.,   64.,  128.,  256.])Note that the above may not produce exact integers:>>>np.geomspace(1,256,num=9,dtype=int)array([  1,   2,   4,   7,  16,  32,  63, 127, 256])>>>np.around(np.geomspace(1,256,num=9)).astype(int)array([  1,   2,   4,   8,  16,  32,  64, 128, 256])Negative, decreasing, and complex inputs are allowed:>>>np.geomspace(1000,1,num=4)array([1000.,  100.,   10.,    1.])>>>np.geomspace(-1000,-1,num=4)array([-1000.,  -100.,   -10.,    -1.])>>>np.geomspace(1j,1000j,num=4)# Straight linearray([0.   +1.j, 0.  +10.j, 0. +100.j, 0.+1000.j])>>>np.geomspace(-1+0j,1+0j,num=5)# Circlearray([-1.00000000e+00+1.22464680e-16j, -7.07106781e-01+7.07106781e-01j,6.12323400e-17+1.00000000e+00j,  7.07106781e-01+7.07106781e-01j,1.00000000e+00+0.00000000e+00j])Graphical illustration ofendpointparameter:>>>importmatplotlib.pyplotasplt>>>N=10>>>y=np.zeros(N)>>>plt.semilogx(np.geomspace(1,1000,N,endpoint=True),y+1,'o')[<matplotlib.lines.Line2D object at 0x...>]>>>plt.semilogx(np.geomspace(1,1000,N,endpoint=False),y+2,'o')[<matplotlib.lines.Line2D object at 0x...>]>>>plt.axis([0.5,2000,0,3])[0.5, 2000, 0, 3]>>>plt.grid(True,color='0.7',linestyle='-',which='both',axis='both')>>>plt.show()"
+Numpy,Array and fft,numpy.meshgrid,"numpy.meshgrid#numpy.meshgrid(*xi,copy=True,sparse=False,indexing='xy')[source]#Return a list of coordinate matrices from coordinate vectors.Make N-D coordinate arrays for vectorized evaluations of
+N-D scalar/vector fields over N-D grids, given
+one-dimensional coordinate arrays x1, x2,Åc, xn.Changed in version 1.9:1-D and 0-D cases are allowed.Parameters:x1, x2,Åc, xnarray_like1-D arrays representing the coordinates of a grid.indexing{ÅexyÅf, ÅeijÅf}, optionalCartesian (ÅexyÅf, default) or matrix (ÅeijÅf) indexing of output.
+See Notes for more details.New in version 1.7.0.sparsebool, optionalIf True the shape of the returned coordinate array for dimensioniis reduced from(N1,...,Ni,...Nn)to(1,...,1,Ni,1,...,1).  These sparse coordinate grids are
+intended to be use withBroadcasting.  When all
+coordinates are used in an expression, broadcasting still leads to a
+fully-dimensonal result array.Default is False.New in version 1.7.0.copybool, optionalIf False, a view into the original arrays are returned in order to
+conserve memory.  Default is True.  Please note thatsparse=False,copy=Falsewill likely return non-contiguous
+arrays.  Furthermore, more than one element of a broadcast array
+may refer to a single memory location.  If you need to write to the
+arrays, make copies first.New in version 1.7.0.Returns:X1, X2,Åc, XNlist of ndarraysFor vectorsx1,x2,Åc,xnwith lengthsNi=len(xi),
+returns(N1,N2,N3,...,Nn)shaped arrays if indexing=ÅfijÅf
+or(N2,N1,N3,...,Nn)shaped arrays if indexing=ÅfxyÅf
+with the elements ofxirepeated to fill the matrix along
+the first dimension forx1, the second forx2and so on.See alsomgridConstruct a multi-dimensional ÅgmeshgridÅh using indexing notation.ogridConstruct an open multi-dimensional ÅgmeshgridÅh using indexing notation.how-to-indexNotesThis function supports both indexing conventions through the indexing
+keyword argument.  Giving the string ÅeijÅf returns a meshgrid with
+matrix indexing, while ÅexyÅf returns a meshgrid with Cartesian indexing.
+In the 2-D case with inputs of length M and N, the outputs are of shape
+(N, M) for ÅexyÅf indexing and (M, N) for ÅeijÅf indexing.  In the 3-D case
+with inputs of length M, N and P, outputs are of shape (N, M, P) for
+ÅexyÅf indexing and (M, N, P) for ÅeijÅf indexing.  The difference is
+illustrated by the following code snippet:xv,yv=np.meshgrid(x,y,indexing='ij')foriinrange(nx):forjinrange(ny):# treat xv[i,j], yv[i,j]xv,yv=np.meshgrid(x,y,indexing='xy')foriinrange(nx):forjinrange(ny):# treat xv[j,i], yv[j,i]In the 1-D and 0-D case, the indexing and sparse keywords have no effect.Examples>>>nx,ny=(3,2)>>>x=np.linspace(0,1,nx)>>>y=np.linspace(0,1,ny)>>>xv,yv=np.meshgrid(x,y)>>>xvarray([[0. , 0.5, 1. ],[0. , 0.5, 1. ]])>>>yvarray([[0.,  0.,  0.],[1.,  1.,  1.]])The result ofmeshgridis a coordinate grid:>>>importmatplotlib.pyplotasplt>>>plt.plot(xv,yv,marker='o',color='k',linestyle='none')>>>plt.show()You can create sparse output arrays to save memory and computation time.>>>xv,yv=np.meshgrid(x,y,sparse=True)>>>xvarray([[0. ,  0.5,  1. ]])>>>yvarray([[0.],[1.]])meshgridis very useful to evaluate functions on a grid. If the
+function depends on all coordinates, both dense and sparse outputs can be
+used.>>>x=np.linspace(-5,5,101)>>>y=np.linspace(-5,5,101)>>># full coordinate arrays>>>xx,yy=np.meshgrid(x,y)>>>zz=np.sqrt(xx**2+yy**2)>>>xx.shape,yy.shape,zz.shape((101, 101), (101, 101), (101, 101))>>># sparse coordinate arrays>>>xs,ys=np.meshgrid(x,y,sparse=True)>>>zs=np.sqrt(xs**2+ys**2)>>>xs.shape,ys.shape,zs.shape((1, 101), (101, 1), (101, 101))>>>np.array_equal(zz,zs)True>>>h=plt.contourf(x,y,zs)>>>plt.axis('scaled')>>>plt.colorbar()>>>plt.show()"
+Numpy,Array and fft,numpy.mgrid,"numpy.mgrid#numpy.mgrid=<numpy.lib.index_tricks.MGridClassobject>#An instance which returns a dense multi-dimensional ÅgmeshgridÅh.An instance which returns a dense (or fleshed out) mesh-grid
+when indexed, so that each returned argument has the same shape.
+The dimensions and number of the output arrays are equal to the
+number of indexing dimensions.  If the step length is not a complex
+number, then the stop is not inclusive.However, if the step length is acomplex number(e.g. 5j), then
+the integer part of its magnitude is interpreted as specifying the
+number of points to create between the start and stop values, where
+the stop valueis inclusive.Returns:mesh-gridndarraysall of the same dimensionsSee alsoogridlikemgridbut returns open (not fleshed out) mesh gridsmeshgridreturn coordinate matrices from coordinate vectorsr_array concatenatorHow to create arrays with regularly-spaced valuesExamples>>>np.mgrid[0:5,0:5]array([[[0, 0, 0, 0, 0],[1, 1, 1, 1, 1],[2, 2, 2, 2, 2],[3, 3, 3, 3, 3],[4, 4, 4, 4, 4]],[[0, 1, 2, 3, 4],[0, 1, 2, 3, 4],[0, 1, 2, 3, 4],[0, 1, 2, 3, 4],[0, 1, 2, 3, 4]]])>>>np.mgrid[-1:1:5j]array([-1. , -0.5,  0. ,  0.5,  1. ])"
+Numpy,Array and fft,numpy.ogrid,"numpy.ogrid#numpy.ogrid=<numpy.lib.index_tricks.OGridClassobject>#An instance which returns an open multi-dimensional ÅgmeshgridÅh.An instance which returns an open (i.e. not fleshed out) mesh-grid
+when indexed, so that only one dimension of each returned array is
+greater than 1.  The dimension and number of the output arrays are
+equal to the number of indexing dimensions.  If the step length is
+not a complex number, then the stop is not inclusive.However, if the step length is acomplex number(e.g. 5j), then
+the integer part of its magnitude is interpreted as specifying the
+number of points to create between the start and stop values, where
+the stop valueis inclusive.Returns:mesh-gridndarrayswith only one dimension not equal to 1See alsomgridlikeogridbut returns dense (or fleshed out) mesh gridsmeshgridreturn coordinate matrices from coordinate vectorsr_array concatenatorHow to create arrays with regularly-spaced valuesExamples>>>fromnumpyimportogrid>>>ogrid[-1:1:5j]array([-1. , -0.5,  0. ,  0.5,  1. ])>>>ogrid[0:5,0:5][array([[0],[1],[2],[3],[4]]), array([[0, 1, 2, 3, 4]])]"
+Numpy,Array and fft,numpy.diag,"numpy.diag#numpy.diag(v,k=0)[source]#Extract a diagonal or construct a diagonal array.See the more detailed documentation fornumpy.diagonalif you use this
+function to extract a diagonal and wish to write to the resulting array;
+whether it returns a copy or a view depends on what version of numpy you
+are using.Parameters:varray_likeIfvis a 2-D array, return a copy of itsk-th diagonal.
+Ifvis a 1-D array, return a 2-D array withvon thek-th
+diagonal.kint, optionalDiagonal in question. The default is 0. Usek>0for diagonals
+above the main diagonal, andk<0for diagonals below the main
+diagonal.Returns:outndarrayThe extracted diagonal or constructed diagonal array.See alsodiagonalReturn specified diagonals.diagflatCreate a 2-D array with the flattened input as a diagonal.traceSum along diagonals.triuUpper triangle of an array.trilLower triangle of an array.Examples>>>x=np.arange(9).reshape((3,3))>>>xarray([[0, 1, 2],[3, 4, 5],[6, 7, 8]])>>>np.diag(x)array([0, 4, 8])>>>np.diag(x,k=1)array([1, 5])>>>np.diag(x,k=-1)array([3, 7])>>>np.diag(np.diag(x))array([[0, 0, 0],[0, 4, 0],[0, 0, 8]])"
+Numpy,Array and fft,numpy.diagflat,"numpy.diagflat#numpy.diagflat(v,k=0)[source]#Create a two-dimensional array with the flattened input as a diagonal.Parameters:varray_likeInput data, which is flattened and set as thek-th
+diagonal of the output.kint, optionalDiagonal to set; 0, the default, corresponds to the ÅgmainÅh diagonal,
+a positive (negative)kgiving the number of the diagonal above
+(below) the main.Returns:outndarrayThe 2-D output array.See alsodiagMATLAB work-alike for 1-D and 2-D arrays.diagonalReturn specified diagonals.traceSum along diagonals.Examples>>>np.diagflat([[1,2],[3,4]])array([[1, 0, 0, 0],[0, 2, 0, 0],[0, 0, 3, 0],[0, 0, 0, 4]])>>>np.diagflat([1,2],1)array([[0, 1, 0],[0, 0, 2],[0, 0, 0]])"
+Numpy,Array and fft,numpy.tri,"numpy.tri#numpy.tri(N,M=None,k=0,dtype=<class'float'>,*,like=None)[source]#An array with ones at and below the given diagonal and zeros elsewhere.Parameters:NintNumber of rows in the array.Mint, optionalNumber of columns in the array.
+By default,Mis taken equal toN.kint, optionalThe sub-diagonal at and below which the array is filled.k= 0 is the main diagonal, whilek< 0 is below it,
+andk> 0 is above.  The default is 0.dtypedtype, optionalData type of the returned array.  The default is float.likearray_like, optionalReference object to allow the creation of arrays which are not
+NumPy arrays. If an array-like passed in aslikesupports
+the__array_function__protocol, the result will be defined
+by it. In this case, it ensures the creation of an array object
+compatible with that passed in via this argument.New in version 1.20.0.Returns:trindarray of shape (N, M)Array with its lower triangle filled with ones and zero elsewhere;
+in other wordsT[i,j]==1forj<=i+k, 0 otherwise.Examples>>>np.tri(3,5,2,dtype=int)array([[1, 1, 1, 0, 0],[1, 1, 1, 1, 0],[1, 1, 1, 1, 1]])>>>np.tri(3,5,-1)array([[0.,  0.,  0.,  0.,  0.],[1.,  0.,  0.,  0.,  0.],[1.,  1.,  0.,  0.,  0.]])"
+Numpy,Array and fft,numpy.tril,"numpy.tril#numpy.tril(m,k=0)[source]#Lower triangle of an array.Return a copy of an array with elements above thek-th diagonal zeroed.
+For arrays withndimexceeding 2,trilwill apply to the final two
+axes.Parameters:marray_like, shape (Åc, M, N)Input array.kint, optionalDiagonal above which to zero elements.k = 0(the default) is the
+main diagonal,k < 0is below it andk > 0is above.Returns:trilndarray, shape (Åc, M, N)Lower triangle ofm, of same shape and data-type asm.See alsotriusame thing, only for the upper triangleExamples>>>np.tril([[1,2,3],[4,5,6],[7,8,9],[10,11,12]],-1)array([[ 0,  0,  0],[ 4,  0,  0],[ 7,  8,  0],[10, 11, 12]])>>>np.tril(np.arange(3*4*5).reshape(3,4,5))array([[[ 0,  0,  0,  0,  0],[ 5,  6,  0,  0,  0],[10, 11, 12,  0,  0],[15, 16, 17, 18,  0]],[[20,  0,  0,  0,  0],[25, 26,  0,  0,  0],[30, 31, 32,  0,  0],[35, 36, 37, 38,  0]],[[40,  0,  0,  0,  0],[45, 46,  0,  0,  0],[50, 51, 52,  0,  0],[55, 56, 57, 58,  0]]])"
+Numpy,Array and fft,numpy.triu,"numpy.triu#numpy.triu(m,k=0)[source]#Upper triangle of an array.Return a copy of an array with the elements below thek-th diagonal
+zeroed. For arrays withndimexceeding 2,triuwill apply to the
+final two axes.Please refer to the documentation fortrilfor further details.See alsotrillower triangle of an arrayExamples>>>np.triu([[1,2,3],[4,5,6],[7,8,9],[10,11,12]],-1)array([[ 1,  2,  3],[ 4,  5,  6],[ 0,  8,  9],[ 0,  0, 12]])>>>np.triu(np.arange(3*4*5).reshape(3,4,5))array([[[ 0,  1,  2,  3,  4],[ 0,  6,  7,  8,  9],[ 0,  0, 12, 13, 14],[ 0,  0,  0, 18, 19]],[[20, 21, 22, 23, 24],[ 0, 26, 27, 28, 29],[ 0,  0, 32, 33, 34],[ 0,  0,  0, 38, 39]],[[40, 41, 42, 43, 44],[ 0, 46, 47, 48, 49],[ 0,  0, 52, 53, 54],[ 0,  0,  0, 58, 59]]])"
+Numpy,Array and fft,numpy.vander,"numpy.vander#numpy.vander(x,N=None,increasing=False)[source]#Generate a Vandermonde matrix.The columns of the output matrix are powers of the input vector. The
+order of the powers is determined by theincreasingboolean argument.
+Specifically, whenincreasingis False, thei-th output column is
+the input vector raised element-wise to the power ofN-i-1. Such
+a matrix with a geometric progression in each row is named for Alexandre-
+Theophile Vandermonde.Parameters:xarray_like1-D input array.Nint, optionalNumber of columns in the output.  IfNis not specified, a square
+array is returned (N=len(x)).increasingbool, optionalOrder of the powers of the columns.  If True, the powers increase
+from left to right, if False (the default) they are reversed.New in version 1.9.0.Returns:outndarrayVandermonde matrix.  Ifincreasingis False, the first column isx^(N-1), the secondx^(N-2)and so forth. Ifincreasingis
+True, the columns arex^0,x^1,...,x^(N-1).See alsopolynomial.polynomial.polyvanderExamples>>>x=np.array([1,2,3,5])>>>N=3>>>np.vander(x,N)array([[ 1,  1,  1],[ 4,  2,  1],[ 9,  3,  1],[25,  5,  1]])>>>np.column_stack([x**(N-1-i)foriinrange(N)])array([[ 1,  1,  1],[ 4,  2,  1],[ 9,  3,  1],[25,  5,  1]])>>>x=np.array([1,2,3,5])>>>np.vander(x)array([[  1,   1,   1,   1],[  8,   4,   2,   1],[ 27,   9,   3,   1],[125,  25,   5,   1]])>>>np.vander(x,increasing=True)array([[  1,   1,   1,   1],[  1,   2,   4,   8],[  1,   3,   9,  27],[  1,   5,  25, 125]])The determinant of a square Vandermonde matrix is the product
+of the differences between the values of the input vector:>>>np.linalg.det(np.vander(x))48.000000000000043 # may vary>>>(5-3)*(5-2)*(5-1)*(3-2)*(3-1)*(2-1)48"
+Numpy,Array and fft,numpy.mat,"numpy.mat#numpy.mat(data,dtype=None)[source]#Interpret the input as a matrix.Unlikematrix,asmatrixdoes not make a copy if the input is already
+a matrix or an ndarray.  Equivalent tomatrix(data,copy=False).Parameters:dataarray_likeInput data.dtypedata-typeData-type of the output matrix.Returns:matmatrixdatainterpreted as a matrix.Examples>>>x=np.array([[1,2],[3,4]])>>>m=np.asmatrix(x)>>>x[0,0]=5>>>mmatrix([[5, 2],[3, 4]])"
+Numpy,Array and fft,numpy.bmat,"numpy.bmat#numpy.bmat(obj,ldict=None,gdict=None)[source]#Build a matrix object from a string, nested sequence, or array.Parameters:objstr or array_likeInput data. If a string, variables in the current scope may be
+referenced by name.ldictdict, optionalA dictionary that replaces local operands in current frame.
+Ignored ifobjis not a string orgdictis None.gdictdict, optionalA dictionary that replaces global operands in current frame.
+Ignored ifobjis not a string.Returns:outmatrixReturns a matrix object, which is a specialized 2-D array.See alsoblockA generalization of this function for N-d arrays, that returns normal ndarrays.Examples>>>A=np.mat('1 1; 1 1')>>>B=np.mat('2 2; 2 2')>>>C=np.mat('3 4; 5 6')>>>D=np.mat('7 8; 9 0')All the following expressions construct the same block matrix:>>>np.bmat([[A,B],[C,D]])matrix([[1, 1, 2, 2],[1, 1, 2, 2],[3, 4, 7, 8],[5, 6, 9, 0]])>>>np.bmat(np.r_[np.c_[A,B],np.c_[C,D]])matrix([[1, 1, 2, 2],[1, 1, 2, 2],[3, 4, 7, 8],[5, 6, 9, 0]])>>>np.bmat('A,B; C,D')matrix([[1, 1, 2, 2],[1, 1, 2, 2],[3, 4, 7, 8],[5, 6, 9, 0]])"

@@ -2,7 +2,7 @@ import streamlit as st
 import os
 import json
 
-st.title("Review Past Conversations")
+st.title("Review Chat History")
 st.markdown("**Select an item to view the conversation content.**")
 
 # Set the path to the data directory
