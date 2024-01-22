@@ -201,6 +201,31 @@ if st.session_state["authentication_status"]:
             st.session_state["messages"] = [{"role": "system", "content": pandas_prompt}]
             st.session_state["messages"].append({"role": "assistant", "content": pandas_first_message})
             
+    #チャット履歴の記録機能
+    if st.button('save', key='my_button', help='save chat history and watch history tab'):
+        with st.spinner("Save for historys（It takes about 5 seconde.）..."):
+
+
+            base_title = datetime.datetime.now().strftime('%Y %m %d %H:%M:%S')
+            t=st.session_state["messages"][2]['content']
+            title = f"{base_title}_{str(t)}"
+            file_list = os.listdir('pages/data')
+
+            i = 1
+            while f'{title}.json' in file_list:
+                title = f'{base_title}_{str(t)}_{i}'
+                print(title)
+                i += 1
+
+            sanitized_title = sanitize_filename(title)
+            with open(f'pages/data/{sanitized_title}.json', 'w') as f:
+                json.dump(st.session_state["messages"], f)
+            st.write('save complete!!')
+    # ユーザインターフェイスにリセットボタンを追加
+    if st.button('reset'):
+        reset_chat_history()
+        st.experimental_rerun()
+            
 
 
 
@@ -237,30 +262,7 @@ elif st.session_state["authentication_status"] == False:
 elif st.session_state["authentication_status"] == None:
     st.warning('Please enter your username and password')
 
-#チャット履歴の記録機能
-if st.button('save', key='my_button', help='save chat history and watch history tab'):
-    with st.spinner("Save for historys（It takes about 5 seconde.）..."):
 
-
-        base_title = datetime.datetime.now().strftime('%Y %m %d %H:%M:%S')
-        t=st.session_state["messages"][2]['content']
-        title = f"{base_title}_{str(t)}"
-        file_list = os.listdir('pages/data')
-
-        i = 1
-        while f'{title}.json' in file_list:
-            title = f'{base_title}_{str(t)}_{i}'
-            print(title)
-            i += 1
-
-        sanitized_title = sanitize_filename(title)
-        with open(f'pages/data/{sanitized_title}.json', 'w') as f:
-            json.dump(st.session_state["messages"], f)
-        st.write('save complete!!')
-# ユーザインターフェイスにリセットボタンを追加
-if st.button('reset'):
-    reset_chat_history()
-    st.experimental_rerun()
     
 
 
