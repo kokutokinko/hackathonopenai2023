@@ -25,11 +25,11 @@ with st.container():
     # Read the selected file by adding the file extension
     with open(os.path.join(data_directory, st.session_state.show_db + '.json'), 'r') as f:
         data_loaded = json.load(f)
-        st.session_state["messages"] = data_loaded
+        st.session_state["his_messages"] = data_loaded
 
 
         
-for message in st.session_state["messages"]:
+for message in st.session_state["his_messages"]:
     
     # Skip the initial prompt and display the rest
     if message["role"] != "system":
