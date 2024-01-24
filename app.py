@@ -78,87 +78,84 @@ def communicate():
 
     # ユーザからの入力がある場合は、入力内容をメッセージ履歴に追加する
     if "user_input" in st.session_state and st.session_state["user_input"]:
-        if "processed" not in st.session_state or not st.session_state["processed"]:
-            st.session_state["processed"] = True
-            user_message = {"role": "user", "content": st.session_state["user_input"]}
-            st.session_state["messages"].append(user_message)
-            
-            
-      
-            #------------------------------------------------------------        
-            
-            if st.session_state["message_count"] == 0:
-                with st.spinner("Searching for documents（It takes about 1 minute.）..."):
-                    service_context, prompt_helper = utils.create_service_context()
-                    #select_storageでindex制御
-                    if st.session_state["select_storage"] == 1:
-                        storage_context = StorageContext.from_defaults(persist_dir="./storage_numpy")
-                    elif st.session_state["select_storage"] == 2:
-                        storage_context = StorageContext.from_defaults(persist_dir="./storage_pandas")
-                    elif st.session_state["select_storage"] == 3:
-                        storage_context = StorageContext.from_defaults(persist_dir="./storage_matplotlib")
-                    
-                    index = load_index_from_storage(storage_context, service_context=service_context)
-                    
-    
-                # クエリ （description：アップロードした顧客情報)
-                query = f"""
-    
-                # Background
-                You are an expert in the field of data collection in data science.
-                Your job is to use your data collection expertise in data science to support user learning. 
-                However, you can also enjoy stories other than data science.
-    
-                # Customer Info
-                initial_prompt: {messages[0]['content']}
-                User request: {messages[2]['content']}
-    
-                # Instructions
-                Provide a "detailed" description and library information to solve the user request.
-                Include library selection, source code and usage, and best practices.
-                In particular, please explain in detail the syntax specification, function usage, what arguments are passed and what type is returned, etc.
+        
+        user_message = {"role": "user", "content": st.session_state["user_input"]}
+        st.session_state["messages"].append(user_message)
+        
+        
+  
+        #------------------------------------------------------------        
+        
+        if st.session_state["message_count"] == 0:
+            with st.spinner("Searching for documents（It takes about 1 minute.）..."):
+                service_context, prompt_helper = utils.create_service_context()
+                #select_storageでindex制御
+                if st.session_state["select_storage"] == 1:
+                    storage_context = StorageContext.from_defaults(persist_dir="./storage_numpy")
+                elif st.session_state["select_storage"] == 2:
+                    storage_context = StorageContext.from_defaults(persist_dir="./storage_pandas")
+                elif st.session_state["select_storage"] == 3:
+                    storage_context = StorageContext.from_defaults(persist_dir="./storage_matplotlib")
                 
-                 # Follow these instructions when providing source code.
-                ・Be sure to include at least 3 different use cases and be sure to include their output. If the output cannot be displayed, do not do so.
-                ・Please output the results of executing the source code you provide.
-                ・Please provide a step-by-step explanation of the import statement required to use the library, from basic to practical usage, and how and when it is used.
-                ・Distinguish between source code and other text and output it in code blocks.
-                ・Please explain the code with comment text.
-                """
-    
-    
-                # llama-indexによる回答の生成
-                result = utils.llama_generate(index=index, query=query, top_k=1)
-    
-                # 回答の表示
-    
-    
-                # ボットのレスポンスを取得してメッセージリストに追加
-                bot_message = {"role": "assistant", "content": str(result)}
-                print(bot_message)
-                st.session_state["messages"].append(bot_message)
-                st.session_state["message_count"] += 1
-    
-                # 入力欄を消去
-                st.session_state["user_input"] = ""
-    
-            else:
-                # OpenAI APIを呼び出し
-                response = utils.get_chatgpt_response(messages)
-    
-    
-    
-                # ボットのレスポンスを取得してメッセージリストに追加
-                bot_message = {"role": "assistant", "content": response}
-                st.session_state["messages"].append(bot_message)
-                st.session_state["message_count"] += 1
-    
-                # 入力欄を消去
-                st.session_state["user_input"] = ""
+                index = load_index_from_storage(storage_context, service_context=service_context)
+                
 
+            # クエリ （description：アップロードした顧客情報)
+            query = f"""
+
+            # Background
+            You are an expert in the field of data collection in data science.
+            Your job is to use your data collection expertise in data science to support user learning. 
+            However, you can also enjoy stories other than data science.
+
+            # Customer Info
+            initial_prompt: {messages[0]['content']}
+            User request: {messages[2]['content']}
+
+            # Instructions
+            Provide a "detailed" description and library information to solve the user request.
+            Include library selection, source code and usage, and best practices.
+            In particular, please explain in detail the syntax specification, function usage, what arguments are passed and what type is returned, etc.
             
-            if 'processed' in st.session_state:
-                st.session_state["processed"] = False
+             # Follow these instructions when providing source code.
+            ・Be sure to include at least 3 different use cases and be sure to include their output. If the output cannot be displayed, do not do so.
+            ・Please output the results of executing the source code you provide.
+            ・Please provide a step-by-step explanation of the import statement required to use the library, from basic to practical usage, and how and when it is used.
+            ・Distinguish between source code and other text and output it in code blocks.
+            ・Please explain the code with comment text.
+            """
+
+
+            # llama-indexによる回答の生成
+            result = utils.llama_generate(index=index, query=query, top_k=1)
+
+            # 回答の表示
+
+
+            # ボットのレスポンスを取得してメッセージリストに追加
+            bot_message = {"role": "assistant", "content": str(result)}
+            print(bot_message)
+            st.session_state["messages"].append(bot_message)
+            st.session_state["message_count"] += 1
+
+            # 入力欄を消去
+            st.session_state["user_input"] = ""
+
+        else:
+            # OpenAI APIを呼び出し
+            response = utils.get_chatgpt_response(messages)
+
+
+
+            # ボットのレスポンスを取得してメッセージリストに追加
+            bot_message = {"role": "assistant", "content": response}
+            st.session_state["messages"].append(bot_message)
+            st.session_state["message_count"] += 1
+
+            # 入力欄を消去
+            st.session_state["user_input"] = ""
+
+  
             
 # ファイル名に使用できない文字を除去する関数
 def sanitize_filename(filename):
@@ -272,9 +269,8 @@ if st.session_state["authentication_status"]:
                 st.markdown(f": {message['content']}", unsafe_allow_html=True)
 
     # ユーザ入力欄の表示
-    user_input = st.text_input("Please enter your message", key="user_input")
-    if st.button('Send'):
-        communicate()
+    user_input = st.text_input("Please enter your message", key="user_input",on_change=communicate)
+
 
 elif st.session_state["authentication_status"] == False:
     st.error('Username/password is incorrect')
