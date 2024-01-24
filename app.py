@@ -1,6 +1,7 @@
 # 必要なモジュールのインポート
 import streamlit as st
 import os
+import time
 import re
 import datetime
 import utils
@@ -143,14 +144,17 @@ def communicate():
 
         else:
             # OpenAI APIを呼び出し
-            response = utils.get_chatgpt_response(messages)
-
-
-
-            # ボットのレスポンスを取得してメッセージリストに追加
-            bot_message = {"role": "assistant", "content": response}
-            st.session_state["messages"].append(bot_message)
-            st.session_state["message_count"] += 1
+            with st.spinner("Genatrate Answer（It takes about 1 minute.）..."):
+                response = utils.get_chatgpt_response(messages)
+    
+    
+    
+                # ボットのレスポンスを取得してメッセージリストに追加
+                bot_message = {"role": "assistant", "content": response}
+                st.session_state["messages"].append(bot_message)
+                st.session_state["message_count"] += 1
+    
+                time.sleep(0.5)
 
             # 入力欄を消去
             st.session_state["user_input"] = ""
