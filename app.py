@@ -78,8 +78,8 @@ def communicate():
 
     # ユーザからの入力がある場合は、入力内容をメッセージ履歴に追加する
     if "user_input" in st.session_state and st.session_state["user_input"]:
-        if "processing" not in st.session_state or not st.session_state["processing"]:
-            st.session_state["processing"] = True
+        if "processed" not in st.session_state or not st.session_state["processed"]:
+            st.session_state["processed"] = True
             user_message = {"role": "user", "content": st.session_state["user_input"]}
             st.session_state["messages"].append(user_message)
             
@@ -156,7 +156,9 @@ def communicate():
                 # 入力欄を消去
                 st.session_state["user_input"] = ""
 
-            st.session_state["processing"] = False
+            
+            if 'processed' in st.session_state:
+                st.session_state["processed"] = False
             
 # ファイル名に使用できない文字を除去する関数
 def sanitize_filename(filename):
@@ -270,7 +272,9 @@ if st.session_state["authentication_status"]:
                 st.markdown(f": {message['content']}", unsafe_allow_html=True)
 
     # ユーザ入力欄の表示
-    user_input = st.text_input("Please enter your message", key="user_input", on_change=communicate)
+    user_input = st.text_input("Please enter your message", key="user_input")
+    if st.button('Send'):
+        communicate()
 
 elif st.session_state["authentication_status"] == False:
     st.error('Username/password is incorrect')
