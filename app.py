@@ -14,6 +14,10 @@ import json
 # APIの設定
 
 
+# 画像ファイルのパスを設定
+user_icon_path = "image/user_icon.png"  # ユーザーアイコンのパス
+bot_icon_path = "image/bot_icon.png"    # ボットアイコンのパス
+logo_path = "image/app_logo.png" #アプリのロゴのパス
 
 
 # APIキーなどの設定
@@ -29,25 +33,22 @@ Hello!
 I am a chatbot here to support learning in the field of numpy.
 Feel free to ask any questions you have regarding data collection in numpy.
 """
+
 pandas_first_message="""
 Hello!
 I am a chatbot here to support learning in the field of pandas.
 Feel free to ask any questions you have regarding data collection in pandas.
 """
 
-
 numpy_prompt = """
 You are a specialist in data science numpy.
 You support users in the field of numpy.
 """
 
-
 pandas_prompt = """
 You are a specialist in data science pandas.
 You support users in the field of pandas.
 """
-
-
 
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
@@ -60,10 +61,6 @@ if "select_storage" not in st.session_state:
     st.session_state["select_storage"] = 1
 
                 
-
-        
-
-
 # チャットボットとやりとりする関数
 def communicate():
     messages = st.session_state["messages"]
@@ -73,10 +70,7 @@ def communicate():
         user_message = {"role": "user", "content": st.session_state["user_input"]}
         st.session_state["messages"].append(user_message)
         
-        
-
-
-        
+  
         #------------------------------------------------------------        
         
         if st.session_state["message_count"] == 0:
@@ -95,8 +89,8 @@ def communicate():
             query = f"""
 
             # Background
-            You are a data science expert.
-            Your job is to use your data science expertise to support user learning.
+            You are an expert in the field of data collection in data science.
+            Your job is to use your data collection expertise in data science to support user learning. 
             However, you can also enjoy stories other than data science.
 
             # Customer Info
@@ -114,7 +108,6 @@ def communicate():
             ・Please provide a step-by-step explanation of the import statement required to use the library, from basic to practical usage, and how and when it is used.
             ・Distinguish between source code and other text and output it in code blocks.
             ・Please explain the code with comment text.
-            
             """
             print("---------debug---------")
             print(query)
@@ -178,10 +171,6 @@ authenticator.login("Login","main")
 #-------------------------ログイン------------------------------------------------------
 
 
-
-    
-
-
 if st.session_state["authentication_status"]:
 
     st.title("Documentor-GPT")
@@ -205,58 +194,57 @@ if st.session_state["authentication_status"]:
             st.session_state["messages"] = [{"role": "system", "content": pandas_prompt}]
             st.session_state["messages"].append({"role": "assistant", "content": pandas_first_message})
             
-    #チャット履歴の記録機能
-    if st.button('save', key='my_button', help='save chat history and watch history tab'):
-        with st.spinner("Save for historys（It takes about 5 seconde.）..."):
-
-
-            base_title = datetime.datetime.now().strftime('%Y %m %d %H:%M:%S')
-            t=st.session_state["messages"][2]['content']
-            title = f"{base_title}_{str(t)}"
-            file_list = os.listdir('pages/data')
-
-            i = 1
-            while f'{title}.json' in file_list:
-                title = f'{base_title}_{str(t)}_{i}'
-                print(title)
-                i += 1
-
-            sanitized_title = sanitize_filename(title)
-            with open(f'pages/data/{sanitized_title}.json', 'w') as f:
-                json.dump(st.session_state["messages"], f)
-            st.write('save complete!!')
-    # ユーザインターフェイスにリセットボタンを追加
-    if st.button('reset'):
-        reset_chat_history()
-        st.experimental_rerun()
-            
-
-
-
-
-
-        
-        
-
-
-        
-        
-    #--------------------ボタンの追加----------------------------------------------------
-
-
-       
+    # ２つの列作成
+    btcol1, btcol2, btcol3 = st.columns([1.2,3,8])
     
+    with btcol1:            
+        # ユーザインターフェイスにリセットボタンを追加
+        if st.button('reset'):
+            reset_chat_history()
+            st.experimental_rerun()
+    
+    with btcol2:
+        if st.button('save', key='my_button', help='save chat history and watch history tab'):
+            if len(st.session_state["messages"]) > 2:  # メッセージリストの長さをチェック
+                with st.spinner("Save for historys（It takes about 5 seconde.）..."):
+                    base_title = datetime.datetime.now().strftime('%Y %m %d %H:%M:%S')
+                    t=st.session_state["messages"][2]['content']            
+                    title = f"{base_title}_{str(t)}"
+                    file_list = os.listdir('pages/data')
 
+                    i = 1
+                    while f'{title}.json' in file_list:
+                        title = f'{base_title}_{str(t)}_{i}'
+                        print(title)
+                        i += 1
+
+                    sanitized_title = sanitize_filename(title)
+                    with open(f'pages/data/{sanitized_title}.json', 'w') as f:
+                        json.dump(st.session_state["messages"], f)
+                    st.write('success!')
+            else:
+                st.error("No conversation") #会話がないときはエラー 
+                  
+                  
     # ユーザインターフェイスの構築
     st.title("ChatBot")
 
     # メッセージ履歴の表示
     for message in st.session_state["messages"]:
         
-        # 初期プロンプトはスキップして表示
         if message["role"] != "system":
-            speaker = "🙂" if message["role"] == "user" else "🤖"
-            st.write(f"{speaker}: {message['content']}")
+            # 画像とテキストのための列を作成
+            cols = st.columns([1, 24])  # 画像用とテキスト用の列のサイズ比率を調整
+
+            with cols[0]:  # 画像の列
+                if message["role"] == "user":
+                    st.image(user_icon_path, width=30)  # ユーザーの画像を表示
+                else:
+                    st.image(bot_icon_path, width=30)  # ボットの画像を表示
+
+            with cols[1]:  # テキストの列
+                # コロンをテキストから分離して表示
+                st.markdown(f": {message['content']}", unsafe_allow_html=True)
 
     # ユーザ入力欄の表示
     user_input = st.text_input("Please enter your message", key="user_input", on_change=communicate)
@@ -267,11 +255,9 @@ elif st.session_state["authentication_status"] == None:
     st.warning('Please enter your username and password')
 
 
-    
-
-
 with st.sidebar:
     st.title("Documentor-GPT")
+    st.image(logo_path, width=180)
     st.caption("Application for Assisting Beginners in Reading Introductory Documents")
     st.markdown("・Chat with us about how to use the libraries you use!")
     st.markdown("・They can also make code suggestions by telling you what they want to achieve!")
