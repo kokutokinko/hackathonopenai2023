@@ -37,14 +37,14 @@ Feel free to ask any questions you have regarding data collection in pandas.
 
 
 numpy_prompt = """
-あなたはデータサイエンスのnumpyにおけるスペシャリストです。
-numpyの分野でユーザーをサポートしてください。
+You are a specialist in data science numpy.
+You support users in the field of numpy.
 """
 
 
 pandas_prompt = """
-あなたはデータサイエンスのpandasにおけるスペシャリストです。
-pandasの分野でユーザーをサポートしてください。
+You are a specialist in data science pandas.
+You support users in the field of pandas.
 """
 
 
@@ -95,8 +95,8 @@ def communicate():
             query = f"""
 
             # Background
-            You are an expert in the field of data collection in data science.
-            Your job is to use your data collection expertise in data science to support user learning. 
+            You are a data science expert.
+            Your job is to use your data science expertise to support user learning.
             However, you can also enjoy stories other than data science.
 
             # Customer Info
@@ -104,13 +104,17 @@ def communicate():
             User request: {messages[2]['content']}
 
             # Instructions
-            データサイエンスに関する質問をされた場合、そのプロセスを最適化するために、ユーザーをサポートしてください。
-            具体的には、User requestを解決するライブラリ名や選定理由、コードと使用方法、ベストプラクティスなどを含めてください。
-            ユーザーの要求に対して役立つコードを提示し、説明をセットで
-            詳しく説明することを意識してください。ライブラリを使用するために必要なimport文、基本的な使用方法から実戦的な使い方まで順を追って説明してください。
-            コードは見やすくするために、他の文章と続けて文章にせず、コードとして区別してください。
-            コードを書いた場合には、そのコードの実行結果として出力を必ずセットで提供してください。
-                        
+            Provide a "detailed" description and library information to solve the user request.
+            Include library selection, source code and usage, and best practices.
+            In particular, please explain in detail the syntax specification, function usage, what arguments are passed and what type is returned, etc.
+            
+             # Follow these instructions when providing source code.
+            ・Be sure to include at least 3 different use cases and be sure to include their output. If the output cannot be displayed, do not do so.
+            ・Please output the results of executing the source code you provide.
+            ・Please provide a step-by-step explanation of the import statement required to use the library, from basic to practical usage, and how and when it is used.
+            ・Distinguish between source code and other text and output it in code blocks.
+            ・Please explain the code with comment text.
+            
             """
             print("---------debug---------")
             print(query)
