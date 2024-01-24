@@ -80,6 +80,7 @@ def communicate():
     if "user_input" in st.session_state and st.session_state["user_input"]:
         user_message = {"role": "user", "content": st.session_state["user_input"]}
         st.session_state["messages"].append(user_message)
+        st.session_state["user_input"] = ""
         
   
         #------------------------------------------------------------        
