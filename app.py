@@ -40,6 +40,12 @@ I am a chatbot here to support learning in the field of pandas.
 Feel free to ask any questions you have regarding data collection in pandas.
 """
 
+matplotlib_first_message="""
+Hello!
+I am a chatbot here to support learning in the field of matplotlib.
+Feel free to ask any questions you have regarding data collection in matplotlib.
+"""
+
 numpy_prompt = """
 You are a specialist in data science numpy.
 You support users in the field of numpy.
@@ -48,6 +54,11 @@ You support users in the field of numpy.
 pandas_prompt = """
 You are a specialist in data science pandas.
 You support users in the field of pandas.
+"""
+
+matplotlib_prompt = """
+You are a specialist in data science pandas.
+You support users in the field of matplotlib.
 """
 
 # st.session_stateを使いメッセージのやりとりを保存
@@ -81,6 +92,8 @@ def communicate():
                     storage_context = StorageContext.from_defaults(persist_dir="./storage_numpy")
                 elif st.session_state["select_storage"] == 2:
                     storage_context = StorageContext.from_defaults(persist_dir="./storage_pandas")
+                elif st.session_state["select_storage"] == 3:
+                    storage_context = StorageContext.from_defaults(persist_dir="./storage_matplotlib")
                 
                 index = load_index_from_storage(storage_context, service_context=service_context)
                 
@@ -109,9 +122,7 @@ def communicate():
             ・Distinguish between source code and other text and output it in code blocks.
             ・Please explain the code with comment text.
             """
-            print("---------debug---------")
-            print(query)
-            print("---------end-----------")
+
 
             # llama-indexによる回答の生成
             result = utils.llama_generate(index=index, query=query, top_k=1)
@@ -179,20 +190,28 @@ if st.session_state["authentication_status"]:
     #--------------------ボタンの追加----------------------------------------------------
 
     # モード選択のためのボタン
-    prompt_selection = st.radio("Please select an initial prompt:", ('About Numpy', 'About Pandas'))
+    prompt_selection = st.radio("Please select an initial prompt:", ('About Numpy', 'About Pandas', 'About matplotlib'))
 
     # 選択に基づいて初期プロンプトを設定
     if prompt_selection != st.session_state.get("last_selection", None):
         if prompt_selection == 'About Numpy':
+            st.session_state.message_count = 0
             st.session_state["select_storage"] = 1
             st.session_state["last_selection"] = 'About Numpy'
             st.session_state["messages"] = [{"role": "system", "content": numpy_prompt}]
             st.session_state["messages"].append({"role": "assistant", "content": numpy_first_message})
-        else:
+        elif prompt_selection == 'About Pandas':
+            st.session_state.message_count = 0
             st.session_state["select_storage"] = 2
             st.session_state["last_selection"] = 'About Pandas'
             st.session_state["messages"] = [{"role": "system", "content": pandas_prompt}]
             st.session_state["messages"].append({"role": "assistant", "content": pandas_first_message})
+        else:
+            st.session_state.message_count = 0
+            st.session_state["select_storage"] = 3
+            st.session_state["last_selection"] = 'About matplotlib'
+            st.session_state["messages"] = [{"role": "system", "content": matplotlib_prompt}]
+            st.session_state["messages"].append({"role": "assistant", "content": matplotlib_first_message})
             
     # ２つの列作成
     btcol1, btcol2, btcol3 = st.columns([1.2,3,8])
@@ -215,7 +234,6 @@ if st.session_state["authentication_status"]:
                     i = 1
                     while f'{title}.json' in file_list:
                         title = f'{base_title}_{str(t)}_{i}'
-                        print(title)
                         i += 1
 
                     sanitized_title = sanitize_filename(title)

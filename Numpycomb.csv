@@ -1,0 +1,363 @@
+Name,Chapter,Section,Content
+Numpy,ArrayObjects,numpy.ndarray,"numpy.ndarray#classnumpy.ndarray(shape,dtype=float,buffer=None,offset=0,strides=None,order=None)[source]#An array object represents a multidimensional, homogeneous array
+of fixed-size items.  An associated data-type object describes the
+format of each element in the array (its byte-order, how many bytes it
+occupies in memory, whether it is an integer, a floating point number,
+or something else, etc.)Arrays should be constructed usingarray,zerosorempty(refer
+to the See Also section below).  The parameters given here refer to
+a low-level method (ndarray(c)) for instantiating an array.For more information, refer to thenumpymodule and examine the
+methods and attributes of an array.Parameters:(for the __new__ method; see Notes below)shapetuple of intsShape of created array.dtypedata-type, optionalAny object that can be interpreted as a numpy data type.bufferobject exposing buffer interface, optionalUsed to fill the array with data.offsetint, optionalOffset of array data in buffer.stridestuple of ints, optionalStrides of data in memory.order{eCf, eFf}, optionalRow-major (C-style) or column-major (Fortran-style) order.See alsoarrayConstruct an array.zerosCreate an array, each element of which is zero.emptyCreate an array, but leave its allocated memory unchanged (i.e., it contains ggarbageh).dtypeCreate a data-type.numpy.typing.NDArrayAn ndarray aliasgenericw.r.t. itsdtype.type.NotesThere are two modes of creating an array using__new__:Ifbufferis None, then onlyshape,dtype, andorderare used.Ifbufferis an object exposing the buffer interface, then
+all keywords are interpreted.No__init__method is needed because the array is fully initialized
+after the__new__method.ExamplesThese examples illustrate the low-levelndarrayconstructor.  Refer
+to theSee Alsosection above for easier ways of constructing an
+ndarray.First mode,bufferis None:>>>np.ndarray(shape=(2,2),dtype=float,order='F')array([[0.0e+000, 0.0e+000], # random[     nan, 2.5e-323]])Second mode:>>>np.ndarray((2,),buffer=np.array([1,2,3]),...offset=np.int_().itemsize,...dtype=int)# offset = 1*itemsize, i.e. skip first elementarray([2, 3])Attributes:TndarrayView of the transposed array.databufferPython buffer object pointing to the start of the arrayfs data.dtypedtype objectData-type of the arrayfs elements.flagsdictInformation about the memory layout of the array.flatnumpy.flatiter objectA 1-D iterator over the array.imagndarrayThe imaginary part of the array.realndarrayThe real part of the array.sizeintNumber of elements in the array.itemsizeintLength of one array element in bytes.nbytesintTotal bytes consumed by the elements of the array.ndimintNumber of array dimensions.shapetuple of intsTuple of array dimensions.stridestuple of intsTuple of bytes to step in each dimension when traversing an array.ctypesctypes objectAn object to simplify the interaction of the array with the ctypes module.basendarrayBase object if memory is from some other object.Methodsall([axis,out,keepdims,where])Returns True if all elements evaluate to True.any([axis,out,keepdims,where])Returns True if any of the elements ofaevaluate to True.argmax([axis,out,keepdims])Return indices of the maximum values along the given axis.argmin([axis,out,keepdims])Return indices of the minimum values along the given axis.argpartition(kth[,axis,kind,order])Returns the indices that would partition this array.argsort([axis,kind,order])Returns the indices that would sort this array.astype(dtype[,order,casting,subok,copy])Copy of the array, cast to a specified type.byteswap([inplace])Swap the bytes of the array elementschoose(choices[,out,mode])Use an index array to construct a new array from a set of choices.clip([min,max,out])Return an array whose values are limited to[min,max].compress(condition[,axis,out])Return selected slices of this array along given axis.conj()Complex-conjugate all elements.conjugate()Return the complex conjugate, element-wise.copy([order])Return a copy of the array.cumprod([axis,dtype,out])Return the cumulative product of the elements along the given axis.cumsum([axis,dtype,out])Return the cumulative sum of the elements along the given axis.diagonal([offset,axis1,axis2])Return specified diagonals.dump(file)Dump a pickle of the array to the specified file.dumps()Returns the pickle of the array as a string.fill(value)Fill the array with a scalar value.flatten([order])Return a copy of the array collapsed into one dimension.getfield(dtype[,offset])Returns a field of the given array as a certain type.item(*args)Copy an element of an array to a standard Python scalar and return it.itemset(*args)Insert scalar into an array (scalar is cast to array's dtype, if possible)max([axis,out,keepdims,initial,where])Return the maximum along a given axis.mean([axis,dtype,out,keepdims,where])Returns the average of the array elements along given axis.min([axis,out,keepdims,initial,where])Return the minimum along a given axis.newbyteorder([new_order])Return the array with the same data viewed with a different byte order.nonzero()Return the indices of the elements that are non-zero.partition(kth[,axis,kind,order])Rearranges the elements in the array in such a way that the value of the element in kth position is in the position it would be in a sorted array.prod([axis,dtype,out,keepdims,initial,...])Return the product of the array elements over the given axisptp([axis,out,keepdims])Peak to peak (maximum - minimum) value along a given axis.put(indices,values[,mode])Seta.flat[n]=values[n]for allnin indices.ravel([order])Return a flattened array.repeat(repeats[,axis])Repeat elements of an array.reshape(shape[,order])Returns an array containing the same data with a new shape.resize(new_shape[,refcheck])Change shape and size of array in-place.round([decimals,out])Returnawith each element rounded to the given number of decimals.searchsorted(v[,side,sorter])Find indices where elements of v should be inserted in a to maintain order.setfield(val,dtype[,offset])Put a value into a specified place in a field defined by a data-type.setflags([write,align,uic])Set array flags WRITEABLE, ALIGNED, WRITEBACKIFCOPY, respectively.sort([axis,kind,order])Sort an array in-place.squeeze([axis])Remove axes of length one froma.std([axis,dtype,out,ddof,keepdims,where])Returns the standard deviation of the array elements along given axis.sum([axis,dtype,out,keepdims,initial,where])Return the sum of the array elements over the given axis.swapaxes(axis1,axis2)Return a view of the array withaxis1andaxis2interchanged.take(indices[,axis,out,mode])Return an array formed from the elements ofaat the given indices.tobytes([order])Construct Python bytes containing the raw data bytes in the array.tofile(fid[,sep,format])Write array to a file as text or binary (default).tolist()Return the array as ana.ndim-levels deep nested list of Python scalars.tostring([order])A compatibility alias fortobytes, with exactly the same behavior.trace([offset,axis1,axis2,dtype,out])Return the sum along diagonals of the array.transpose(*axes)Returns a view of the array with axes transposed.var([axis,dtype,out,ddof,keepdims,where])Returns the variance of the array elements, along given axis.view([dtype][,type])New view of array with the same data.dot"
+Numpy,ArrayObjects,numpy.ndarray.flags,"numpy.ndarray.flags#attributendarray.flags#Information about the memory layout of the array.NotesTheflagsobject can be accessed dictionary-like (as ina.flags['WRITEABLE']),
+or by using lowercased attribute names (as ina.flags.writeable). Short flag
+names are only supported in dictionary access.Only the WRITEBACKIFCOPY, WRITEABLE, and ALIGNED flags can be
+changed by the user, via direct assignment to the attribute or dictionary
+entry, or by callingndarray.setflags.The array flags cannot be set arbitrarily:WRITEBACKIFCOPY can only be setFalse.ALIGNED can only be setTrueif the data is truly aligned.WRITEABLE can only be setTrueif the array owns its own memory
+or the ultimate owner of the memory exposes a writeable buffer
+interface or is a string.Arrays can be both C-style and Fortran-style contiguous simultaneously.
+This is clear for 1-dimensional arrays, but can also be true for higher
+dimensional arrays.Even for contiguous arrays a stride for a given dimensionarr.strides[dim]may bearbitraryifarr.shape[dim]==1or the array has no elements.
+It doesnotgenerally hold thatself.strides[-1]==self.itemsizefor C-style contiguous arrays orself.strides[0]==self.itemsizefor
+Fortran-style contiguous arrays is true.Attributes:C_CONTIGUOUS (C)The data is in a single, C-style contiguous segment.F_CONTIGUOUS (F)The data is in a single, Fortran-style contiguous segment.OWNDATA (O)The array owns the memory it uses or borrows it from another object.WRITEABLE (W)The data area can be written to.  Setting this to False locks
+the data, making it read-only.  A view (slice, etc.) inherits WRITEABLE
+from its base array at creation time, but a view of a writeable
+array may be subsequently locked while the base array remains writeable.
+(The opposite is not true, in that a view of a locked array may not
+be made writeable.  However, currently, locking a base object does not
+lock any views that already reference it, so under that circumstance it
+is possible to alter the contents of a locked array via a previously
+created writeable view onto it.)  Attempting to change a non-writeable
+array raises a RuntimeError exception.ALIGNED (A)The data and all elements are aligned appropriately for the hardware.WRITEBACKIFCOPY (X)This array is a copy of some other array. The C-API function
+PyArray_ResolveWritebackIfCopy must be called before deallocating
+to the base array will be updated with the contents of this array.FNCF_CONTIGUOUS and not C_CONTIGUOUS.FORCF_CONTIGUOUS or C_CONTIGUOUS (one-segment test).BEHAVED (B)ALIGNED and WRITEABLE.CARRAY (CA)BEHAVED and C_CONTIGUOUS.FARRAY (FA)BEHAVED and F_CONTIGUOUS and not C_CONTIGUOUS."
+Numpy,ArrayObjects,numpy.ndarray.shape,"numpy.ndarray.shape#attributendarray.shape#Tuple of array dimensions.The shape property is usually used to get the current shape of an array,
+but may also be used to reshape the array in-place by assigning a tuple of
+array dimensions to it.  As withnumpy.reshape, one of the new shape
+dimensions can be -1, in which case its value is inferred from the size of
+the array and the remaining dimensions. Reshaping an array in-place will
+fail if a copy is required.WarningSettingarr.shapeis discouraged and may be deprecated in the
+future.  Usingndarray.reshapeis the preferred approach.See alsonumpy.shapeEquivalent getter function.numpy.reshapeFunction similar to settingshape.ndarray.reshapeMethod similar to settingshape.Examples>>>x=np.array([1,2,3,4])>>>x.shape(4,)>>>y=np.zeros((2,3,4))>>>y.shape(2, 3, 4)>>>y.shape=(3,8)>>>yarray([[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.],[ 0.,  0.,  0.,  0.,  0.,  0.,  0.,  0.]])>>>y.shape=(3,6)Traceback (most recent call last):File""<stdin>"", line1, in<module>ValueError:total size of new array must be unchanged>>>np.zeros((4,2))[::2].shape=(-1,)Traceback (most recent call last):File""<stdin>"", line1, in<module>AttributeError:Incompatible shape for in-place modification. Use`.reshape()` to make a copy with the desired shape."
+Numpy,ArrayObjects,numpy.ndarray.strides,"numpy.ndarray.strides#attributendarray.strides#Tuple of bytes to step in each dimension when traversing an array.The byte offset of element(i[0],i[1],...,i[n])in an arrayais:offset=sum(np.array(i)*a.strides)A more detailed explanation of strides can be found in the
+gndarray.rsth file in the NumPy reference guide.WarningSettingarr.stridesis discouraged and may be deprecated in the
+future.numpy.lib.stride_tricks.as_stridedshould be preferred
+to create a new view of the same data in a safer way.See alsonumpy.lib.stride_tricks.as_stridedNotesImagine an array of 32-bit integers (each 4 bytes):x=np.array([[0,1,2,3,4],[5,6,7,8,9]],dtype=np.int32)This array is stored in memory as 40 bytes, one after the other
+(known as a contiguous block of memory).  The strides of an array tell
+us how many bytes we have to skip in memory to move to the next position
+along a certain axis.  For example, we have to skip 4 bytes (1 value) to
+move to the next column, but 20 bytes (5 values) to get to the same
+position in the next row.  As such, the strides for the arrayxwill be(20,4).Examples>>>y=np.reshape(np.arange(2*3*4),(2,3,4))>>>yarray([[[ 0,  1,  2,  3],[ 4,  5,  6,  7],[ 8,  9, 10, 11]],[[12, 13, 14, 15],[16, 17, 18, 19],[20, 21, 22, 23]]])>>>y.strides(48, 16, 4)>>>y[1,1,1]17>>>offset=sum(y.strides*np.array((1,1,1)))>>>offset/y.itemsize17>>>x=np.reshape(np.arange(5*6*7*8),(5,6,7,8)).transpose(2,3,1,0)>>>x.strides(32, 4, 224, 1344)>>>i=np.array([3,5,2,2])>>>offset=sum(i*x.strides)>>>x[3,5,2,2]813>>>offset/x.itemsize813"
+Numpy,ArrayObjects,numpy.ndarray.ndim,"numpy.ndarray.ndim#attributendarray.ndim#Number of array dimensions.Examples>>>x=np.array([1,2,3])>>>x.ndim1>>>y=np.zeros((2,3,4))>>>y.ndim3"
+Numpy,ArrayObjects,numpy.ndarray.data,numpy.ndarray.data#attributendarray.data#Python buffer object pointing to the start of the arrayfs data.
+Numpy,ArrayObjects,numpy.ndarray.size,"numpy.ndarray.size#attributendarray.size#Number of elements in the array.Equal tonp.prod(a.shape), i.e., the product of the arrayfs
+dimensions.Notesa.sizereturns a standard arbitrary precision Python integer. This
+may not be the case with other methods of obtaining the same value
+(like the suggestednp.prod(a.shape), which returns an instance
+ofnp.int_), and may be relevant if the value is used further in
+calculations that may overflow a fixed size integer type.Examples>>>x=np.zeros((3,5,2),dtype=np.complex128)>>>x.size30>>>np.prod(x.shape)30"
+Numpy,ArrayObjects,numpy.ndarray.itemsize,"numpy.ndarray.itemsize#attributendarray.itemsize#Length of one array element in bytes.Examples>>>x=np.array([1,2,3],dtype=np.float64)>>>x.itemsize8>>>x=np.array([1,2,3],dtype=np.complex128)>>>x.itemsize16"
+Numpy,ArrayObjects,numpy.ndarray.nbytes,"numpy.ndarray.nbytes#attributendarray.nbytes#Total bytes consumed by the elements of the array.See alsosys.getsizeofMemory consumed by the object itself without parents in case view. This does include memory consumed by non-element attributes.NotesDoes not include memory consumed by non-element attributes of the
+array object.Examples>>>x=np.zeros((3,5,2),dtype=np.complex128)>>>x.nbytes480>>>np.prod(x.shape)*x.itemsize480"
+Numpy,ArrayObjects,numpy.ndarray.base,"numpy.ndarray.base#attributendarray.base#Base object if memory is from some other object.ExamplesThe base of an array that owns its memory is None:>>>x=np.array([1,2,3,4])>>>x.baseisNoneTrueSlicing creates a view, whose memory is shared with x:>>>y=x[2:]>>>y.baseisxTrue"
+Numpy,ArrayObjects,numpy.ndarray.dtype,"numpy.ndarray.dtype#attributendarray.dtype#Data-type of the arrayfs elements.WarningSettingarr.dtypeis discouraged and may be deprecated in the
+future.  Setting will replace thedtypewithout modifying the
+memory (see alsondarray.viewandndarray.astype).Parameters:NoneReturns:dnumpy dtype objectSee alsondarray.astypeCast the values contained in the array to a new data-type.ndarray.viewCreate a view of the same data but a different data-type.numpy.dtypeExamples>>>xarray([[0, 1],[2, 3]])>>>x.dtypedtype('int32')>>>type(x.dtype)<type 'numpy.dtype'>"
+Numpy,ArrayObjects,numpy.ndarray.T,"numpy.ndarray.T#attributendarray.T#View of the transposed array.Same asself.transpose().See alsotransposeExamples>>>a=np.array([[1,2],[3,4]])>>>aarray([[1, 2],[3, 4]])>>>a.Tarray([[1, 3],[2, 4]])>>>a=np.array([1,2,3,4])>>>aarray([1, 2, 3, 4])>>>a.Tarray([1, 2, 3, 4])"
+Numpy,ArrayObjects,numpy.ndarray.real,"numpy.ndarray.real#attributendarray.real#The real part of the array.See alsonumpy.realequivalent functionExamples>>>x=np.sqrt([1+0j,0+1j])>>>x.realarray([ 1.        ,  0.70710678])>>>x.real.dtypedtype('float64')"
+Numpy,ArrayObjects,numpy.ndarray.imag,"numpy.ndarray.imag#attributendarray.imag#The imaginary part of the array.Examples>>>x=np.sqrt([1+0j,0+1j])>>>x.imagarray([ 0.        ,  0.70710678])>>>x.imag.dtypedtype('float64')"
+Numpy,ArrayObjects,numpy.ndarray.flat,"numpy.ndarray.flat#attributendarray.flat#A 1-D iterator over the array.This is anumpy.flatiterinstance, which acts similarly to, but is not
+a subclass of, Pythonfs built-in iterator object.See alsoflattenReturn a copy of the array collapsed into one dimension.flatiterExamples>>>x=np.arange(1,7).reshape(2,3)>>>xarray([[1, 2, 3],[4, 5, 6]])>>>x.flat[3]4>>>x.Tarray([[1, 4],[2, 5],[3, 6]])>>>x.T.flat[3]5>>>type(x.flat)<class 'numpy.flatiter'>An assignment example:>>>x.flat=3;xarray([[3, 3, 3],[3, 3, 3]])>>>x.flat[[1,4]]=1;xarray([[3, 1, 3],[3, 1, 3]])"
+Numpy,ArrayObjects,numpy.ndarray.ctypes,"numpy.ndarray.ctypes#attributendarray.ctypes#An object to simplify the interaction of the array with the ctypes
+module.This attribute creates an object that makes it easier to use arrays
+when calling shared libraries with the ctypes module. The returned
+object has, among others, data, shape, and strides attributes (see
+Notes below) which themselves return ctypes objects that can be used
+as arguments to a shared library.Parameters:NoneReturns:cPython objectPossessing attributes data, shape, strides, etc.See alsonumpy.ctypeslibNotesBelow are the public attributes of this object which were documented
+in gGuide to NumPyh (we have omitted undocumented public attributes,
+as well as documented private attributes):_ctypes.dataA pointer to the memory area of the array as a Python integer.
+This memory area may contain data that is not aligned, or not in correct
+byte-order. The memory area may not even be writeable. The array
+flags and data-type of this array should be respected when passing this
+attribute to arbitrary C-code to avoid trouble that can include Python
+crashing. User Beware! The value of this attribute is exactly the same
+asself._array_interface_['data'][0].Note that unlikedata_as, a reference will not be kept to the array:
+code likectypes.c_void_p((a+b).ctypes.data)will result in a
+pointer to a deallocated array, and should be spelt(a+b).ctypes.data_as(ctypes.c_void_p)_ctypes.shape(c_intp*self.ndim): A ctypes array of length self.ndim where
+the basetype is the C-integer corresponding todtype('p')on this
+platform (seec_intp). This base-type could bectypes.c_int,ctypes.c_long, orctypes.c_longlongdepending on
+the platform. The ctypes array contains the shape of
+the underlying array._ctypes.strides(c_intp*self.ndim): A ctypes array of length self.ndim where
+the basetype is the same as for the shape attribute. This ctypes array
+contains the strides information from the underlying array. This strides
+information is important for showing how many bytes must be jumped to
+get to the next element in the array._ctypes.data_as(obj)[source]Return the data pointer cast to a particular c-types object.
+For example, callingself._as_parameter_is equivalent toself.data_as(ctypes.c_void_p). Perhaps you want to use the data as a
+pointer to a ctypes array of floating-point data:self.data_as(ctypes.POINTER(ctypes.c_double)).The returned pointer will keep a reference to the array._ctypes.shape_as(obj)[source]Return the shape tuple as an array of some other c-types
+type. For example:self.shape_as(ctypes.c_short)._ctypes.strides_as(obj)[source]Return the strides tuple as an array of some other
+c-types type. For example:self.strides_as(ctypes.c_longlong).If the ctypes module is not available, then the ctypes attribute
+of array objects still returns something useful, but ctypes objects
+are not returned and errors may be raised instead. In particular,
+the object will still have theas_parameterattribute which will
+return an integer equal to the data attribute.Examples>>>importctypes>>>x=np.array([[0,1],[2,3]],dtype=np.int32)>>>xarray([[0, 1],[2, 3]], dtype=int32)>>>x.ctypes.data31962608 # may vary>>>x.ctypes.data_as(ctypes.POINTER(ctypes.c_uint32))<__main__.LP_c_uint object at 0x7ff2fc1fc200> # may vary>>>x.ctypes.data_as(ctypes.POINTER(ctypes.c_uint32)).contentsc_uint(0)>>>x.ctypes.data_as(ctypes.POINTER(ctypes.c_uint64)).contentsc_ulong(4294967296)>>>x.ctypes.shape<numpy.core._internal.c_long_Array_2 object at 0x7ff2fc1fce60> # may vary>>>x.ctypes.strides<numpy.core._internal.c_long_Array_2 object at 0x7ff2fc1ff320> # may vary"
+Numpy,ArrayObjects,numpy.ndarray.item,"numpy.ndarray.item#methodndarray.item(*args)#Copy an element of an array to a standard Python scalar and return it.Parameters:*argsArguments (variable number and type)none: in this case, the method only works for arrays
+with one element (a.size == 1), which element is
+copied into a standard Python scalar object and returned.int_type: this argument is interpreted as a flat index into
+the array, specifying which element to copy and return.tuple of int_types: functions as does a single int_type argument,
+except that the argument is interpreted as an nd-index into the
+array.Returns:zStandard Python scalar objectA copy of the specified element of the array as a suitable
+Python scalarNotesWhen the data type ofais longdouble or clongdouble, item() returns
+a scalar array object because there is no available Python scalar that
+would not lose information. Void arrays return a buffer object for item(),
+unless fields are defined, in which case a tuple is returned.itemis very similar to a[args], except, instead of an array scalar,
+a standard Python scalar is returned. This can be useful for speeding up
+access to elements of the array and doing arithmetic on elements of the
+array using Pythonfs optimized math.Examples>>>np.random.seed(123)>>>x=np.random.randint(9,size=(3,3))>>>xarray([[2, 2, 6],[1, 3, 6],[1, 0, 1]])>>>x.item(3)1>>>x.item(7)0>>>x.item((0,1))2>>>x.item((2,2))1"
+Numpy,ArrayObjects,numpy.ndarray.tolist,"numpy.ndarray.tolist#methodndarray.tolist()#Return the array as ana.ndim-levels deep nested list of Python scalars.Return a copy of the array data as a (nested) Python list.
+Data items are converted to the nearest compatible builtin Python type, via
+theitemfunction.Ifa.ndimis 0, then since the depth of the nested list is 0, it will
+not be a list at all, but a simple Python scalar.Parameters:noneReturns:yobject, or list of object, or list of list of object, or cThe possibly nested list of array elements.NotesThe array may be recreated viaa=np.array(a.tolist()), although this
+may sometimes lose precision.ExamplesFor a 1D array,a.tolist()is almost the same aslist(a),
+except thattolistchanges numpy scalars to Python scalars:>>>a=np.uint32([1,2])>>>a_list=list(a)>>>a_list[1, 2]>>>type(a_list[0])<class 'numpy.uint32'>>>>a_tolist=a.tolist()>>>a_tolist[1, 2]>>>type(a_tolist[0])<class 'int'>Additionally, for a 2D array,tolistapplies recursively:>>>a=np.array([[1,2],[3,4]])>>>list(a)[array([1, 2]), array([3, 4])]>>>a.tolist()[[1, 2], [3, 4]]The base case for this recursion is a 0D array:>>>a=np.array(1)>>>list(a)Traceback (most recent call last):...TypeError:iteration over a 0-d array>>>a.tolist()1"
+Numpy,ArrayObjects,numpy.ndarray.itemset,"numpy.ndarray.itemset#methodndarray.itemset(*args)#Insert scalar into an array (scalar is cast to arrayfs dtype, if possible)There must be at least 1 argument, and define the last argument
+asitem.  Then,a.itemset(*args)is equivalent to but faster
+thana[args]=item.  The item should be a scalar value andargsmust select a single item in the arraya.Parameters:*argsArgumentsIf one argument: a scalar, only used in caseais of size 1.
+If two arguments: the last argument is the value to be set
+and must be a scalar, the first argument specifies a single array
+element location. It is either an int or a tuple.NotesCompared to indexing syntax,itemsetprovides some speed increase
+for placing a scalar into a particular location in anndarray,
+if you must do this.  However, generally this is discouraged:
+among other problems, it complicates the appearance of the code.
+Also, when usingitemset(anditem) inside a loop, be sure
+to assign the methods to a local variable to avoid the attribute
+look-up at each loop iteration.Examples>>>np.random.seed(123)>>>x=np.random.randint(9,size=(3,3))>>>xarray([[2, 2, 6],[1, 3, 6],[1, 0, 1]])>>>x.itemset(4,0)>>>x.itemset((2,2),9)>>>xarray([[2, 2, 6],[1, 0, 6],[1, 0, 9]])"
+Numpy,ArrayObjects,numpy.ndarray.tobytes,"numpy.ndarray.tobytes#methodndarray.tobytes(order='C')#Construct Python bytes containing the raw data bytes in the array.Constructs Python bytes showing a copy of the raw contents of
+data memory. The bytes object is produced in C-order by default.
+This behavior is controlled by theorderparameter.New in version 1.9.0.Parameters:order{eCf, eFf, eAf}, optionalControls the memory layout of the bytes object. eCf means C-order,
+eFf means F-order, eAf (short forAny) means eFf ifais
+Fortran contiguous, eCf otherwise. Default is eCf.Returns:sbytesPython bytes exhibiting a copy ofafs raw data.See alsofrombufferInverse of this operation, construct a 1-dimensional array from Python bytes.Examples>>>x=np.array([[0,1],[2,3]],dtype='<u2')>>>x.tobytes()b'\x00\x00\x01\x00\x02\x00\x03\x00'>>>x.tobytes('C')==x.tobytes()True>>>x.tobytes('F')b'\x00\x00\x02\x00\x01\x00\x03\x00'"
+Numpy,ArrayObjects,numpy.ndarray.astype,"numpy.ndarray.astype#methodndarray.astype(dtype,order='K',casting='unsafe',subok=True,copy=True)#Copy of the array, cast to a specified type.Parameters:dtypestr or dtypeTypecode or data-type to which the array is cast.order{eCf, eFf, eAf, eKf}, optionalControls the memory layout order of the result.
+eCf means C order, eFf means Fortran order, eAf
+means eFf order if all the arrays are Fortran contiguous,
+eCf order otherwise, and eKf means as close to the
+order the array elements appear in memory as possible.
+Default is eKf.casting{enof, eequivf, esafef, esame_kindf, eunsafef}, optionalControls what kind of data casting may occur. Defaults to eunsafef
+for backwards compatibility.enof means the data types should not be cast at all.eequivf means only byte-order changes are allowed.esafef means only casts which can preserve values are allowed.esame_kindf means only safe casts or casts within a kind,
+like float64 to float32, are allowed.eunsafef means any data conversions may be done.subokbool, optionalIf True, then sub-classes will be passed-through (default), otherwise
+the returned array will be forced to be a base-class array.copybool, optionalBy default, astype always returns a newly allocated array. If this
+is set to false, and thedtype,order, andsubokrequirements are satisfied, the input array is returned instead
+of a copy.Returns:arr_tndarrayUnlesscopyis False and the other conditions for returning the input
+array are satisfied (see description forcopyinput parameter),arr_tis a new array of the same shape as the input array, with dtype, order
+given bydtype,order.Raises:ComplexWarningWhen casting from complex to float or int. To avoid this,
+one should usea.real.astype(t).NotesChanged in version 1.17.0:Casting between a simple data type and a structured one is possible only
+for gunsafeh casting.  Casting to multiple fields is allowed, but
+casting from multiple fields is not.Changed in version 1.9.0:Casting from numeric to string types in esafef casting mode requires
+that the string dtype length is long enough to store the max
+integer/float value converted.Examples>>>x=np.array([1,2,2.5])>>>xarray([1. ,  2. ,  2.5])>>>x.astype(int)array([1, 2, 2])"
+Numpy,ArrayObjects,numpy.ndarray.byteswap,"numpy.ndarray.byteswap#methodndarray.byteswap(inplace=False)#Swap the bytes of the array elementsToggle between low-endian and big-endian data representation by
+returning a byteswapped array, optionally swapped in-place.
+Arrays of byte-strings are not swapped. The real and imaginary
+parts of a complex number are swapped individually.Parameters:inplacebool, optionalIfTrue, swap bytes in-place, default isFalse.Returns:outndarrayThe byteswapped array. IfinplaceisTrue, this is
+a view to self.Examples>>>A=np.array([1,256,8755],dtype=np.int16)>>>list(map(hex,A))['0x1', '0x100', '0x2233']>>>A.byteswap(inplace=True)array([  256,     1, 13090], dtype=int16)>>>list(map(hex,A))['0x100', '0x1', '0x3322']Arrays of byte-strings are not swapped>>>A=np.array([b'ceg',b'fac'])>>>A.byteswap()array([b'ceg', b'fac'], dtype='|S3')A.newbyteorder().byteswap()produces an array with the same valuesbut different representation in memory>>>A=np.array([1,2,3])>>>A.view(np.uint8)array([1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,0, 0], dtype=uint8)>>>A.newbyteorder().byteswap(inplace=True)array([1, 2, 3])>>>A.view(np.uint8)array([0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0,0, 3], dtype=uint8)"
+Numpy,ArrayObjects,numpy.ndarray.copy,"numpy.ndarray.copy#methodndarray.copy(order='C')#Return a copy of the array.Parameters:order{eCf, eFf, eAf, eKf}, optionalControls the memory layout of the copy. eCf means C-order,
+eFf means F-order, eAf means eFf ifais Fortran contiguous,
+eCf otherwise. eKf means match the layout ofaas closely
+as possible. (Note that this function andnumpy.copyare very
+similar but have different default values for their order=
+arguments, and this function always passes sub-classes through.)See alsonumpy.copySimilar function with different default behaviornumpy.copytoNotesThis function is the preferred method for creating an array copy.  The
+functionnumpy.copyis similar, but it defaults to using order eKf,
+and will not pass sub-classes through by default.Examples>>>x=np.array([[1,2,3],[4,5,6]],order='F')>>>y=x.copy()>>>x.fill(0)>>>xarray([[0, 0, 0],[0, 0, 0]])>>>yarray([[1, 2, 3],[4, 5, 6]])>>>y.flags['C_CONTIGUOUS']True"
+Numpy,ArrayObjects,numpy.ndarray.view,"numpy.ndarray.view#methodndarray.view([dtype][,type])#New view of array with the same data.NotePassing None fordtypeis different from omitting the parameter,
+since the former invokesdtype(None)which is an alias fordtype('float_').Parameters:dtypedata-type or ndarray sub-class, optionalData-type descriptor of the returned view, e.g., float32 or int16.
+Omitting it results in the view having the same data-type asa.
+This argument can also be specified as an ndarray sub-class, which
+then specifies the type of the returned object (this is equivalent to
+setting thetypeparameter).typePython type, optionalType of the returned view, e.g., ndarray or matrix.  Again, omission
+of the parameter results in type preservation.Notesa.view()is used two different ways:a.view(some_dtype)ora.view(dtype=some_dtype)constructs a view
+of the arrayfs memory with a different data-type.  This can cause a
+reinterpretation of the bytes of memory.a.view(ndarray_subclass)ora.view(type=ndarray_subclass)just
+returns an instance ofndarray_subclassthat looks at the same array
+(same shape, dtype, etc.)  This does not cause a reinterpretation of the
+memory.Fora.view(some_dtype), ifsome_dtypehas a different number of
+bytes per entry than the previous dtype (for example, converting a regular
+array to a structured array), then the last axis ofamust be
+contiguous. This axis will be resized in the result.Changed in version 1.23.0:Only the last axis needs to be contiguous. Previously, the entire array
+had to be C-contiguous.Examples>>>x=np.array([(1,2)],dtype=[('a',np.int8),('b',np.int8)])Viewing array data using a different type and dtype:>>>y=x.view(dtype=np.int16,type=np.matrix)>>>ymatrix([[513]], dtype=int16)>>>print(type(y))<class 'numpy.matrix'>Creating a view on a structured array so it can be used in calculations>>>x=np.array([(1,2),(3,4)],dtype=[('a',np.int8),('b',np.int8)])>>>xv=x.view(dtype=np.int8).reshape(-1,2)>>>xvarray([[1, 2],[3, 4]], dtype=int8)>>>xv.mean(0)array([2.,  3.])Making changes to the view changes the underlying array>>>xv[0,1]=20>>>xarray([(1, 20), (3,  4)], dtype=[('a', 'i1'), ('b', 'i1')])Using a view to convert an array to a recarray:>>>z=x.view(np.recarray)>>>z.aarray([1, 3], dtype=int8)Views share data:>>>x[0]=(9,10)>>>z[0](9, 10)Views that change the dtype size (bytes per entry) should normally be
+avoided on arrays defined by slices, transposes, fortran-ordering, etc.:>>>x=np.array([[1,2,3],[4,5,6]],dtype=np.int16)>>>y=x[:,::2]>>>yarray([[1, 3],[4, 6]], dtype=int16)>>>y.view(dtype=[('width',np.int16),('length',np.int16)])Traceback (most recent call last):...ValueError:To change to a dtype of a different size, the last axis must be contiguous>>>z=y.copy()>>>z.view(dtype=[('width',np.int16),('length',np.int16)])array([[(1, 3)],[(4, 6)]], dtype=[('width', '<i2'), ('length', '<i2')])However, views that change dtype are totally fine for arrays with a
+contiguous last axis, even if the rest of the axes are not C-contiguous:>>>x=np.arange(2*3*4,dtype=np.int8).reshape(2,3,4)>>>x.transpose(1,0,2).view(np.int16)array([[[ 256,  770],[3340, 3854]],[[1284, 1798],[4368, 4882]],[[2312, 2826],[5396, 5910]]], dtype=int16)"
+Numpy,ArrayObjects,numpy.ndarray.reshape,"numpy.ndarray.reshape#methodndarray.reshape(shape,order='C')#Returns an array containing the same data with a new shape.Refer tonumpy.reshapefor full documentation.See alsonumpy.reshapeequivalent functionNotesUnlike the free functionnumpy.reshape, this method onndarrayallows
+the elements of the shape parameter to be passed in as separate arguments.
+For example,a.reshape(10,11)is equivalent toa.reshape((10,11))."
+Numpy,ArrayObjects,numpy.ndarray.transpose,"numpy.ndarray.transpose#methodndarray.transpose(*axes)#Returns a view of the array with axes transposed.Refer tonumpy.transposefor full documentation.Parameters:axesNone, tuple of ints, ornintsNone or no argument: reverses the order of the axes.tuple of ints:iin thej-th place in the tuple means that the
+arrayfsi-th axis becomes the transposed arrayfsj-th axis.nints: same as an n-tuple of the same ints (this form is
+intended simply as a gconvenienceh alternative to the tuple form).Returns:pndarrayView of the array with its axes suitably permuted.See alsotransposeEquivalent function.ndarray.TArray property returning the array transposed.ndarray.reshapeGive a new shape to an array without changing its data.Examples>>>a=np.array([[1,2],[3,4]])>>>aarray([[1, 2],[3, 4]])>>>a.transpose()array([[1, 3],[2, 4]])>>>a.transpose((1,0))array([[1, 3],[2, 4]])>>>a.transpose(1,0)array([[1, 3],[2, 4]])>>>a=np.array([1,2,3,4])>>>aarray([1, 2, 3, 4])>>>a.transpose()array([1, 2, 3, 4])"
+Numpy,ArrayObjects,numpy.ndarray.swapaxes,"numpy.ndarray.swapaxes#methodndarray.swapaxes(axis1,axis2)#Return a view of the array withaxis1andaxis2interchanged.Refer tonumpy.swapaxesfor full documentation.See alsonumpy.swapaxesequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.flatten,"numpy.ndarray.flatten#methodndarray.flatten(order='C')#Return a copy of the array collapsed into one dimension.Parameters:order{eCf, eFf, eAf, eKf}, optionaleCf means to flatten in row-major (C-style) order.
+eFf means to flatten in column-major (Fortran-
+style) order. eAf means to flatten in column-major
+order ifais Fortrancontiguousin memory,
+row-major order otherwise. eKf means to flattenain the order the elements occur in memory.
+The default is eCf.Returns:yndarrayA copy of the input array, flattened to one dimension.See alsoravelReturn a flattened array.flatA 1-D flat iterator over the array.Examples>>>a=np.array([[1,2],[3,4]])>>>a.flatten()array([1, 2, 3, 4])>>>a.flatten('F')array([1, 3, 2, 4])"
+Numpy,ArrayObjects,numpy.ndarray.ravel,numpy.ndarray.ravel#methodndarray.ravel([order])#Return a flattened array.Refer tonumpy.ravelfor full documentation.See alsonumpy.ravelequivalent functionndarray.flata flat iterator on the array.
+Numpy,ArrayObjects,numpy.ndarray.squeeze,numpy.ndarray.squeeze#methodndarray.squeeze(axis=None)#Remove axes of length one froma.Refer tonumpy.squeezefor full documentation.See alsonumpy.squeezeequivalent function
+Numpy,ArrayObjects,numpy.ndarray.max,"numpy.ndarray.max#methodndarray.max(axis=None,out=None,keepdims=False,initial=<novalue>,where=True)#Return the maximum along a given axis.Refer tonumpy.amaxfor full documentation.See alsonumpy.amaxequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.argmax,"numpy.ndarray.argmax#methodndarray.argmax(axis=None,out=None,*,keepdims=False)#Return indices of the maximum values along the given axis.Refer tonumpy.argmaxfor full documentation.See alsonumpy.argmaxequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.min,"numpy.ndarray.min#methodndarray.min(axis=None,out=None,keepdims=False,initial=<novalue>,where=True)#Return the minimum along a given axis.Refer tonumpy.aminfor full documentation.See alsonumpy.aminequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.argmin,"numpy.ndarray.argmin#methodndarray.argmin(axis=None,out=None,*,keepdims=False)#Return indices of the minimum values along the given axis.Refer tonumpy.argminfor detailed documentation.See alsonumpy.argminequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.sum,"numpy.ndarray.sum#methodndarray.sum(axis=None,dtype=None,out=None,keepdims=False,initial=0,where=True)#Return the sum of the array elements over the given axis.Refer tonumpy.sumfor full documentation.See alsonumpy.sumequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.cumsum,"numpy.ndarray.cumsum#methodndarray.cumsum(axis=None,dtype=None,out=None)#Return the cumulative sum of the elements along the given axis.Refer tonumpy.cumsumfor full documentation.See alsonumpy.cumsumequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.mean,"numpy.ndarray.mean#methodndarray.mean(axis=None,dtype=None,out=None,keepdims=False,*,where=True)#Returns the average of the array elements along given axis.Refer tonumpy.meanfor full documentation.See alsonumpy.meanequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.var,"numpy.ndarray.var#methodndarray.var(axis=None,dtype=None,out=None,ddof=0,keepdims=False,*,where=True)#Returns the variance of the array elements, along given axis.Refer tonumpy.varfor full documentation.See alsonumpy.varequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.std,"numpy.ndarray.std#methodndarray.std(axis=None,dtype=None,out=None,ddof=0,keepdims=False,*,where=True)#Returns the standard deviation of the array elements along given axis.Refer tonumpy.stdfor full documentation.See alsonumpy.stdequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.prod,"numpy.ndarray.prod#methodndarray.prod(axis=None,dtype=None,out=None,keepdims=False,initial=1,where=True)#Return the product of the array elements over the given axisRefer tonumpy.prodfor full documentation.See alsonumpy.prodequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.cumprod,"numpy.ndarray.cumprod#methodndarray.cumprod(axis=None,dtype=None,out=None)#Return the cumulative product of the elements along the given axis.Refer tonumpy.cumprodfor full documentation.See alsonumpy.cumprodequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.all,"numpy.ndarray.all#methodndarray.all(axis=None,out=None,keepdims=False,*,where=True)#Returns True if all elements evaluate to True.Refer tonumpy.allfor full documentation.See alsonumpy.allequivalent function"
+Numpy,ArrayObjects,numpy.ndarray.any,"numpy.ndarray.any#methodndarray.any(axis=None,out=None,keepdims=False,*,where=True)#Returns True if any of the elements ofaevaluate to True.Refer tonumpy.anyfor full documentation.See alsonumpy.anyequivalent function"
+Numpy,Universal functions,numpy.ufunc.__call__,"numpy.ufunc.__call__#methodufunc.__call__(*args,**kwargs)#Call self as a function."
+Numpy,Universal functions,numpy.ufunc.accumulate,"numpy.ufunc.accumulate#methodufunc.accumulate(array,axis=0,dtype=None,out=None)#Accumulate the result of applying the operator to all elements.For a one-dimensional array, accumulate produces results equivalent to:r=np.empty(len(A))t=op.identity# op = the ufunc being applied to A's  elementsforiinrange(len(A)):t=op(t,A[i])r[i]=treturnrFor example, add.accumulate() is equivalent to np.cumsum().For a multi-dimensional array, accumulate is applied along only one
+axis (axis zero by default; see Examples below) so repeated use is
+necessary if one wants to accumulate over multiple axes.Parameters:arrayarray_likeThe array to act on.axisint, optionalThe axis along which to apply the accumulation; default is zero.dtypedata-type code, optionalThe data-type used to represent the intermediate results. Defaults
+to the data-type of the output array if such is provided, or the
+data-type of the input array if no output array is provided.outndarray, None, or tuple of ndarray and None, optionalA location into which the result is stored. If not provided or None,
+a freshly-allocated array is returned. For consistency withufunc.__call__, if given as a keyword, this may be wrapped in a
+1-element tuple.Changed in version 1.13.0:Tuples are allowed for keyword argument.Returns:rndarrayThe accumulated values. Ifoutwas supplied,ris a reference toout.Examples1-D array examples:>>>np.add.accumulate([2,3,5])array([ 2,  5, 10])>>>np.multiply.accumulate([2,3,5])array([ 2,  6, 30])2-D array examples:>>>I=np.eye(2)>>>Iarray([[1.,  0.],[0.,  1.]])Accumulate along axis 0 (rows), down columns:>>>np.add.accumulate(I,0)array([[1.,  0.],[1.,  1.]])>>>np.add.accumulate(I)# no axis specified = axis zeroarray([[1.,  0.],[1.,  1.]])Accumulate along axis 1 (columns), through rows:>>>np.add.accumulate(I,1)array([[1.,  1.],[0.,  1.]])"
+Numpy,Universal functions,numpy.ufunc.at,"numpy.ufunc.at#methodufunc.at(a,indices,b=None,/)#Performs unbuffered in place operation on operand eaf for elements
+specified by eindicesf. For addition ufunc, this method is equivalent toa[indices]+=b, except that results are accumulated for elements that
+are indexed more than once. For example,a[[0,0]]+=1will only
+increment the first element once because of buffering, whereasadd.at(a,[0,0],1)will increment the first element twice.New in version 1.8.0.Parameters:aarray_likeThe array to perform in place operation on.indicesarray_like or tupleArray like index object or slice object for indexing into first
+operand. If first operand has multiple dimensions, indices can be a
+tuple of array like index objects or slice objects.barray_likeSecond operand for ufuncs requiring two operands. Operand must be
+broadcastable over first operand after indexing or slicing.ExamplesSet items 0 and 1 to their negative values:>>>a=np.array([1,2,3,4])>>>np.negative.at(a,[0,1])>>>aarray([-1, -2,  3,  4])Increment items 0 and 1, and increment item 2 twice:>>>a=np.array([1,2,3,4])>>>np.add.at(a,[0,1,2,2],1)>>>aarray([2, 3, 5, 4])Add items 0 and 1 in first array to second array,
+and store results in first array:>>>a=np.array([1,2,3,4])>>>b=np.array([1,2])>>>np.add.at(a,[0,1],b)>>>aarray([2, 4, 3, 4])"
+Numpy,Universal functions,numpy.ufunc.outer,"numpy.ufunc.outer#methodufunc.outer(A,B,/,**kwargs)#Apply the ufuncopto all pairs (a, b) with a inAand b inB.LetM=A.ndim,N=B.ndim. Then the result,C, ofop.outer(A,B)is an array of dimension M + N such that:\[C[i_0, ..., i_{M-1}, j_0, ..., j_{N-1}] =
+op(A[i_0, ..., i_{M-1}], B[j_0, ..., j_{N-1}])\]ForAandBone-dimensional, this is equivalent to:r=empty(len(A),len(B))foriinrange(len(A)):forjinrange(len(B)):r[i,j]=op(A[i],B[j])# op = ufunc in questionParameters:Aarray_likeFirst arrayBarray_likeSecond arraykwargsanyArguments to pass on to the ufunc. Typicallydtypeorout.
+Seeufuncfor a comprehensive overview of all available arguments.Returns:rndarrayOutput arraySee alsonumpy.outerA less powerful version ofnp.multiply.outerthatravels all inputs to 1D. This exists primarily for compatibility with old code.tensordotnp.tensordot(a,b,axes=((),()))andnp.multiply.outer(a,b)behave same for all dimensions of a and b.Examples>>>np.multiply.outer([1,2,3],[4,5,6])array([[ 4,  5,  6],[ 8, 10, 12],[12, 15, 18]])A multi-dimensional example:>>>A=np.array([[1,2,3],[4,5,6]])>>>A.shape(2, 3)>>>B=np.array([[1,2,3,4]])>>>B.shape(1, 4)>>>C=np.multiply.outer(A,B)>>>C.shape;C(2, 3, 1, 4)array([[[[ 1,  2,  3,  4]],[[ 2,  4,  6,  8]],[[ 3,  6,  9, 12]]],[[[ 4,  8, 12, 16]],[[ 5, 10, 15, 20]],[[ 6, 12, 18, 24]]]])"
+Numpy,Universal functions,numpy.ufunc.reduce,"numpy.ufunc.reduce#methodufunc.reduce(array,axis=0,dtype=None,out=None,keepdims=False,initial=<novalue>,where=True)#Reducesarrayfs dimension by one, by applying ufunc along one axis.Let\(array.shape = (N_0, ..., N_i, ..., N_{M-1})\).  Then\(ufunc.reduce(array, axis=i)[k_0, ..,k_{i-1}, k_{i+1}, .., k_{M-1}]\)=
+the result of iteratingjover\(range(N_i)\), cumulatively applying
+ufunc to each\(array[k_0, ..,k_{i-1}, j, k_{i+1}, .., k_{M-1}]\).
+For a one-dimensional array, reduce produces results equivalent to:r=op.identity# op = ufuncforiinrange(len(A)):r=op(r,A[i])returnrFor example, add.reduce() is equivalent to sum().Parameters:arrayarray_likeThe array to act on.axisNone or int or tuple of ints, optionalAxis or axes along which a reduction is performed.
+The default (axis= 0) is perform a reduction over the first
+dimension of the input array.axismay be negative, in
+which case it counts from the last to the first axis.New in version 1.7.0.If this is None, a reduction is performed over all the axes.
+If this is a tuple of ints, a reduction is performed on multiple
+axes, instead of a single axis or all the axes as before.For operations which are either not commutative or not associative,
+doing a reduction over multiple axes is not well-defined. The
+ufuncs do not currently raise an exception in this case, but will
+likely do so in the future.dtypedata-type code, optionalThe type used to represent the intermediate results. Defaults
+to the data-type of the output array if this is provided, or
+the data-type of the input array if no output array is provided.outndarray, None, or tuple of ndarray and None, optionalA location into which the result is stored. If not provided or None,
+a freshly-allocated array is returned. For consistency withufunc.__call__, if given as a keyword, this may be wrapped in a
+1-element tuple.Changed in version 1.13.0:Tuples are allowed for keyword argument.keepdimsbool, optionalIf this is set to True, the axes which are reduced are left
+in the result as dimensions with size one. With this option,
+the result will broadcast correctly against the originalarray.New in version 1.7.0.initialscalar, optionalThe value with which to start the reduction.
+If the ufunc has no identity or the dtype is object, this defaults
+to None - otherwise it defaults to ufunc.identity.
+IfNoneis given, the first element of the reduction is used,
+and an error is thrown if the reduction is empty.New in version 1.15.0.wherearray_like of bool, optionalA boolean array which is broadcasted to match the dimensions
+ofarray, and selects elements to include in the reduction. Note
+that for ufuncs likeminimumthat do not have an identity
+defined, one has to pass in alsoinitial.New in version 1.17.0.Returns:rndarrayThe reduced array. Ifoutwas supplied,ris a reference to it.Examples>>>np.multiply.reduce([2,3,5])30A multi-dimensional array example:>>>X=np.arange(8).reshape((2,2,2))>>>Xarray([[[0, 1],[2, 3]],[[4, 5],[6, 7]]])>>>np.add.reduce(X,0)array([[ 4,  6],[ 8, 10]])>>>np.add.reduce(X)# confirm: default axis value is 0array([[ 4,  6],[ 8, 10]])>>>np.add.reduce(X,1)array([[ 2,  4],[10, 12]])>>>np.add.reduce(X,2)array([[ 1,  5],[ 9, 13]])You can use theinitialkeyword argument to initialize the reduction
+with a different value, andwhereto select specific elements to include:>>>np.add.reduce([10],initial=5)15>>>np.add.reduce(np.ones((2,2,2)),axis=(0,2),initial=10)array([14., 14.])>>>a=np.array([10.,np.nan,10])>>>np.add.reduce(a,where=~np.isnan(a))20.0Allows reductions of empty arrays where they would normally fail, i.e.
+for ufuncs without an identity.>>>np.minimum.reduce([],initial=np.inf)inf>>>np.minimum.reduce([[1.,2.],[3.,4.]],initial=10.,where=[True,False])array([ 1., 10.])>>>np.minimum.reduce([])Traceback (most recent call last):...ValueError:zero-size array to reduction operation minimum which has no identity"
+Numpy,Universal functions,numpy.ufunc.reduceat,"numpy.ufunc.reduceat#methodufunc.reduceat(array,indices,axis=0,dtype=None,out=None)#Performs a (local) reduce with specified slices over a single axis.For i inrange(len(indices)),reduceatcomputesufunc.reduce(array[indices[i]:indices[i+1]]), which becomes the i-th
+generalized growh parallel toaxisin the final result (i.e., in a
+2-D array, for example, ifaxis = 0, it becomes the i-th row, but ifaxis = 1, it becomes the i-th column).  There are three exceptions to this:wheni=len(indices)-1(so for the last index),indices[i+1]=array.shape[axis].ifindices[i]>=indices[i+1], the i-th generalized growh is
+simplyarray[indices[i]].ifindices[i]>=len(array)orindices[i]<0, an error is raised.The shape of the output depends on the size ofindices, and may be
+larger thanarray(this happens iflen(indices)>array.shape[axis]).Parameters:arrayarray_likeThe array to act on.indicesarray_likePaired indices, comma separated (not colon), specifying slices to
+reduce.axisint, optionalThe axis along which to apply the reduceat.dtypedata-type code, optionalThe type used to represent the intermediate results. Defaults
+to the data type of the output array if this is provided, or
+the data type of the input array if no output array is provided.outndarray, None, or tuple of ndarray and None, optionalA location into which the result is stored. If not provided or None,
+a freshly-allocated array is returned. For consistency withufunc.__call__, if given as a keyword, this may be wrapped in a
+1-element tuple.Changed in version 1.13.0:Tuples are allowed for keyword argument.Returns:rndarrayThe reduced values. Ifoutwas supplied,ris a reference toout.NotesA descriptive example:Ifarrayis 1-D, the functionufunc.accumulate(array)is the same asufunc.reduceat(array,indices)[::2]whereindicesisrange(len(array)-1)with a zero placed
+in every other element:indices=zeros(2*len(array)-1),indices[1::2]=range(1,len(array)).Donft be fooled by this attributefs name:reduceat(array)is not
+necessarily smaller thanarray.ExamplesTo take the running sum of four successive values:>>>np.add.reduceat(np.arange(8),[0,4,1,5,2,6,3,7])[::2]array([ 6, 10, 14, 18])A 2-D example:>>>x=np.linspace(0,15,16).reshape(4,4)>>>xarray([[ 0.,   1.,   2.,   3.],[ 4.,   5.,   6.,   7.],[ 8.,   9.,  10.,  11.],[12.,  13.,  14.,  15.]])# reduce such that the result has the following five rows:# [row1 + row2 + row3]# [row4]# [row2]# [row3]# [row1 + row2 + row3 + row4]>>>np.add.reduceat(x,[0,3,1,2,0])array([[12.,  15.,  18.,  21.],[12.,  13.,  14.,  15.],[ 4.,   5.,   6.,   7.],[ 8.,   9.,  10.,  11.],[24.,  28.,  32.,  36.]])# reduce such that result has the following two columns:# [col1 * col2 * col3, col4]>>>np.multiply.reduceat(x,[0,3],1)array([[   0.,     3.],[ 120.,     7.],[ 720.,    11.],[2184.,    15.]])"
+Numpy,Universal functions,numpy.ufunc.resolve_dtypes,"numpy.ufunc.resolve_dtypes#methodufunc.resolve_dtypes(dtypes,*,signature=None,casting=None,reduction=False)#Find the dtypes NumPy will use for the operation.  Both input and
+output dtypes are returned and may differ from those provided.NoteThis function always applies NEP 50 rules since it is not provided
+any actual values.  The Python typesint,float, andcomplexthus behave weak and should be passed for guntypedh
+Python input.Parameters:dtypestuple of dtypes, None, or literal int, float, complexThe input dtypes for each operand.  Output operands can be
+None, indicating that the dtype must be found.signaturetuple of DTypes or None, optionalIf given, enforces exact DType (classes) of the specific operand.
+The ufuncdtypeargument is equivalent to passing a tuple with
+only output dtypes set.casting{enof, eequivf, esafef, esame_kindf, eunsafef}, optionalThe casting mode when casting is necessary.  This is identical to
+the ufunc call casting modes.reductionbooleanIf given, the resolution assumes a reduce operation is happening
+which slightly changes the promotion and type resolution rules.dtypesis usually something like(None,np.dtype(""i2""),None)for reductions (first input is also the output).NoteThe default casting mode is gsame_kindh, however, as of
+NumPy 1.24, NumPy uses gunsafeh for reductions.Returns:dtypestuple of dtypesThe dtypes which NumPy would use for the calculation.  Note that
+dtypes may not match the passed in ones (casting is necessary).See alsonumpy.ufunc._resolve_dtypes_and_contextSimilar function to this, but returns additional information which give access to the core C functionality of NumPy.ExamplesThis API requires passing dtypes, define them for convenience:>>>int32=np.dtype(""int32"")>>>float32=np.dtype(""float32"")The typical ufunc call does not pass an output dtype.np.addhas two
+inputs and one output, so leave the output asNone(not provided):>>>np.add.resolve_dtypes((int32,float32,None))(dtype('float64'), dtype('float64'), dtype('float64'))The loop found uses gfloat64h for all operands (including the output), the
+first input would be cast.resolve_dtypessupports gweakh handling for Python scalars by passingint,float, orcomplex:>>>np.add.resolve_dtypes((float32,float,None))(dtype('float32'), dtype('float32'), dtype('float32'))Where the Pythonfloatbehaves samilar to a Python value0.0in a ufunc call.  (SeeNEP 50for details.)"
+Numpy,Universal functions,numpy.ufunc.nin,numpy.ufunc.nin#attributeufunc.nin#The number of inputs.Data attribute containing the number of arguments the ufunc treats as input.Examples>>>np.add.nin2>>>np.multiply.nin2>>>np.power.nin2>>>np.exp.nin1
+Numpy,Universal functions,numpy.ufunc.nout,"numpy.ufunc.nout#attributeufunc.nout#The number of outputs.Data attribute containing the number of arguments the ufunc treats as output.NotesSince all ufuncs can take output arguments, this will always be (at least) 1.Examples>>>np.add.nout1>>>np.multiply.nout1>>>np.power.nout1>>>np.exp.nout1"
+Numpy,Universal functions,numpy.ufunc.nargs,"numpy.ufunc.nargs#attributeufunc.nargs#The number of arguments.Data attribute containing the number of arguments the ufunc takes, including
+optional ones.NotesTypically this value will be one more than what you might expect because all
+ufuncs take  the optional gouth argument.Examples>>>np.add.nargs3>>>np.multiply.nargs3>>>np.power.nargs3>>>np.exp.nargs2"
+Numpy,Universal functions,numpy.ufunc.ntypes,"numpy.ufunc.ntypes#attributeufunc.ntypes#The number of types.The number of numerical NumPy types - of which there are 18 total - on which
+the ufunc can operate.See alsonumpy.ufunc.typesExamples>>>np.add.ntypes18>>>np.multiply.ntypes18>>>np.power.ntypes17>>>np.exp.ntypes7>>>np.remainder.ntypes14"
+Numpy,Universal functions,numpy.ufunc.types,"numpy.ufunc.types#attributeufunc.types#Returns a list with types grouped input->output.Data attribute listing the data-type gDomain-Rangeh groupings the ufunc can
+deliver. The data-types are given using the character codes.See alsonumpy.ufunc.ntypesExamples>>>np.add.types['??->?', 'bb->b', 'BB->B', 'hh->h', 'HH->H', 'ii->i', 'II->I', 'll->l','LL->L', 'qq->q', 'QQ->Q', 'ff->f', 'dd->d', 'gg->g', 'FF->F', 'DD->D','GG->G', 'OO->O']>>>np.multiply.types['??->?', 'bb->b', 'BB->B', 'hh->h', 'HH->H', 'ii->i', 'II->I', 'll->l','LL->L', 'qq->q', 'QQ->Q', 'ff->f', 'dd->d', 'gg->g', 'FF->F', 'DD->D','GG->G', 'OO->O']>>>np.power.types['bb->b', 'BB->B', 'hh->h', 'HH->H', 'ii->i', 'II->I', 'll->l', 'LL->L','qq->q', 'QQ->Q', 'ff->f', 'dd->d', 'gg->g', 'FF->F', 'DD->D', 'GG->G','OO->O']>>>np.exp.types['f->f', 'd->d', 'g->g', 'F->F', 'D->D', 'G->G', 'O->O']>>>np.remainder.types['bb->b', 'BB->B', 'hh->h', 'HH->H', 'ii->i', 'II->I', 'll->l', 'LL->L','qq->q', 'QQ->Q', 'ff->f', 'dd->d', 'gg->g', 'OO->O']"
+Numpy,Universal functions,numpy.ufunc.identity,"numpy.ufunc.identity#attributeufunc.identity#The identity value.Data attribute containing the identity element for the ufunc, if it has one.
+If it does not, the attribute value is None.Examples>>>np.add.identity0>>>np.multiply.identity1>>>np.power.identity1>>>print(np.exp.identity)None"
+Numpy,Universal functions,numpy.ufunc.signature,"numpy.ufunc.signature#attributeufunc.signature#Definition of the core elements a generalized ufunc operates on.The signature determines how the dimensions of each input/output array
+are split into core and loop dimensions:Each dimension in the signature is matched to a dimension of the
+corresponding passed-in array, starting from the end of the shape tuple.Core dimensions assigned to the same label in the signature must have
+exactly matching sizes, no broadcasting is performed.The core dimensions are removed from all inputs and the remaining
+dimensions are broadcast together, defining the loop dimensions.NotesGeneralized ufuncs are used internally in many linalg functions, and in
+the testing suite; the examples below are taken from these.
+For ufuncs that operate on scalars, the signature is None, which is
+equivalent to e()f for every argument.Examples>>>np.core.umath_tests.matrix_multiply.signature'(m,n),(n,p)->(m,p)'>>>np.linalg._umath_linalg.det.signature'(m,m)->()'>>>np.add.signatureisNoneTrue  # equivalent to '(),()->()'"
+Numpy,Universal functions,numpy.ufunc.reduce,"numpy.ufunc.reduce#methodufunc.reduce(array,axis=0,dtype=None,out=None,keepdims=False,initial=<novalue>,where=True)#Reducesarrayfs dimension by one, by applying ufunc along one axis.Let\(array.shape = (N_0, ..., N_i, ..., N_{M-1})\).  Then\(ufunc.reduce(array, axis=i)[k_0, ..,k_{i-1}, k_{i+1}, .., k_{M-1}]\)=
+the result of iteratingjover\(range(N_i)\), cumulatively applying
+ufunc to each\(array[k_0, ..,k_{i-1}, j, k_{i+1}, .., k_{M-1}]\).
+For a one-dimensional array, reduce produces results equivalent to:r=op.identity# op = ufuncforiinrange(len(A)):r=op(r,A[i])returnrFor example, add.reduce() is equivalent to sum().Parameters:arrayarray_likeThe array to act on.axisNone or int or tuple of ints, optionalAxis or axes along which a reduction is performed.
+The default (axis= 0) is perform a reduction over the first
+dimension of the input array.axismay be negative, in
+which case it counts from the last to the first axis.New in version 1.7.0.If this is None, a reduction is performed over all the axes.
+If this is a tuple of ints, a reduction is performed on multiple
+axes, instead of a single axis or all the axes as before.For operations which are either not commutative or not associative,
+doing a reduction over multiple axes is not well-defined. The
+ufuncs do not currently raise an exception in this case, but will
+likely do so in the future.dtypedata-type code, optionalThe type used to represent the intermediate results. Defaults
+to the data-type of the output array if this is provided, or
+the data-type of the input array if no output array is provided.outndarray, None, or tuple of ndarray and None, optionalA location into which the result is stored. If not provided or None,
+a freshly-allocated array is returned. For consistency withufunc.__call__, if given as a keyword, this may be wrapped in a
+1-element tuple.Changed in version 1.13.0:Tuples are allowed for keyword argument.keepdimsbool, optionalIf this is set to True, the axes which are reduced are left
+in the result as dimensions with size one. With this option,
+the result will broadcast correctly against the originalarray.New in version 1.7.0.initialscalar, optionalThe value with which to start the reduction.
+If the ufunc has no identity or the dtype is object, this defaults
+to None - otherwise it defaults to ufunc.identity.
+IfNoneis given, the first element of the reduction is used,
+and an error is thrown if the reduction is empty.New in version 1.15.0.wherearray_like of bool, optionalA boolean array which is broadcasted to match the dimensions
+ofarray, and selects elements to include in the reduction. Note
+that for ufuncs likeminimumthat do not have an identity
+defined, one has to pass in alsoinitial.New in version 1.17.0.Returns:rndarrayThe reduced array. Ifoutwas supplied,ris a reference to it.Examples>>>np.multiply.reduce([2,3,5])30A multi-dimensional array example:>>>X=np.arange(8).reshape((2,2,2))>>>Xarray([[[0, 1],[2, 3]],[[4, 5],[6, 7]]])>>>np.add.reduce(X,0)array([[ 4,  6],[ 8, 10]])>>>np.add.reduce(X)# confirm: default axis value is 0array([[ 4,  6],[ 8, 10]])>>>np.add.reduce(X,1)array([[ 2,  4],[10, 12]])>>>np.add.reduce(X,2)array([[ 1,  5],[ 9, 13]])You can use theinitialkeyword argument to initialize the reduction
+with a different value, andwhereto select specific elements to include:>>>np.add.reduce([10],initial=5)15>>>np.add.reduce(np.ones((2,2,2)),axis=(0,2),initial=10)array([14., 14.])>>>a=np.array([10.,np.nan,10])>>>np.add.reduce(a,where=~np.isnan(a))20.0Allows reductions of empty arrays where they would normally fail, i.e.
+for ufuncs without an identity.>>>np.minimum.reduce([],initial=np.inf)inf>>>np.minimum.reduce([[1.,2.],[3.,4.]],initial=10.,where=[True,False])array([ 1., 10.])>>>np.minimum.reduce([])Traceback (most recent call last):...ValueError:zero-size array to reduction operation minimum which has no identity"
+Numpy,Universal functions,numpy.ufunc.accumulate,"numpy.ufunc.accumulate#methodufunc.accumulate(array,axis=0,dtype=None,out=None)#Accumulate the result of applying the operator to all elements.For a one-dimensional array, accumulate produces results equivalent to:r=np.empty(len(A))t=op.identity# op = the ufunc being applied to A's  elementsforiinrange(len(A)):t=op(t,A[i])r[i]=treturnrFor example, add.accumulate() is equivalent to np.cumsum().For a multi-dimensional array, accumulate is applied along only one
+axis (axis zero by default; see Examples below) so repeated use is
+necessary if one wants to accumulate over multiple axes.Parameters:arrayarray_likeThe array to act on.axisint, optionalThe axis along which to apply the accumulation; default is zero.dtypedata-type code, optionalThe data-type used to represent the intermediate results. Defaults
+to the data-type of the output array if such is provided, or the
+data-type of the input array if no output array is provided.outndarray, None, or tuple of ndarray and None, optionalA location into which the result is stored. If not provided or None,
+a freshly-allocated array is returned. For consistency withufunc.__call__, if given as a keyword, this may be wrapped in a
+1-element tuple.Changed in version 1.13.0:Tuples are allowed for keyword argument.Returns:rndarrayThe accumulated values. Ifoutwas supplied,ris a reference toout.Examples1-D array examples:>>>np.add.accumulate([2,3,5])array([ 2,  5, 10])>>>np.multiply.accumulate([2,3,5])array([ 2,  6, 30])2-D array examples:>>>I=np.eye(2)>>>Iarray([[1.,  0.],[0.,  1.]])Accumulate along axis 0 (rows), down columns:>>>np.add.accumulate(I,0)array([[1.,  0.],[1.,  1.]])>>>np.add.accumulate(I)# no axis specified = axis zeroarray([[1.,  0.],[1.,  1.]])Accumulate along axis 1 (columns), through rows:>>>np.add.accumulate(I,1)array([[1.,  1.],[0.,  1.]])"
+Numpy,Universal functions,numpy.ufunc.reduceat,"numpy.ufunc.reduceat#methodufunc.reduceat(array,indices,axis=0,dtype=None,out=None)#Performs a (local) reduce with specified slices over a single axis.For i inrange(len(indices)),reduceatcomputesufunc.reduce(array[indices[i]:indices[i+1]]), which becomes the i-th
+generalized growh parallel toaxisin the final result (i.e., in a
+2-D array, for example, ifaxis = 0, it becomes the i-th row, but ifaxis = 1, it becomes the i-th column).  There are three exceptions to this:wheni=len(indices)-1(so for the last index),indices[i+1]=array.shape[axis].ifindices[i]>=indices[i+1], the i-th generalized growh is
+simplyarray[indices[i]].ifindices[i]>=len(array)orindices[i]<0, an error is raised.The shape of the output depends on the size ofindices, and may be
+larger thanarray(this happens iflen(indices)>array.shape[axis]).Parameters:arrayarray_likeThe array to act on.indicesarray_likePaired indices, comma separated (not colon), specifying slices to
+reduce.axisint, optionalThe axis along which to apply the reduceat.dtypedata-type code, optionalThe type used to represent the intermediate results. Defaults
+to the data type of the output array if this is provided, or
+the data type of the input array if no output array is provided.outndarray, None, or tuple of ndarray and None, optionalA location into which the result is stored. If not provided or None,
+a freshly-allocated array is returned. For consistency withufunc.__call__, if given as a keyword, this may be wrapped in a
+1-element tuple.Changed in version 1.13.0:Tuples are allowed for keyword argument.Returns:rndarrayThe reduced values. Ifoutwas supplied,ris a reference toout.NotesA descriptive example:Ifarrayis 1-D, the functionufunc.accumulate(array)is the same asufunc.reduceat(array,indices)[::2]whereindicesisrange(len(array)-1)with a zero placed
+in every other element:indices=zeros(2*len(array)-1),indices[1::2]=range(1,len(array)).Donft be fooled by this attributefs name:reduceat(array)is not
+necessarily smaller thanarray.ExamplesTo take the running sum of four successive values:>>>np.add.reduceat(np.arange(8),[0,4,1,5,2,6,3,7])[::2]array([ 6, 10, 14, 18])A 2-D example:>>>x=np.linspace(0,15,16).reshape(4,4)>>>xarray([[ 0.,   1.,   2.,   3.],[ 4.,   5.,   6.,   7.],[ 8.,   9.,  10.,  11.],[12.,  13.,  14.,  15.]])# reduce such that the result has the following five rows:# [row1 + row2 + row3]# [row4]# [row2]# [row3]# [row1 + row2 + row3 + row4]>>>np.add.reduceat(x,[0,3,1,2,0])array([[12.,  15.,  18.,  21.],[12.,  13.,  14.,  15.],[ 4.,   5.,   6.,   7.],[ 8.,   9.,  10.,  11.],[24.,  28.,  32.,  36.]])# reduce such that result has the following two columns:# [col1 * col2 * col3, col4]>>>np.multiply.reduceat(x,[0,3],1)array([[   0.,     3.],[ 120.,     7.],[ 720.,    11.],[2184.,    15.]])"
+Numpy,Universal functions,numpy.ufunc.outer,"numpy.ufunc.outer#methodufunc.outer(A,B,/,**kwargs)#Apply the ufuncopto all pairs (a, b) with a inAand b inB.LetM=A.ndim,N=B.ndim. Then the result,C, ofop.outer(A,B)is an array of dimension M + N such that:\[C[i_0, ..., i_{M-1}, j_0, ..., j_{N-1}] =
+op(A[i_0, ..., i_{M-1}], B[j_0, ..., j_{N-1}])\]ForAandBone-dimensional, this is equivalent to:r=empty(len(A),len(B))foriinrange(len(A)):forjinrange(len(B)):r[i,j]=op(A[i],B[j])# op = ufunc in questionParameters:Aarray_likeFirst arrayBarray_likeSecond arraykwargsanyArguments to pass on to the ufunc. Typicallydtypeorout.
+Seeufuncfor a comprehensive overview of all available arguments.Returns:rndarrayOutput arraySee alsonumpy.outerA less powerful version ofnp.multiply.outerthatravels all inputs to 1D. This exists primarily for compatibility with old code.tensordotnp.tensordot(a,b,axes=((),()))andnp.multiply.outer(a,b)behave same for all dimensions of a and b.Examples>>>np.multiply.outer([1,2,3],[4,5,6])array([[ 4,  5,  6],[ 8, 10, 12],[12, 15, 18]])A multi-dimensional example:>>>A=np.array([[1,2,3],[4,5,6]])>>>A.shape(2, 3)>>>B=np.array([[1,2,3,4]])>>>B.shape(1, 4)>>>C=np.multiply.outer(A,B)>>>C.shape;C(2, 3, 1, 4)array([[[[ 1,  2,  3,  4]],[[ 2,  4,  6,  8]],[[ 3,  6,  9, 12]]],[[[ 4,  8, 12, 16]],[[ 5, 10, 15, 20]],[[ 6, 12, 18, 24]]]])"
+Numpy,Universal functions,numpy.ufunc.at,"numpy.ufunc.at#methodufunc.at(a,indices,b=None,/)#Performs unbuffered in place operation on operand eaf for elements
+specified by eindicesf. For addition ufunc, this method is equivalent toa[indices]+=b, except that results are accumulated for elements that
+are indexed more than once. For example,a[[0,0]]+=1will only
+increment the first element once because of buffering, whereasadd.at(a,[0,0],1)will increment the first element twice.New in version 1.8.0.Parameters:aarray_likeThe array to perform in place operation on.indicesarray_like or tupleArray like index object or slice object for indexing into first
+operand. If first operand has multiple dimensions, indices can be a
+tuple of array like index objects or slice objects.barray_likeSecond operand for ufuncs requiring two operands. Operand must be
+broadcastable over first operand after indexing or slicing.ExamplesSet items 0 and 1 to their negative values:>>>a=np.array([1,2,3,4])>>>np.negative.at(a,[0,1])>>>aarray([-1, -2,  3,  4])Increment items 0 and 1, and increment item 2 twice:>>>a=np.array([1,2,3,4])>>>np.add.at(a,[0,1,2,2],1)>>>aarray([2, 3, 5, 4])Add items 0 and 1 in first array to second array,
+and store results in first array:>>>a=np.array([1,2,3,4])>>>b=np.array([1,2])>>>np.add.at(a,[0,1],b)>>>aarray([2, 4, 3, 4])"
